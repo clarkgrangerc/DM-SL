@@ -6,7 +6,7 @@ library(ggplot2)
 
 # read in the data: make sure to use the path name to
 # wherever you'd stored the file
-abia = read.csv('C:/Users/clark/OneDrive/UTEXAS/Spring20/Data Mining/ABIA.csv')
+abia = read.csv('ABIA.csv')
 summary(abia)
 head(abia)
 
