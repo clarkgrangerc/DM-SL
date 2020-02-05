@@ -86,6 +86,46 @@ Month_sum = abia %>%
         caption="Source: ABIA",
         x="Month",
         y = "Delay in minutes")
+        library(mosaic)
+
+Cancel_data = ABIA %>%
+  group_by(UniqueCarrier) %>%
+  summarize(cancellation.rate = mean(Cancelled))
+
+ggplot(Cancel_data, aes(x=UniqueCarrier, y=cancellation.rate)) + 
+  geom_bar(stat='identity') +
+  coord_flip()+
+  labs(title="Cancellation Rate vs Airline Carrier",
+       caption = "Source: ABIA" ,
+       y="Cancellation Rate" ,
+       x="Airline")
+
+Month_Abbreviation <- factor(Month_Abbreviation, levels = c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"))
+
+Month_data = ABIA %>%
+  group_by(Month_Abbreviation) %>%
+  summarize(cancellation.rate = mean(Cancelled))
+
+ggplot(Month_data, aes(x=factor(Month_Abbreviation, levels = c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")), y=cancellation.rate)) + 
+  geom_bar(stat='identity') +
+  coord_flip()+
+  labs(title="Cancellation Rate vs Month",
+       caption = "Source: ABIA" ,
+       y="Cancellation Rate" ,
+       x="Month")
+  
+Time_data = ABIA %>%
+  group_by(CRSDepTime) %>%
+  summarize(cancellation.rate = mean(Cancelled))
+
+ggplot(Time_data, aes(x=CRSDepTime, y=cancellation.rate)) + 
+  geom_bar(stat='identity') +
+  coord_flip()+ 
+  xlim(500, 2400) + ylim(0,.25)+
+  labs(title="Cancellation Rate vs Time of Day",
+       caption = "Source: ABIA" ,
+       y="Cancellation Rate" ,
+       x="Military Time")
  
  
  
