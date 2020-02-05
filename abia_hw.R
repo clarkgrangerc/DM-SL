@@ -24,9 +24,8 @@ ggplot(data = abia) +
   geom_point(mapping = aes(x = displ, y = hwy)) + 
   facet_wrap(~ UniqueCarrier, nrow = 2)
 
-####### AVERAGE DEPARTURE DELAY PER CARRIER(DEPARTING OR ARRIVING From Austin ) #########
+####### AVERAGE DEPARTURE DELAY PER CARRIER (Departing From Austin ) #########
 naustin = subset(abia, Origin=="AUS")
-caustin = 
 
  carrier_sum = naustin %>%
       group_by(UniqueCarrier)  %>%  # group the data points by model nae
@@ -41,7 +40,7 @@ windows()
         x="Carrier",
         y = "Delay in minutes")
  
- ######AVG Delay per Scheduled Time of Departure##############
+ ######AVG Delay per Scheduled Time of Departure(Departing from Austin)##############
  
 CRSDepTime_sum = naustin %>%
    group_by(CRSDepTime)  %>%  # group the data points by model nae
