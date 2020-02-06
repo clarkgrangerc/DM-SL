@@ -1,0 +1,97 @@
+---
+title: "Exercise 1"
+author: "Clark, Zach, Zargham"
+date: "2/5/2020"
+output:
+  html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(FNN)
+library(mosaic)
+library(ggplot2)
+```
+
+## Patterns of Delay & Cancellation at Austin Bergstorm Airport
+
+We look at the data collected on flights at ABIA to check for intresting patterns. Some of those patterns include the delay or cancellation of flights with respect to different carriers, days of the month and days of the week. 
+
+The data includes flights into and out of ABIA. In this exercise we focus on the patterns of departure delay for flights going out of ABIA. For this we create a new subset that includes only those flights which depart from ABIA. Also we consider any flights that depart minutes before their scheduled time to be on-time and convert negative values to zeros to give more realistic picture and without affecting average values for departure delay. 
+```{r echo= FALSE}
+abia = read.csv('ABIA.csv')
+naustin = subset(abia, Origin=="AUS")
+naustin$DepDelay = ifelse(naustin$DepDelay < 0, 0, naustin$DepDelay)
+naustin$CRSDTime= substr(naustin$CRSDepTime, 1, nchar(naustin$CRSDepTime)-2)
+```
+
+## Carrier Wise Patterns of Delays
+The first pattern we try to explore is the average departure delay for different carriers and see which carriers have more delays on average. This will show the performance of carriers. 
+
+```{r , echo = FALSE}
+carrier_sum = naustin %>%
+      group_by(UniqueCarrier)  %>%  # group the data points by model nae
+   summarize(DD.mean=mean(DepDelay ,na.rm=TRUE)) 
+
+ggplot(carrier_sum, aes(x=reorder(UniqueCarrier,DD.mean), y=DD.mean)) + 
+   geom_bar(stat='identity') + 
+   coord_flip()+
+   labs(title="Average Departure Delay per Carrier", 
+        caption="Source: ABIA",
+        x="Carrier",
+        y = "Delay in minutes")
+```
+
+## Average Cancellation Rate per Carrier
+
+Calculating the average cancellation rate per carriers we see that MQ has the highest cancellation rate among all carriers that are departing from ABIA. 
+
+```{r  echo= FALSE}
+carrier_canc = abia%>%
+    group_by(UniqueCarrier) %>%
+    summarize(canc_rate = sum(Cancelled=='1')/n())#total survey#
+ 
+ ggplot(carrier_canc, aes(x=reorder(UniqueCarrier,canc_rate), y=canc_rate)) + 
+   geom_bar(stat='identity') + 
+   coord_flip()+
+   labs(title="Cancellation Rate per Carrier", 
+        caption="Source: ABIA",
+        x="Carrier",
+        y = "Cancellation rate")
+```
+
+
+## Average Departure Delay for Time of the Day
+
+When looking at the average departure delay for different hours of a day, we see that the peak hours of evening like 17:00 has highest average departure delay for flights flying out of ABIA. The highest bar of 00:00 is an outlier and should be ignored because we have only two flights flying out at 00 hour and only one of them is delayed for 56 mins leading to a higher average delay for that hour.    
+
+```{r echo = FALSE}
+CRSDepTime_sum = naustin %>%
+   group_by(CRSDTime)  %>%  # group the data points by model nae
+   summarize(CRSDD.mean=mean(DepDelay,na.rm=TRUE)) 
+ ggplot(CRSDepTime_sum, aes(x=CRSDTime, y=CRSDD.mean)) + 
+   geom_bar(stat='identity') + 
+   labs(title="AVG Delay per Scheduled Time of Departure", 
+        caption="Source: ABIA",
+        x="Scheduled Time (Hour of the Day",
+        y = "Delay in minutes")
+```
+
+
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

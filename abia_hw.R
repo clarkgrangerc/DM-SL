@@ -19,17 +19,11 @@ ggplot(data = abia) +
   geom_point(mapping = aes(x = Dest, y = DepDelay))
 
 
-# facets
-ggplot(data = abia) + 
-  geom_point(mapping = aes(x = displ, y = hwy)) + 
-  facet_wrap(~ UniqueCarrier, nrow = 2)
-
 ####### AVERAGE DEPARTURE DELAY PER CARRIER (Departing From Austin ) #########
 naustin = subset(abia, Origin=="AUS")
-<<<<<<< HEAD
-=======
 naustin$DepDelay = ifelse(naustin$DepDelay < 0, 0, naustin$DepDelay)
->>>>>>> b9b0d24da86fa30374bdd1e3699e068a2daffa4e
+naustin$CRSDTime= substr(naustin$CRSDepTime, 1, nchar(naustin$CRSDepTime)-2)
+
 
 carrier_sum = naustin %>%
       group_by(UniqueCarrier)  %>%  # group the data points by model nae
@@ -46,16 +40,21 @@ ggplot(carrier_sum, aes(x=reorder(UniqueCarrier,DD.mean), y=DD.mean)) +
  ######AVG Delay per Scheduled Time of Departure(Departing from Austin)##############
  
 CRSDepTime_sum = naustin %>%
-   group_by(CRSDepTime)  %>%  # group the data points by model nae
+   group_by(CRSDTime)  %>%  # group the data points by model nae
    summarize(CRSDD.mean=mean(DepDelay,na.rm=TRUE)) 
  windows()
- ggplot(CRSDepTime_sum, aes(x=CRSDepTime, y=CRSDD.mean)) + 
+ ggplot(CRSDepTime_sum, aes(x=CRSDTime, y=CRSDD.mean)) + 
    geom_bar(stat='identity') + 
    labs(title="AVG Delay per Scheduled Time of Departure", 
         caption="Source: ABIA",
-        x="Scheduled Time",
-        y = "Delay in minutes") 
+        x="Scheduled Time (Hour of the Day",
+        y = "Delay in minutes")
  
+ count(nrow(naustin$CRSDTime == "17"))
+ 
+summary(naustin)
+
+  
  ##       ylim(0, 200) + xlim(0,2400)
  
  
