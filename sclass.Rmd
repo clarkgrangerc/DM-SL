@@ -30,7 +30,9 @@ plot350 =ggplot(data = sclass350) +
 plot350
 ```
 
+
 In the figure 2.1. we can see the negative relation between the mileage and  the price, as expected.
+
 
 The following steep is divide our data between the test and train data for both variables. After that, we generate random samples of our subsets of data. Then, we calculate the rsme generated at each level of K in our k nearest neighbor model for price of a 350 s class given the mileage. 
 
@@ -63,10 +65,8 @@ y_train350 = select(D_train350, price)
 X_test350 = select(D_test350, mileage)
 y_test350 = select(D_test350, price)
 
-#####
-########## K -Nearest Neighbor Model##############
-#####
-# define a helper function for calculating RMSE
+
+##### K -Nearest Neighbor Model#define a helper function for calculating RMSE
 rmse = function(y, ypred) {
   sqrt(mean(data.matrix((y-ypred)^2)))
 }
@@ -82,7 +82,7 @@ for(i in c(3:nrow(X_train350))){
 colnames(knn_output) <- c("k","RMSE")
 k_min = knn_output$k[which.min(knn_output$RMSE)]
 
-###########Graph rsme vs k ################
+###########Graph rsme vs k ##
 plot350_k= ggplot(data = knn_output)+
   geom_line(aes(x = k, y = RMSE))+
   geom_line(aes(x = k_min, y = RMSE), col = "red")+
@@ -90,9 +90,11 @@ plot350_k= ggplot(data = knn_output)+
        x="K",
        y = "RMSE")
 ```
+
 ```{r echo=FALSE, warning= FALSE}
 plot350_k
 ```
+
 The figure 2.2. shows the series of RMSE at every value of K, the red line indicate the k which generate the minimum RMSE. In this case the k value is  `r k_min`. However this value will change any time we generate a new random sample, to decide the best k we repeated the process ten times and then we took the average of the minium k.  
 
 ### Figure 2.3. 
@@ -112,7 +114,7 @@ D_test350$ypred_knn350_best = ypred_knn350_best
 p_test350 = ggplot(data = D_test350) + 
   geom_point(mapping = aes(x = mileage, y = price), color='lightgrey')+ 
   geom_path(aes(x = mileage, y = ypred_knn350_best), color='red')+
-  labs(title="KNN model with minimum RMSE", 
+  labs(title="KNN model for S350 with minimum RMSE", 
        x="Mileage",
        y = "Price in USD")
  p_test350
@@ -121,3 +123,112 @@ p_test350 = ggplot(data = D_test350) +
 After run the model with the best k, we generate the fitted values to compare with our test subset. the figure 2.3. shows the fit of the chosen model.  
 
 ## Model for MB S65AMG
+
+Now we have to do the same process to find out what is the best model for the S65 AMG class.
+
+### Figure 2.4.
+
+```{r echo=FALSE, warning= FALSE}
+####### 65 AMG ###
+#######Plot Price vs mileage for 350 trim
+
+plot65AMG =ggplot(data = sclass65AMG) + 
+  geom_point(mapping = aes(x = mileage, y = price), color='blue')+
+  labs(title="MB S65 AMG ", 
+     x="Mileage",
+     y = "Price in USD")
+plot65AMG
+```
+
+
+### Figure 2.5.
+
+```{r include=FALSE, echo=FALSE, warning= FALSE}
+# Make a train-test split 65 AMG
+N65 = nrow(sclass65AMG)
+N_train65 = floor(0.8*N65)
+N_test65 = N65 - N_train65
+
+#####Train/test split
+# randomly sample a set of data points to include in the training set
+train_ind65 = sample.int(N65, N_train65, replace=FALSE)
+
+# Define the training and testing set
+D_train65 = sclass65AMG[train_ind65,]
+D_test65 = sclass65AMG[-train_ind65,]
+
+# optional book-keeping step:
+# reorder the rows of the testing set by the mileage variable
+# this isn't necessary, but it will allow us to make a pretty plot later
+D_test65 = arrange(D_test65, mileage)
+head(D_test65)
+
+# Now separate the training and testing sets into features (X) and outcome (y)
+X_train65 = select(D_train65, mileage)
+y_train65 = select(D_train65, price)
+X_test65 = select(D_test65, mileage)
+y_test65 = select(D_test65, price)
+
+#####
+########## K -Nearest Neighbor Model##############
+#####
+# define a helper function for calculating RMSE
+rmse = function(y, ypred) {
+  sqrt(mean(data.matrix((y-ypred)^2)))
+}
+
+knn_output <- data.frame(K=c(),rmse=c())
+
+for(i in c(3:nrow(X_train65))){
+  knn_Gen = knn.reg(train = X_train65, test = X_test65, y = y_train65, k=i)
+  ypred_knn65 = knn_Gen$pred
+  knn_rmse =rmse(y_test65,ypred_knn65)
+  knn_output = rbind(knn_output,c(i,knn_rmse))
+}
+colnames(knn_output) <- c("k","RMSE")
+k_min2 = knn_output$k[which.min(knn_output$RMSE)]
+
+###########Graph rsme vs k ################
+plot65_k= ggplot(data = knn_output)+
+  geom_line(aes(x = k, y = RMSE))+
+  geom_line(aes(x = k_min2, y = RMSE), col = "red")+
+  labs(title="KNN's Models for 65AMG Trim ", 
+       x="K",
+       y = "RMSE")
+plot65_k
+```
+
+```{r echo=FALSE, warning= FALSE}
+plot65_k
+```
+
+The figure 2.5. shows the series of RMSE at every value of K, the red line indicate the k which generate the minimum RMSE. In this case the k value which minimize the RMSE for S65 AMG trim is  `r k_min2`. However this value will change any time we generate a new random sample, to decide the best k we repeated the process ten times and then we took the average of the minium k.  
+
+### Figure 2.6.
+
+```{r include=FALSE, echo=FALSE, warning= FALSE}
+# Running the best Knn model 
+knn_best = knn.reg(train = X_train65, test = X_test65, y = y_train65, k=k_min2)
+ypred_knn65_best=knn_best$pred
+rmse(y_test65, ypred_knn65_best)
+
+####
+# plot the fit
+####
+# attach the predictions to the test data frame
+D_test65$ypred_knn65_best = ypred_knn65_best
+
+p_test65 = ggplot(data = D_test65) + 
+  geom_point(mapping = aes(x = mileage, y = price), color='lightgrey')+ 
+  geom_path(aes(x = mileage, y = ypred_knn65_best), color='red')+
+  labs(title="KNN model for S65AMG with the minimum RMSE", 
+       x="Mileage",
+       y = "Price in USD")
+p_test65 
+```
+
+```{r echo=FALSE, warning= FALSE}
+p_test65
+```
+
+After run the model with the best k, we generate the fitted values to compare with our test subset. the figure 2.6. shows the fit of the chosen model.
