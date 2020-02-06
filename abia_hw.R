@@ -6,7 +6,7 @@ library(ggplot2)
 
 # read in the data: make sure to use the path name to
 # wherever you'd stored the file
-abia = read.csv('C:/Users/clark/OneDrive/UTEXAS/Spring20/Data Mining/ABIA.csv')
+abia = read.csv('ABIA.csv')
 summary(abia)
 head(abia)
 
@@ -26,14 +26,13 @@ ggplot(data = abia) +
 
 ####### AVERAGE DEPARTURE DELAY PER CARRIER(DEPARTING OR ARRIVING From Austin ) #########
 naustin = subset(abia, Origin=="AUS")
-caustin = 
+naustin$DepDelay = ifelse(naustin$DepDelay < 0, 0, naustin$DepDelay)
 
- carrier_sum = naustin %>%
+carrier_sum = naustin %>%
       group_by(UniqueCarrier)  %>%  # group the data points by model nae
-   summarize(DD.mean=mean(DepDelay[which(DepDelay > 0)],na.rm=TRUE)) 
- 
-windows()
- ggplot(carrier_sum, aes(x=reorder(UniqueCarrier,DD.mean), y=DD.mean)) + 
+   summarize(DD.mean=mean(DepDelay ,na.rm=TRUE)) 
+
+ggplot(carrier_sum, aes(x=reorder(UniqueCarrier,DD.mean), y=DD.mean)) + 
    geom_bar(stat='identity') + 
    coord_flip()+
    labs(title="Average Departure Delay per Carrier", 
@@ -45,11 +44,10 @@ windows()
  
 CRSDepTime_sum = naustin %>%
    group_by(CRSDepTime)  %>%  # group the data points by model nae
-   summarize(CRSDD.mean=mean(DepDelay[which(DepDelay > 0)],na.rm=TRUE)) 
+   summarize(CRSDD.mean=mean(DepDelay,na.rm=TRUE)) 
  windows()
  ggplot(CRSDepTime_sum, aes(x=CRSDepTime, y=CRSDD.mean)) + 
    geom_bar(stat='identity') + 
-   coord_flip() +
    labs(title="AVG Delay per Scheduled Time of Departure", 
         caption="Source: ABIA",
         x="Scheduled Time",
@@ -88,7 +86,7 @@ Month_sum = abia %>%
         y = "Delay in minutes")
         library(mosaic)
 
-Cancel_data = ABIA %>%
+Cancel_data = abia %>%
   group_by(UniqueCarrier) %>%
   summarize(cancellation.rate = mean(Cancelled))
 
@@ -102,7 +100,7 @@ ggplot(Cancel_data, aes(x=UniqueCarrier, y=cancellation.rate)) +
 
 Month_Abbreviation <- factor(Month_Abbreviation, levels = c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"))
 
-Month_data = ABIA %>%
+Month_data = abia %>%
   group_by(Month_Abbreviation) %>%
   summarize(cancellation.rate = mean(Cancelled))
 
@@ -114,7 +112,7 @@ ggplot(Month_data, aes(x=factor(Month_Abbreviation, levels = c("Jan", "Feb", "Ma
        y="Cancellation Rate" ,
        x="Month")
   
-Time_data = ABIA %>%
+Time_data = abia %>%
   group_by(CRSDepTime) %>%
   summarize(cancellation.rate = mean(Cancelled))
 
