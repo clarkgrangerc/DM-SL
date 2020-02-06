@@ -106,9 +106,19 @@ p_test350
 
 ####### 65 AMG ###########
 #######Plot Price vs mileage for 350 trim#####
+
 plot65AMG =ggplot(data = sclass65AMG) + 
-  geom_point(mapping = aes(x = mileage, y = price), color='blue')  
+  geom_point(mapping = aes(x = mileage, y = price), color='blue')+
+  labs(title="MB S65 AMG ", 
+     x="Mileage",
+     y = "Price in USD")
 plot65AMG
+
+
+par(mfrow=c(1,2))
+plot350
+plot65AMG
+
 
 # Make a train-test split 65 AMG
 N65 = nrow(sclass65AMG)
