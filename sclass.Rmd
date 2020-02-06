@@ -2,7 +2,7 @@
 # Question 2. K-nearest neighbors
 
 ```{r include=FALSE}
-##################### Problem 2 HW1 #####################
+ #### plot the graph
 library(tidyverse)
 library(FNN)
 library(mosaic)
@@ -19,8 +19,7 @@ With information of over 29,000 Mercedes-Benz S Class vehicles, our goal is to u
 
 ## Model for MB S350 
 
-###
-
+### Figure 2.1. 
 ```{r echo=FALSE, warning= FALSE}
 plot350 =ggplot(data = sclass350) + 
   geom_point(mapping = aes(x = mileage, y = price), color='blue')+
@@ -30,11 +29,12 @@ plot350 =ggplot(data = sclass350) +
 plot350
 ```
 
+In the figure 2.1. we can see the negative relation between the mileage and  the price, as expected.
 
-aaa
-TEXT
+The following steep is divide our data between the test and train data for both variables. After that, we generate random samples of our subsets of data. Then, we calculate the rsme generated at each level of K in our k nearest neighbor model for price of a 350 s class given the mileage. 
 
-```{r echo=FALSE, warning= FALSE}
+### Figure 2.2. 
+```{r include=FALSE, echo=FALSE, warning= FALSE}
 # Make a train-test split 350
 N350 = nrow(sclass350)
 N_train350 = floor(0.8*N350)
@@ -87,16 +87,15 @@ plot350_k= ggplot(data = knn_output)+
   labs(title="KNN's Models for 350 Trim ", 
        x="K",
        y = "RMSE")
+```
+```{r echo=FALSE, warning= FALSE}
 plot350_k
 ```
+The figure 2.2. shows the series of RMSE at every value of K, the red line indicate the k which generate the minimum RMSE. In this case the k value is  `r k_min`. However this value will change any time we generate a new random sample, to decide the best k we repeated the process ten times and then we took the average of the minium k.  
 
-
-
-
+### Figure 2.3. 
 ```{r echo=FALSE, warning= FALSE}
-# Running the best Knn model 
-#####
-
+###The BEST model
 knn_best = knn.reg(train = X_train350, test = X_test350, y = y_train350, k=k_min)
 ypred_knn350_best=knn_best$pred
 rmse(y_test350, ypred_knn350_best)
@@ -113,7 +112,9 @@ p_test350 = ggplot(data = D_test350) +
   labs(title="KNN model with minimum RMSE", 
        x="Mileage",
        y = "Price in USD")
-p_test350 
+ p_test350
 ```
 
+After run the model with the best k, we generate the fitted values to compare with our test subset. the figure 2.3. shows the fit of the chosen model.  
 
+## Model for MB S65AMG
