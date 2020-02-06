@@ -22,7 +22,10 @@ windows()
 
 #######Plot Price vs mileage for 350 trim#####
 plot350 =ggplot(data = sclass350) + 
-  geom_point(mapping = aes(x = mileage, y = price), color='blue')
+  geom_point(mapping = aes(x = mileage, y = price), color='blue')+
+  labs(title="MB S350 ", 
+     x="Mileage",
+     y = "Price in USD")
 plot350
 
 # Make a train-test split 350
