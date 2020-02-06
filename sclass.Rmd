@@ -20,6 +20,7 @@ With information of over 29,000 Mercedes-Benz S Class vehicles, our goal is to u
 ## Model for MB S350 
 
 ### Figure 2.1. 
+
 ```{r echo=FALSE, warning= FALSE}
 plot350 =ggplot(data = sclass350) + 
   geom_point(mapping = aes(x = mileage, y = price), color='blue')+
@@ -34,6 +35,7 @@ In the figure 2.1. we can see the negative relation between the mileage and  the
 The following steep is divide our data between the test and train data for both variables. After that, we generate random samples of our subsets of data. Then, we calculate the rsme generated at each level of K in our k nearest neighbor model for price of a 350 s class given the mileage. 
 
 ### Figure 2.2. 
+
 ```{r include=FALSE, echo=FALSE, warning= FALSE}
 # Make a train-test split 350
 N350 = nrow(sclass350)
@@ -94,6 +96,7 @@ plot350_k
 The figure 2.2. shows the series of RMSE at every value of K, the red line indicate the k which generate the minimum RMSE. In this case the k value is  `r k_min`. However this value will change any time we generate a new random sample, to decide the best k we repeated the process ten times and then we took the average of the minium k.  
 
 ### Figure 2.3. 
+
 ```{r echo=FALSE, warning= FALSE}
 ###The BEST model
 knn_best = knn.reg(train = X_train350, test = X_test350, y = y_train350, k=k_min)
