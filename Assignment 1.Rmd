@@ -1,9 +1,10 @@
 ---
 title: "Exercise 1"
-author: "Clark, Zach, Zargham"
+author: 'By: Granger, Carlson, Khan'
 date: "2/5/2020"
-output:
-  html_document
+output: 
+      md_document:
+      variant: markdown_github
 ---
 
 ```{r setup, include=FALSE}
@@ -14,19 +15,21 @@ library(mosaic)
 library(ggplot2)
 ```
 
+# Question 1
 ## Patterns of Delay & Cancellation at Austin Bergstorm Airport
 
 We look at the data collected on flights at ABIA to check for intresting patterns. Some of those patterns include the delay or cancellation of flights with respect to different carriers, days of the month and days of the week. 
 
 The data includes flights into and out of ABIA. In this exercise we focus on the patterns of departure delay for flights going out of ABIA. For this we create a new subset that includes only those flights which depart from ABIA. Also we consider any flights that depart minutes before their scheduled time to be on-time and convert negative values to zeros to give more realistic picture and without affecting average values for departure delay. 
-```{r echo= FALSE}
+```{r echo= FALSE, warning=FALSE}
 abia = read.csv('ABIA.csv')
 naustin = subset(abia, Origin=="AUS")
 naustin$DepDelay = ifelse(naustin$DepDelay < 0, 0, naustin$DepDelay)
 naustin$CRSDTime= substr(naustin$CRSDepTime, 1, nchar(naustin$CRSDepTime)-2)
+naustin$Month1=month.abb[naustin$Month]
 ```
 
-## Carrier Wise Patterns of Delays
+## Carrier Patterns of Delays
 The first pattern we try to explore is the average departure delay for different carriers and see which carriers have more delays on average. This will show the performance of carriers. 
 
 ```{r , echo = FALSE}
@@ -70,28 +73,316 @@ When looking at the average departure delay for different hours of a day, we see
 CRSDepTime_sum = naustin %>%
    group_by(CRSDTime)  %>%  # group the data points by model nae
    summarize(CRSDD.mean=mean(DepDelay,na.rm=TRUE)) 
- ggplot(CRSDepTime_sum, aes(x=CRSDTime, y=CRSDD.mean)) + 
-   geom_bar(stat='identity') + 
+ ggplot(CRSDepTime_sum, aes(x=factor(CRSDTime, levels = c("", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22")), y=CRSDD.mean)) + 
+   geom_bar(stat='identity') +
    labs(title="AVG Delay per Scheduled Time of Departure", 
         caption="Source: ABIA",
         x="Scheduled Time (Hour of the Day",
         y = "Delay in minutes")
 ```
 
+## Average Cancellation for Time of the Day
 
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+Looking at cancellation pattern for every hour of the day, we see that the highest cancellation rate occurs for 22:00 hour of the day. Any flight within this hour has a higher rate of cancellation than flights flying out at other hours of the day
+```{r echo=FALSE}
+Time_data = naustin %>%
+  group_by(CRSDTime) %>%
+  summarize(cancellation.rate = mean(Cancelled))
+            
+ggplot(Time_data, aes(x=factor(CRSDTime, levels = c("", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22")), y=cancellation.rate)) + 
+  geom_bar(stat='identity') +
+  coord_flip()+ 
+  labs(title="Cancellation Rate vs Time of Day",
+       caption = "Source: ABIA" ,
+       y="Cancellation Rate" ,
+       x="Military Time")
 ```
 
-## Including Plots
+## Average Delay per Month of the Year
 
-You can also embed plots, for example:
+The average delay of flights flying out of ABIA for each month shows that the month of December witnesses highest average delays. This can be attributed to the weather in this month and also the higher number of flights in holiday season. 
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r echo = FALSE, warning=FALSE}
+Month_sum = naustin %>%
+   group_by(Month1)  %>%  # group the data points by model nae
+   summarize(DD.mean=mean(DepDelay,na.rm=TRUE)) 
+ 
+ ggplot(Month_sum, aes(x=factor(Month1, levels = c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")), y=DD.mean)) + 
+   geom_bar(stat='identity') + 
+   coord_flip()+
+   labs(title="Average Departure Delay per Month", 
+        caption="Source: ABIA",
+        x="Month",
+        y = "Delay in minutes")
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+## Average Cancellation Rate for Month of the Year
+
+The same analysis of cancellation rate for each month of the year shows that the month of March saw highest rate of flight cancellation flying out of ABIA. This can be attributed to weather and higher number of flights in this month.
+
+```{r echo = FALSE, warning= FALSE}
+Cancel_data = naustin %>%
+  group_by(Month1) %>%
+  summarize(cancellation.rate = mean(Cancelled))
+
+ggplot(Cancel_data, aes(x=factor(Month1, levels = c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")), y=cancellation.rate)) + 
+  geom_bar(stat='identity') +
+  coord_flip()+
+  labs(title="Cancellation Rate vs Month of the Year",
+       caption = "Source: ABIA" ,
+       y="Cancellation Rate" ,
+       x="Month")
+```
+
+## Average Delay per Destination of Flight
+The graph for average delay per destination shows which destination airports have higher delays for flights flying out of Austin. Des Moines International Airport has the highest average delay with Newark Liberty Airport coming second in average delays. 
+
+```{r echo = FALSE, warning=FALSE}
+DestinationDelay = naustin %>%
+   group_by(Dest) %>%
+   summarize(DDM= mean(DepDelay, na.rm = TRUE))
+ ggplot(DestinationDelay , aes (x= reorder(Dest,DDM), y= DDM))+
+   geom_bar(stat = 'identity')+
+   coord_flip()+
+   labs(title = "AVG Delay per Destination of Flight",
+        caption = "Source : ABIA",
+        x = "Destination",
+        y= "Delay in minutes")
+```
+
+
+# Question 2. K-nearest neighbors
+
+```{r include=FALSE}
+ #### plot the graph
+library(tidyverse)
+library(FNN)
+library(mosaic)
+sclass = read.csv('sclass.csv')
+summary(sclass)
+
+# Focus on 2 trim levels: 350 and 65 AMG
+sclass350 = subset(sclass, trim == '350')
+sclass65AMG = subset(sclass, trim == '65 AMG')
+
+```
+
+With information of over 29,000 Mercedes-Benz S Class vehicles, our goal is to use K-nearest neighbors to build a predictive model for price, given mileage, separately for each of two trim levels: 350 and 65 AMG.
+
+## Model for MB S350 
+
+### Figure 2.1. 
+
+```{r echo=FALSE, warning= FALSE}
+plot350 =ggplot(data = sclass350) + 
+  geom_point(mapping = aes(x = mileage, y = price), color='blue')+
+  labs(title="MB S350 ", 
+     x="Mileage",
+     y = "Price in USD")
+plot350
+```
+
+
+In the figure 2.1. we can see the negative relation between the mileage and  the price, as expected.
+
+
+The following step is divide our data between the test and train data for both variables. After that, we generate random samples of our subsets of data. Then, we calculate the rsme generated at each level of K in our k nearest neighbor model for price of a 350 s class given the mileage. 
+
+### Figure 2.2. 
+
+```{r include=FALSE, echo=FALSE, warning= FALSE}
+# Make a train-test split 350
+N350 = nrow(sclass350)
+N_train350 = floor(0.8*N350)
+N_test350 = N350 - N_train350
+
+
+#####Train/test split
+# randomly sample a set of data points to include in the training set
+train_ind350 = sample.int(N350, N_train350, replace=FALSE)
+
+# Define the training and testing set
+D_train350 = sclass350[train_ind350,]
+D_test350 = sclass350[-train_ind350,]
+
+# optional book-keeping step:
+# reorder the rows of the testing set by the mileage variable
+# this isn't necessary, but it will allow us to make a pretty plot later
+D_test350 = arrange(D_test350, mileage)
+head(D_test350)
+
+# Now separate the training and testing sets into features (X) and outcome (y)
+X_train350 = select(D_train350, mileage)
+y_train350 = select(D_train350, price)
+X_test350 = select(D_test350, mileage)
+y_test350 = select(D_test350, price)
+
+
+##### K -Nearest Neighbor Model#define a helper function for calculating RMSE
+rmse = function(y, ypred) {
+  sqrt(mean(data.matrix((y-ypred)^2)))
+}
+
+knn_output <- data.frame(K=c(),rmse=c())
+
+for(i in c(3:nrow(X_train350))){
+  knn_Gen = knn.reg(train = X_train350, test = X_test350, y = y_train350, k=i)
+  ypred_knn350 = knn_Gen$pred
+  knn_rmse =rmse(y_test350,ypred_knn350)
+  knn_output = rbind(knn_output,c(i,knn_rmse))
+}
+colnames(knn_output) <- c("k","RMSE")
+k_min = knn_output$k[which.min(knn_output$RMSE)]
+
+###########Graph rsme vs k ##
+plot350_k= ggplot(data = knn_output)+
+  geom_line(aes(x = k, y = RMSE))+
+  geom_line(aes(x = k_min, y = RMSE), col = "red")+
+  labs(title="KNN's Models for 350 Trim ", 
+       x="K",
+       y = "RMSE")
+```
+
+```{r echo=FALSE, warning= FALSE}
+plot350_k
+```
+
+The figure 2.2. shows the series of RMSE at every value of K, the red line indicate the k which generate the minimum RMSE. In this case the k value is  `r k_min`. However this value will change any time we generate a new random sample, to decide the best k we repeated the process ten times and then we took the average of the minium k.  
+
+### Figure 2.3. 
+
+```{r echo=FALSE, warning= FALSE}
+###The BEST model
+knn_best = knn.reg(train = X_train350, test = X_test350, y = y_train350, k=k_min)
+ypred_knn350_best=knn_best$pred
+rmse(y_test350, ypred_knn350_best)
+
+####
+# plot the fit
+####
+# attach the predictions to the test data frame
+D_test350$ypred_knn350_best = ypred_knn350_best
+
+p_test350 = ggplot(data = D_test350) + 
+  geom_point(mapping = aes(x = mileage, y = price), color='lightgrey')+ 
+  geom_path(aes(x = mileage, y = ypred_knn350_best), color='red')+
+  labs(title="KNN model for S350 with minimum RMSE", 
+       x="Mileage",
+       y = "Price in USD")
+ p_test350
+```
+
+After run the model with the best k, we generate the fitted values to compare with our test subset. the figure 2.3. shows the fit of the chosen model.  
+
+## Model for MB S65AMG
+
+Now we have to do the same process to find out what is the best model for the S65 AMG class.
+
+### Figure 2.4.
+
+```{r echo=FALSE, warning= FALSE}
+####### 65 AMG ###
+#######Plot Price vs mileage for 350 trim
+
+plot65AMG =ggplot(data = sclass65AMG) + 
+  geom_point(mapping = aes(x = mileage, y = price), color='blue')+
+  labs(title="MB S65 AMG ", 
+     x="Mileage",
+     y = "Price in USD")
+plot65AMG
+```
+
+
+### Figure 2.5.
+
+```{r include=FALSE, echo=FALSE, warning= FALSE}
+# Make a train-test split 65 AMG
+N65 = nrow(sclass65AMG)
+N_train65 = floor(0.8*N65)
+N_test65 = N65 - N_train65
+
+#####Train/test split
+# randomly sample a set of data points to include in the training set
+train_ind65 = sample.int(N65, N_train65, replace=FALSE)
+
+# Define the training and testing set
+D_train65 = sclass65AMG[train_ind65,]
+D_test65 = sclass65AMG[-train_ind65,]
+
+# optional book-keeping step:
+# reorder the rows of the testing set by the mileage variable
+# this isn't necessary, but it will allow us to make a pretty plot later
+D_test65 = arrange(D_test65, mileage)
+head(D_test65)
+
+# Now separate the training and testing sets into features (X) and outcome (y)
+X_train65 = select(D_train65, mileage)
+y_train65 = select(D_train65, price)
+X_test65 = select(D_test65, mileage)
+y_test65 = select(D_test65, price)
+
+#####
+########## K -Nearest Neighbor Model##############
+#####
+# define a helper function for calculating RMSE
+rmse = function(y, ypred) {
+  sqrt(mean(data.matrix((y-ypred)^2)))
+}
+
+knn_output <- data.frame(K=c(),rmse=c())
+
+for(i in c(3:nrow(X_train65))){
+  knn_Gen = knn.reg(train = X_train65, test = X_test65, y = y_train65, k=i)
+  ypred_knn65 = knn_Gen$pred
+  knn_rmse =rmse(y_test65,ypred_knn65)
+  knn_output = rbind(knn_output,c(i,knn_rmse))
+}
+colnames(knn_output) <- c("k","RMSE")
+k_min2 = knn_output$k[which.min(knn_output$RMSE)]
+
+###########Graph rsme vs k ################
+plot65_k= ggplot(data = knn_output)+
+  geom_line(aes(x = k, y = RMSE))+
+  geom_line(aes(x = k_min2, y = RMSE), col = "red")+
+  labs(title="KNN's Models for 65AMG Trim ", 
+       x="K",
+       y = "RMSE")
+plot65_k
+```
+
+```{r echo=FALSE, warning= FALSE}
+plot65_k
+```
+
+The figure 2.5. shows the series of RMSE at every value of K, the red line indicate the k which generate the minimum RMSE. In this case the k value which minimize the RMSE for S65 AMG trim is  `r k_min2`. However this value will change any time we generate a new random sample, to decide the best k we repeated the process ten times and then we took the average of the minimum k.  
+
+### Figure 2.6.
+
+```{r include=FALSE, echo=FALSE, warning= FALSE}
+# Running the best Knn model 
+knn_best = knn.reg(train = X_train65, test = X_test65, y = y_train65, k=k_min2)
+ypred_knn65_best=knn_best$pred
+rmse(y_test65, ypred_knn65_best)
+
+####
+# plot the fit
+####
+# attach the predictions to the test data frame
+D_test65$ypred_knn65_best = ypred_knn65_best
+
+p_test65 = ggplot(data = D_test65) + 
+  geom_point(mapping = aes(x = mileage, y = price), color='lightgrey')+ 
+  geom_path(aes(x = mileage, y = ypred_knn65_best), color='red')+
+  labs(title="KNN model for S65AMG with the minimum RMSE", 
+       x="Mileage",
+       y = "Price in USD")
+p_test65 
+```
+
+```{r echo=FALSE, warning= FALSE}
+p_test65
+```
+
+After run the model with the best k, we generate the fitted values to compare with our test subset. the figure 2.6. shows the fit of the chosen model.
+
+The K for these two datasets are different because of the different relative variance in both these datasets. We see that the S65 dataset has less variance as compared its average then the S350 set, which in turn leads to a higher K.  
