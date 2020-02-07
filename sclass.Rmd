@@ -3,6 +3,7 @@
 
 ```{r include=FALSE}
  #### plot the graph
+getwd()
 library(tidyverse)
 library(FNN)
 library(mosaic)
