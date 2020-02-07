@@ -103,7 +103,7 @@ Model for MB S350
 In the figure 2.1. we can see the negative relation between the mileage
 and the price, as expected.
 
-The following steep is divide our data between the test and train data
+The following step is divide our data between the test and train data
 for both variables. After that, we generate random samples of our
 subsets of data. Then, we calculate the rsme generated at each level of
 K in our k nearest neighbor model for price of a 350 s class given the
@@ -115,13 +115,13 @@ mileage.
 
 The figure 2.2. shows the series of RMSE at every value of K, the red
 line indicate the k which generate the minimum RMSE. In this case the k
-value is 18. However this value will change any time we generate a new
+value is 6. However this value will change any time we generate a new
 random sample, to decide the best k we repeated the process ten times
 and then we took the average of the minium k.
 
 ### Figure 2.3.
 
-    ## [1] 9503.398
+    ## [1] 11779.52
 
 ![](Assignment-1_files/figure-markdown_strict/unnamed-chunk-13-1.png)
 
@@ -145,10 +145,10 @@ for the S65 AMG class.
 
 The figure 2.5. shows the series of RMSE at every value of K, the red
 line indicate the k which generate the minimum RMSE. In this case the k
-value which minimize the RMSE for S65 AMG trim is 25. However this value
+value which minimize the RMSE for S65 AMG trim is 3. However this value
 will change any time we generate a new random sample, to decide the best
 k we repeated the process ten times and then we took the average of the
-minium k.
+minimum k.
 
 ### Figure 2.6.
 
@@ -157,3 +157,8 @@ minium k.
 After run the model with the best k, we generate the fitted values to
 compare with our test subset. the figure 2.6. shows the fit of the
 chosen model.
+
+The K for these two datasets are different because of the different
+relative variance in both these datasets. We see that the S65 dataset
+has less variance as compared its average then the S350 set, which in
+turn leads to a higher K.
