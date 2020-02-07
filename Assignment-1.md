@@ -24,7 +24,7 @@ The first pattern we try to explore is the average departure delay for
 different carriers and see which carriers have more delays on average.
 This will show the performance of carriers.
 
-![](Assignment-1_files/figure-markdown_github/unnamed-chunk-2-1.png)
+![](Assignment-1_files/figure-markdown_strict/unnamed-chunk-2-1.png)
 
 Average Cancellation Rate per Carrier
 -------------------------------------
@@ -33,7 +33,7 @@ Calculating the average cancellation rate per carriers we see that MQ
 has the highest cancellation rate among all carriers that are departing
 from ABIA.
 
-![](Assignment-1_files/figure-markdown_github/unnamed-chunk-3-1.png)
+![](Assignment-1_files/figure-markdown_strict/unnamed-chunk-3-1.png)
 
 Average Departure Delay for Time of the Day
 -------------------------------------------
@@ -45,7 +45,7 @@ of 00:00 is an outlier and should be ignored because we have only two
 flights flying out at 00 hour and only one of them is delayed for 56
 mins leading to a higher average delay for that hour.
 
-![](Assignment-1_files/figure-markdown_github/unnamed-chunk-4-1.png)
+![](Assignment-1_files/figure-markdown_strict/unnamed-chunk-4-1.png)
 
 Average Cancellation for Time of the Day
 ----------------------------------------
@@ -54,7 +54,7 @@ Looking at cancellation pattern for every hour of the day, we see that
 the highest cancellation rate occurs for 22:00 hour of the day. Any
 flight within this hour has a higher rate of cancellation than flights
 flying out at other hours of the day
-![](Assignment-1_files/figure-markdown_github/unnamed-chunk-5-1.png)
+![](Assignment-1_files/figure-markdown_strict/unnamed-chunk-5-1.png)
 
 Average Delay per Month of the Year
 -----------------------------------
@@ -64,7 +64,7 @@ that the month of December witnesses highest average delays. This can be
 attributed to the weather in this month and also the higher number of
 flights in holiday season.
 
-![](Assignment-1_files/figure-markdown_github/unnamed-chunk-6-1.png)
+![](Assignment-1_files/figure-markdown_strict/unnamed-chunk-6-1.png)
 
 Average Cancellation Rate for Month of the Year
 -----------------------------------------------
@@ -74,7 +74,7 @@ that the month of March saw highest rate of flight cancellation flying
 out of ABIA. This can be attributed to weather and higher number of
 flights in this month.
 
-![](Assignment-1_files/figure-markdown_github/unnamed-chunk-7-1.png)
+![](Assignment-1_files/figure-markdown_strict/unnamed-chunk-7-1.png)
 
 Average Delay per Destination of Flight
 ---------------------------------------
@@ -84,7 +84,7 @@ airports have higher delays for flights flying out of Austin. Des Moines
 International Airport has the highest average delay with Newark Liberty
 Airport coming second in average delays.
 
-![](Assignment-1_files/figure-markdown_github/unnamed-chunk-8-1.png)
+![](Assignment-1_files/figure-markdown_strict/unnamed-chunk-8-1.png)
 
 Question 2. K-nearest neighbors
 ===============================
@@ -98,7 +98,7 @@ Model for MB S350
 
 ### Figure 2.1.
 
-![](Assignment-1_files/figure-markdown_github/unnamed-chunk-10-1.png)
+![](Assignment-1_files/figure-markdown_strict/unnamed-chunk-10-1.png)
 
 In the figure 2.1. we can see the negative relation between the mileage
 and the price, as expected.
@@ -111,19 +111,19 @@ mileage.
 
 ### Figure 2.2.
 
-![](Assignment-1_files/figure-markdown_github/unnamed-chunk-12-1.png)
+![](Assignment-1_files/figure-markdown_strict/unnamed-chunk-12-1.png)
 
 The figure 2.2. shows the series of RMSE at every value of K, the red
 line indicate the k which generate the minimum RMSE. In this case the k
-value is 15. However this value will change any time we generate a new
+value is 16. However this value will change any time we generate a new
 random sample, to decide the best k we repeated the process ten times
 and then we took the average of the minium k.
 
 ### Figure 2.3.
 
-    ## [1] 11486.15
+    ## [1] 9986.78
 
-![](Assignment-1_files/figure-markdown_github/unnamed-chunk-13-1.png)
+![](Assignment-1_files/figure-markdown_strict/unnamed-chunk-13-1.png)
 
 After run the model with the best k, we generate the fitted values to
 compare with our test subset. the figure 2.3. shows the fit of the
@@ -137,22 +137,22 @@ for the S65 AMG class.
 
 ### Figure 2.4.
 
-![](Assignment-1_files/figure-markdown_github/unnamed-chunk-14-1.png)
+![](Assignment-1_files/figure-markdown_strict/unnamed-chunk-14-1.png)
 
 ### Figure 2.5.
 
-![](Assignment-1_files/figure-markdown_github/unnamed-chunk-16-1.png)
+![](Assignment-1_files/figure-markdown_strict/unnamed-chunk-16-1.png)
 
 The figure 2.5. shows the series of RMSE at every value of K, the red
 line indicate the k which generate the minimum RMSE. In this case the k
-value which minimize the RMSE for S65 AMG trim is 18. However this value
+value which minimize the RMSE for S65 AMG trim is 23. However this value
 will change any time we generate a new random sample, to decide the best
 k we repeated the process ten times and then we took the average of the
 minium k.
 
 ### Figure 2.6.
 
-![](Assignment-1_files/figure-markdown_github/unnamed-chunk-18-1.png)
+![](Assignment-1_files/figure-markdown_strict/unnamed-chunk-18-1.png)
 
 After run the model with the best k, we generate the fitted values to
 compare with our test subset. the figure 2.6. shows the fit of the
