@@ -12,11 +12,6 @@ head(abia)
 
 abia2 <- na.omit(abia)
 
-# creating a ggplot
-# The first line sets up a coordinate system.
-# the second line maps displ to x, hwy to y, and draws points
-ggplot(data = abia) + 
-  geom_point(mapping = aes(x = Dest, y = DepDelay))
 
 
 ####### AVERAGE DEPARTURE DELAY PER CARRIER (Departing From Austin ) #########
@@ -44,11 +39,23 @@ CRSDepTime_sum = naustin %>%
    summarize(CRSDD.mean=mean(DepDelay,na.rm=TRUE)) 
  windows()
  ggplot(CRSDepTime_sum, aes(x=CRSDTime, y=CRSDD.mean)) + 
-   geom_bar(stat='identity') + 
+   geom_bar(stat='identity') +
    labs(title="AVG Delay per Scheduled Time of Departure", 
         caption="Source: ABIA",
         x="Scheduled Time (Hour of the Day",
         y = "Delay in minutes")
+ 
+ 
+ DestinationDelay = naustin %>%
+   group_by(Dest) %>%
+   summarize(DDM= mean(DepDelay, na.rm = TRUE))
+ ggplot(DestinationDelay , aes (x= reorder(Dest,DDM), y= DDM))+
+   geom_bar(stat = 'identity')+
+   coord_flip()+
+   labs(title = "AVG Delay per Destination of Flight",
+        caption = "Source : ABIA",
+        x = "Destination",
+        y= "Delay in minutes")
  
  count(nrow(naustin$CRSDTime == "17"))
  
@@ -74,9 +81,9 @@ summary(naustin)
  
  ############## AVG Departure Delay per Month (DEPARTING OR ARRIVING From Austin ) #####################
  
-Month_sum = abia %>%
+Month_sum = naustin %>%
    group_by(Month)  %>%  # group the data points by model nae
-   summarize(DD.mean=mean(DepDelay[which(DepDelay > 0)],na.rm=TRUE)) 
+   summarize(DD.mean=mean(DepDelay,na.rm=TRUE)) 
  
  windows()
  ggplot(Month_sum, aes(x=Month, y=DD.mean)) + 
@@ -88,17 +95,18 @@ Month_sum = abia %>%
         y = "Delay in minutes")
         library(mosaic)
 
-Cancel_data = abia %>%
-  group_by(UniqueCarrier) %>%
+Cancel_data = naustin %>%
+  group_by(Month) %>%
   summarize(cancellation.rate = mean(Cancelled))
 
-ggplot(Cancel_data, aes(x=UniqueCarrier, y=cancellation.rate)) + 
+windows()
+ggplot(Cancel_data, aes(x=Month, y=cancellation.rate)) + 
   geom_bar(stat='identity') +
   coord_flip()+
-  labs(title="Cancellation Rate vs Airline Carrier",
+  labs(title="Cancellation Rate vs Month of the Year",
        caption = "Source: ABIA" ,
        y="Cancellation Rate" ,
-       x="Airline")
+       x="Month")
 
 Month_Abbreviation <- factor(Month_Abbreviation, levels = c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"))
 
@@ -114,21 +122,21 @@ ggplot(Month_data, aes(x=factor(Month_Abbreviation, levels = c("Jan", "Feb", "Ma
        y="Cancellation Rate" ,
        x="Month")
   
-Time_data = abia %>%
-  group_by(CRSDepTime) %>%
+Time_data = naustin %>%
+  group_by(CRSDTime) %>%
   summarize(cancellation.rate = mean(Cancelled))
 
-ggplot(Time_data, aes(x=CRSDepTime, y=cancellation.rate)) + 
+windows()
+ggplot(Time_data, aes(x=CRSDTime, y=cancellation.rate)) + 
   geom_bar(stat='identity') +
   coord_flip()+ 
-  xlim(500, 2400) + ylim(0,.25)+
   labs(title="Cancellation Rate vs Time of Day",
        caption = "Source: ABIA" ,
        y="Cancellation Rate" ,
        x="Military Time")
  
  
- 
+xlim(5, 24) + ylim(0,.25) 
  ########## MAPS #########
  
  airportcodes = read.csv('C:/Users/clark/OneDrive/UTEXAS/Spring20/Data Mining/airportcodes.csv')
