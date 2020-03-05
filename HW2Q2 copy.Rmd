@@ -1,0 +1,51 @@
+---
+title: "HW2Q2"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(mosaic)
+
+```
+
+## Question 2: A Hospital Audit
+### Part 1: Are some radiologists more clinically conservative than others in recalling patients, holding patient risk factors equal?
+Here, we model recall decisions on all risk factors and the radiologist that made the decision to gauge how conservative the doctors are relative to each other.
+
+
+```{r part 1}
+brca = read.csv("brca.csv")
+model_recall = glm(recall ~ . - cancer, data=brca, family=binomial)
+summary(model_recall)
+```
+In this output, we can see the estimates on the different radiologists, which tells us how conservative they are. Notice, our output only has four radiologists shown but there are actually 5 radiologists of interest. The fifth one is excluded and represented by the intercept. Then, the radiologist estimates in this output are just used to compare against that fifth radiologist. For example, radiologist 34 has an estimate of -.52, which corresponds to multiplying the odds of recall by .6, holding all other risk factors equal, therefore this radiologist is less conservative than the baseline radiologist(the fifth radiolist not shown in the output) at the hospital. 
+
+Analagously, radiologist 89 seems to be the most conservative with an estimate of .46 which cooresponds to multiplying the odds of recall by 1.58(again, comparing to the fifth radiologist not shown in the output), holding other risk factors constant.
+
+In conclusion, yes, some radioligists seem to be more conservative than others. This model would suggest that if the same patient saw both radiologist 34 and radiologist 89, radiologist 89 would be about 2.6 times more likely to recall them. This is a pretty concerning figure. We would like our cross-doctor reliability to be higher. It seems logical that there should be some stable risk of cancer that should determine recall and which doctor you have shouldn't influence the decision, at least not to the magnitude we see here. Moreover, here is our radiologist conservativeness ranking
+1) Radiologist 89 
+2) Radiologist 66 
+3) Radiologist 13 
+4) Radiologist 95 
+5) Radiologist 34
+
+### Part 2: When the radiologists at this hospital interpret a mammogram to make a decision on whether to recall the patient, does the data suggest that they should be weighing some clinical risk factors more heavily than they currently are?
+
+Let's model cancer versus recall and risk factors. "Model B"(regresses cancer on recall decision and risk factors) shouldn't be any better than "Model A"(regresses cancer on only recall decision) if doctors are using all the risk factor information to the fullest of its potential.
+```{r part 2}
+model_cancer = glm(cancer ~ ., data=brca, family=binomial)
+summary(model_cancer)
+```
+
+This result implies that Model B is better than Model A from above because the model is giving esimates to some of the risk factors even after controling for recall. If doctors were correctly weighting all risk factors in their recall decisions, the only non-zero estimate should be on the recall feature. The recall variable is a proxy for the probability of cancer since doctors want the most-at-risk patients to be further evaluated. So, the fact that there are non-zero estimates on features that aren't recall suggests the model was improved even after using the recall decisions by incorporating risk factors that shoud have already been used in recall.
+
+In this case, there are non-zero estimates on some features. In fact, there are some pretty large estimates on some of the risk factors! For example, tissue density type 4 had an estimate of 1.998 which cooresponds to being 7.37x more likely to have cancer than patients with density 1. 
+
+This also shows up in the raw error rates. Family history seems like it might not be weighted enough in the doctors' recall decisions. This can be seen below in the increase in false positives and false negatives when moving from history=0 to history=1. 1.5% of the patients who weren't recalled ended up having cancer when they didn't have any family history of breast cancer. When they did have family history of breast cancer, this figure jumps to 2.75%. 84.8% of the patients who were recalled didn't end up having cancer in the case where they had no family history of breast cancer. In the case where they did have family history of breast cancer, this figure jumps to 86.2%. Also, patients with tissue density 4 are 7.4x more likely to get cancer, holding recall decision fixed. Patients with family history of cancer are 1.28x more likely to get cancer than patients without history of breast cancer, holding recall decision fixed.
+```{r}
+xtabs(~cancer + recall + history, brca) %>% prop.table(margin=c(2, 3))
+xtabs(~cancer + recall + age, brca) %>% prop.table(margin=c(2, 3))
+xtabs(~cancer + recall + density, brca) %>% prop.table(margin=c(2, 3))
+```
+In conclusion, the doctors could adjust how they are currently weighting different risk factors to make more accurate evidence-based decisions about recall and reduce unneccessary diagnostic tests as well as make sure people who need diagnostic tests are getting them. Ultimately, this should also lead to better outcomes for the patients because we will catch the cancer sooner for the patients who have breast cancer.
