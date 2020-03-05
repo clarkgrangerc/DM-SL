@@ -1,0 +1,171 @@
+---
+title: "Question 3. Predicting when articles go viral"
+output: html_document
+---
+
+```{r include=FALSE}
+ #### Libraries 
+library(tidyverse)
+library(mosaic)
+library(class)
+library(FNN)
+library(foreach)
+library(class)
+library(jtools)
+###Data reading
+on = read.csv("https://raw.githubusercontent.com/jgscott/ECO395M/master/data/online_news.csv")
+###### Adding Viral Binary Variable and Log Shares Variable to the dataset
+on$viral = ifelse(on$shares > 1400, 1, 0)
+summary(on$viral)
+on$lshares =log(on$shares)
+
+```
+
+Description task objectives 
+
+
+# Approach #1 Working with 
+```{r include=FALSE}
+### AVG Accuracy model # 0 Null model for comparison (Accuraccy)
+n = nrow(on)
+n_train = round(0.8*n)  # round to nearest integer
+n_test = n - n_train
+train_cases = sample.int(n, n_train, replace=FALSE)
+test_cases = setdiff(1:n, train_cases)
+on_train = on[train_cases,]
+null_m=table(on_train$viral)
+null_m
+ACC_null=null_m[1]/count(on_train)
+ACC_null
+
+##### AVG accuracy for Linear Model #1 built manually
+
+lm_shares = do(100)*{
+  #	resample data with replacement
+    # Split into training and testing sets
+  n = nrow(on)
+  n_train = round(0.8*n)  # round to nearest integer
+  n_test = n - n_train
+  train_cases = sample.int(n, n_train, replace=FALSE)
+  test_cases = setdiff(1:n, train_cases)
+  on_train = on[train_cases,]
+  on_test = on[test_cases,]
+  y_test   = on$viral[test_cases]
+  
+    m1 = lm(shares ~ n_tokens_title + n_tokens_content + num_hrefs + 
+            num_self_hrefs + num_imgs + num_videos + 
+            average_token_length + num_keywords + data_channel_is_lifestyle +
+            data_channel_is_entertainment + data_channel_is_bus + 
+            data_channel_is_socmed + data_channel_is_tech +
+            data_channel_is_world + self_reference_avg_sharess +
+            is_weekend + global_rate_negative_words + global_rate_positive_words + title_subjectivity,data=on_train)
+  
+  pred_test = predict(m1, on_test)
+  yhat_test = ifelse((pred_test>1400),yes=1,no=0)
+  1-sum(yhat_test != y_test)/n_test 
+  
+}
+ACC_m1=colMeans(lm_shares)
+
+##### AVG accuracy for Linear Model #2 built using KNN with shares
+X = dplyr::select(on, n_tokens_title, n_tokens_content, num_hrefs, 
+                  num_self_hrefs, num_imgs, num_videos, 
+                  average_token_length, num_keywords, self_reference_avg_sharess) 
+y = on$shares
+
+k_grid = seq(1, 100, by=5)
+err_grid = foreach(k = k_grid,  .combine='c') %do% {
+  knn_shares = do(5)*{
+    n = length(y)
+    n_train = round(0.8*n)
+    n_test = n - n_train
+    train_ind = sample.int(n, n_train)
+    X_train = X[train_ind,]
+    X_test = X[-train_ind,]
+    y_train = y[train_ind]
+    y_test = y[-train_ind]
+    y_test_valid=on$viral[-train_ind]
+    
+    # scale the training set features
+    scale_factors = apply(X_train, 2, sd)
+    X_train_sc = scale(X_train, scale=scale_factors)
+    
+    # scale the test set features using the same scale factors
+    X_test_sc = scale(X_test, scale=scale_factors)
+    
+    # Fit two KNN models (notice the odd values of K)
+    knn_m2= knn.reg(train=X_train_sc, test= X_test_sc, y=y_train, k=k)
+    
+   # Calculating classification errors
+    phat_test = knn_m2$pred
+    yhat_test = ifelse((phat_test>1400),1 , 0)
+    sum(yhat_test != y_test_valid)/n_test 
+    
+  } 
+  colMeans(knn_shares)
+}
+acc_k=1-err_grid
+ACC_km2=max(acc_k)
+ACC_km2
+
+##### AVG accuracy for Linear Model #3 built using ln of shares 
+
+lm_lshares = do(100)*{
+  #	resample data with replacement
+  # Split into training and testing sets
+  n = nrow(on)
+  n_train = round(0.8*n)  # round to nearest integer
+  n_test = n - n_train
+  train_cases = sample.int(n, n_train, replace=FALSE)
+  test_cases = setdiff(1:n, train_cases)
+  on_train = on[train_cases,]
+  on_test = on[test_cases,]
+  y_test   = on$viral[test_cases]
+  
+  
+  m3 = lm(lshares ~ n_tokens_title + n_tokens_content + num_hrefs + 
+            num_self_hrefs + num_imgs + num_videos + 
+            average_token_length + num_keywords + data_channel_is_lifestyle +
+            data_channel_is_entertainment + data_channel_is_bus + 
+            data_channel_is_socmed + data_channel_is_tech +
+            data_channel_is_world + self_reference_avg_sharess +
+            is_weekend + global_rate_negative_words + global_rate_positive_words + title_subjectivity,data=on_train)
+  
+  pred_test = predict(m3, on_test)
+  yhat_test = ifelse(pred_test>log(1400),1 ,0)
+  #1-sum(yhat_test != y_test)/n_test ###Accuracy rate
+  confusion_out = table(y = on_test$viral, yhat = yhat_test)
+}
+CM=colMeans(lm_lshares)
+tp=CM[4]
+tn=CM[1]
+fp=CM[3]
+fn=CM[2]
+tpr = tp / (tp + fn)
+tpr
+fpr = fp / (fp + tn)
+fpr
+ACC_m3 = (tp+tn)/(tp+tn+fp+fn)
+ACC_m3
+ERR_m3=1-ACC_m3
+ERR_m3
+
+
+```
+
+
+
+Present a table with ACC of the models and comment, then present the Conf matrix for the best model and the requested ratios. Comment. 
+
+
+lshares ~ n_tokens_title + n_tokens_content + num_hrefs + 
+            num_self_hrefs + num_imgs + num_videos + 
+            average_token_length + num_keywords + data_channel_is_lifestyle +
+            data_channel_is_entertainment + data_channel_is_bus + 
+            data_channel_is_socmed + data_channel_is_tech +
+            data_channel_is_world + self_reference_avg_sharess +
+            is_weekend + global_rate_negative_words + global_rate_positive_words +       title_subjectivity
+
+
+
+
