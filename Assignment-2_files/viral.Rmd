@@ -1,6 +1,7 @@
 ---
 title: "Question 3. Predicting when articles go viral"
-output: html_document
+output:  md_document:
+                    variant: markdown_github
 ---
 
 ```{r include=FALSE}
@@ -157,6 +158,8 @@ ACC_m3
 ERR_m3=1-ACC_m3
 ERR_m3
 
+g1=ACC_m3-ACC_null
+l1=ACC_m3/ACC_null
 
 ```
 
@@ -192,7 +195,7 @@ table1=kable(accdata1)
 table1
 ```
 
-In table 1 we can observe so far the model with the best accuracy is the linear model over the log of shares. We can see that the linear model over shares is even worse that the null model.  We can see that the linear model of log shares has a gain in accuracy of `r (ACC_m3-ACC_null)*100`% comparing with the null model, it means a lift of `r ACC_m3/ACC_null`. 
+In table 1 we can observe so far the model with the best accuracy is the linear model over the log of shares. We can see that the linear model over shares is even worse that the null model.  We can see that the linear model of log shares has a gain in accuracy of `r g1*100`% comparing with the null model, it means a lift of `r l1`. 
  
 
 Having found our best model for the prediction of number of shares we proceed to present the Confusion matrix and the requested stats:
@@ -332,6 +335,10 @@ acc_k6=1-err_grid
 ACC_km6=max(acc_k6)
 knngraph <- data.frame(K=c(k_grid), acc=c(acc_k6))
 
+g2=ACC_m5-ACC_m3
+l2=ACC_m5/ACC_m3
+
+
 
 ```
 
@@ -345,7 +352,7 @@ table3=kable(accdata21)
 table3
 ```
  
-In the table 3 we can see that the model with the best accuraccy is the Logit Model, which is slightly superior to the Linear Probability model (`r ACC_m5 vs ACC_m4`). This result was expected since in this approach we are working directly over the binary variable, then the prediction rank will have less variation. In the first case we predicted the number of shares, which have a huge rank of possible outcomes. In the table 4, we present the confusion matrix for our best model and then we present the requested stats. We can see that the logistic model gives a gain of accuracy of `r (ACC_m5-ACC_m3)*100`% over the lineal model of log shares. It represents a lift of `r ACC_m5/ACC_m3`.
+In the table 3 we can see that the model with the best accuraccy is the Logit Model, which is slightly superior to the Linear Probability model (`r ACC_m5` vs `r ACC_m4`). This result was expected since in this approach we are working directly over the binary variable, then the prediction rank will have less variation. In the first case we predicted the number of shares, which have a huge rank of possible outcomes. In the table 4, we present the confusion matrix for our best model and then we present the requested stats. We can see that the logistic model gives a gain of accuracy of `r g2*100`% over the lineal model of log shares. It represents a lift of `r l2`.
 
 
 **Table 4. Confusion Matrix for the Logistic Model of Viral**
