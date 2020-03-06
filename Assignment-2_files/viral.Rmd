@@ -26,9 +26,9 @@ on$lshares =log(on$shares)
 ```
 
 
-Using the data of 39,797 online articles published by Mashable during 2013 and 2014, the goal is bulding a model to determine if an article goes viral or not. An article is considered viral if it was shared more than 1400 times. We have a set o features of each article such as things like how long the headline is, how long the article is, how positive or negative the "sentiment" of the article was, among others. Beyond to get the best model to classify, Mashable wants to know if there is anything they can learn about how to improve an article's chance of reaching this threshold. 
+Using the data of 39,797 online articles published by Mashable during 2013 and 2014, the goal is building a model to determine if an article goes viral or not. An article is considered viral if it was shared more than 1400 times. We have a set o features of each article such as things like how long the headline is, how long the article is, how positive or negative the "sentiment" of the article was, among others. Beyond to get the best model to classify, Mashable wants to know if there is anything they can learn about how to improve an article's chance of reaching this threshold. 
 
-To deal with this problem we are going to work with two approach. The first approach is from the standpoint of regression. we will build three models following techniques such as linear regression, K neares neighboor and transforming the objective variable. In this first approach the objective variable will be the number of shares. The second approach is from the standpoint of classification. In this case our objective variable will be a binary entry Viral, which is 1 if the article is viral or 0 otherwise. In both approach, we have measures that help us to classify the model performance. 
+To deal with this problem we are going to work with two approach. The first approach is from the standpoint of regression. we will build three models following techniques such as linear regression, K nearest neighbor and transforming the objective variable. In this first approach the objective variable will be the number of shares. The second approach is from the standpoint of classification. In this case our objective variable will be a binary entry Viral, which is 1 if the article is viral or 0 otherwise. In both approach, we have measures that help us to classify the model performance. 
 
 
 ## Approach #1 Working with Shares as objective variable
@@ -161,7 +161,7 @@ ERR_m3
 ```
 
 
-In the first approach our objective variable is number of shares. To start  we anylized all the set of features([see features](https://github.com/jgscott/ECO395M/blob/master/data/online_news_codes.txt)) we have to decide which of them are important to include in the models. Then we start fitting linear models with several combinations of variables. We used the function step to test if including some interactions in the model would be helpful, but finally we decided work with a more parsimonious model, given it has a good fitting. Below we can see the variables we used in our linear models, we ran the first using shares as epxlained variable and then we used log of shares as explanatory variable. Then, we decided to try with a knn model as well. For this last model, we did not consider the binary variables since they do not add too much information in this methodology. The variables used in the knn model are summarized below. 
+In the first approach our objective variable is number of shares. To start  we anylized all the set of features([see features](https://github.com/jgscott/ECO395M/blob/master/data/online_news_codes.txt)) we have to decide which of them are important to include in the models. Then we start fitting linear models with several combinations of variables. We used the function step to test if including some interactions in the model would be helpful, but finally we decided work with a more parsimonious model, given it has a good fitting. Below we can see the variables we used in our linear models, we ran the first using shares as explained variable and then we used log of shares as explanatory variable. Then, we decided to try with a knn model as well. For this last model, we did not consider the binary variables since they do not add too much information in this methodology. The variables used in the knn model are summarized below. 
 
 **Specification for Linear models:**
 
@@ -179,7 +179,8 @@ Shares ~ n_tokens_title, n_tokens_content, num_hrefs,
                   num_self_hrefs, num_imgs, num_videos, 
                   average_token_length, num_keywords, self_reference_avg_sharess
 
-Since the predictions of our model are numerical (number of shares), we needed the evaluation in terms of a binary prediction (viral or not). For that reason after generated prediction of our models across multiple train/test splits we summarized the accuracy rate of each one considering a threeshold of 1400 shares to consider an article viral. In the table 1 we can see the accuracy ratio for our thre models plus "null" model that always predicts the articles as "not viral". 
+
+Since the predictions of our model are numerical (number of shares), we needed the evaluation in terms of a binary prediction (viral or not). For that reason after generated prediction of our models across multiple train/test splits we summarized the accuracy rate of each model considering a threshold of 1400 shares to consider an article viral. In the table 1 we can see the accuracy ratio for our three models plus a "null" model that always predicts the articles as "not viral". 
 
 **Table 1. Accuracy rate for models with Shares as objective variable**
 ```{r echo=FALSE, warning= FALSE}
@@ -190,8 +191,9 @@ row.names(accdata1) <- c("Null Model","Linear Model","KNN Model","Linear Model (
 table1=kable(accdata1) 
 table1
 ```
-In table 1 we can observe so far the model with the best accuracy is the linear model over the log of shares. We can see that the linear model over shares is even worse that the null model.  
 
+In table 1 we can observe so far the model with the best accuracy is the linear model over the log of shares. We can see that the linear model over shares is even worse that the null model.  We can see that the linear model of log shares has a gain in accuracy of `r (ACC_m3-ACC_null)*100`% comparing with the null model, it means a lift of `r ACC_m3/ACC_null`. 
+ 
 
 Having found our best model for the prediction of number of shares we proceed to present the Confusion matrix and the requested stats:
 
@@ -213,10 +215,10 @@ table2
  False positive rate = `r fpr*100`%
  
  
+ 
 ## Approach #2 Working with binary variable viral as objective 
 
 In the second approach we handled this problem from the standpoint of classification. That is, we defined a binary variable viral and built our very models for directly predicting viral status as a target variable. We worked with the same specification of our first lineal model, but using Linear probability model regression and a a logit model regression. In the case of the Knn approach we used the same variables of the knn model for shares.The table 3 summarized the accuracy rate for the three classification models.  
-  
 ```{r include=FALSE}
 ##### AVG accuracy for Linear Probability Model #4 built as a LPM model with y=viral
 
@@ -333,9 +335,7 @@ knngraph <- data.frame(K=c(k_grid), acc=c(acc_k6))
 
 ```
 
-
 **Table 3. Accuracy rate for models with  viral as objective variable**
-
 ```{r echo=FALSE, warning= FALSE}
   accdata2 = c(ACC_m4,ACC_m5,ACC_km6)
 accdata21=as.data.frame(accdata2)
@@ -345,11 +345,10 @@ table3=kable(accdata21)
 table3
 ```
  
+In the table 3 we can see that the model with the best accuraccy is the Logit Model, which is slightly superior to the Linear Probability model (`r ACC_m5 vs ACC_m4`). This result was expected since in this approach we are working directly over the binary variable, then the prediction rank will have less variation. In the first case we predicted the number of shares, which have a huge rank of possible outcomes. In the table 4, we present the confusion matrix for our best model and then we present the requested stats. We can see that the logistic model gives a gain of accuracy of `r (ACC_m5-ACC_m3)*100`% over the lineal model of log shares. It represents a lift of `r ACC_m5/ACCm3`.
 
 
-
-
-**Table 2. Confusion Matrix for the Logistic Model of Viral**
+**Table 4. Confusion Matrix for the Logistic Model of Viral**
 ```{r echo=FALSE, warning= FALSE}
 CM_m5=as.data.frame(CM1)
 colnames(CM_m5)<-c("Logit Model")
@@ -367,10 +366,9 @@ table4
  False positive rate = `r fpr1*100`%
 
 
-We decided to include a graph to see the advantages in accuracy of the probabilistic models over the Knn classification model. 
+In addition, we decided to include a graph to see the advantages in accuracy of the probabilistic models over the Knn classification model with differents values of K (see graph 1).  
 
-
-**Graph 1. KNN model for several K's vs the LPM and Logit Models**
+**Graph 1. KNN models vs LPM and Logit Models**
 ```{r echo=FALSE, warning= FALSE}
 colnames(knngraph) <- c("k","AVG_ACC")
 k_min = knngraph$k[which.max(knngraph$AVG_ACC)]
@@ -380,22 +378,22 @@ plotknn= ggplot(data = knngraph)+
   geom_line(aes(x =k_min , y = AVG_ACC), col = "blue")+
   geom_line(aes(x= k, y = ACC_m4, col="red"))+
   geom_line(aes(x= k, y = ACC_m5, col="green"))+
-  labs(title="KNN's Models for Viral vs LPM and Logit ",
-       x="K",
-       y = "Accuracy Rate", fill="LPM")
+  labs(x="K", y = "Accuracy Rate", fill="LPM")
 plotknn
 ```
 
 
-Table with coeff of my best model 
 
 ## How can we increase the probability that an article goes viral?
 
 
-**Table 6. Average Marginal Effects of the Logit Model 
+By this point we have adressed the problem to find the best model to predict with the highest accuracy the binary output viral. But we also want to know what features would increase the probability of an article to go viral or not. However, since our best model is a logistic model we know that the coefficients generated do not have a direct interpretation as a causal effect, in this case a probability of succes. Therefore, in table 6 we compute the average marginal effect of all the variables we included in our logit model, because them can be readed as the partial causal effect of each variable over the probability of an article to go viral. Thus, if we want to increase the probability to be viral we should increase the features with the higher partial effect such as writing an article about social media or releasing the article in a weekend. In the other hand we should avoid the characteristic that have a negative partial effect such as writing about entertainment or including a large number of negative words. 
+
+**Table 6. Average Marginal Effects of the Logit Model**
 ```{r echo=FALSE, warning= FALSE}
 margins_m5=margins(m5, type='response')
 table5=kable(summary(margins_m5)) 
 table5
 
 ```
+
