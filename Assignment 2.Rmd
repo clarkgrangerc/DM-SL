@@ -82,7 +82,8 @@ So we decided to have the following model as our final best linear regression mo
 
 ```{r coef, echo=F}
 lmbase = lm(price ~ landValue+lotSize+ livingArea+ bedrooms+ bathrooms+ extrarooms + centralAir + heating + age+ newConstruction+ fireplaces + fuel + age+ pctCollege , data=Housing)
-pander(summary(lmbase))
+panderOptions('table.split.table', 100)
+pander(summary(lmbase), )
 ```
 
 We applied this model on 1000 random train/ test splits of our data and calculated its out of sample root mean squared error.
