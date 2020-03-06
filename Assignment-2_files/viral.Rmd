@@ -3,7 +3,7 @@ title: "Question 3. Predicting when articles go viral"
 output: md_document
 ---
 
-```{r include=FALSE}
+```{r include=FALSE, cache= TRUE}
  #### Libraries 
 library(tidyverse)
 library(mosaic)
@@ -25,6 +25,7 @@ on$lshares =log(on$shares)
 
 ```
 
+# Question 3. Predicting when articles go viral
 
 Using the data of 39,797 online articles published by Mashable during 2013 and 2014, the goal is building a model to determine if an article goes viral or not. An article is considered viral if it was shared more than 1400 times. We have a set o features of each article such as things like how long the headline is, how long the article is, how positive or negative the "sentiment" of the article was, among others. Beyond to get the best model to classify, Mashable wants to know if there is anything they can learn about how to improve an article's chance of reaching this threshold. 
 
@@ -32,7 +33,7 @@ To deal with this problem we are going to work with two approach. The first appr
 
 
 ## Approach #1 Working with Shares as objective variable
-```{r include=FALSE}
+```{r include=FALSE, cache= TRUE}
 ### AVG Accuracy model # 0 Null model for comparison (Accuraccy)
 n = nrow(on)
 n_train = round(0.8*n)  # round to nearest integer
@@ -185,7 +186,7 @@ Shares ~ n_tokens_title, n_tokens_content, num_hrefs,
 Since the predictions of our model are numerical (number of shares), we needed the evaluation in terms of a binary prediction (viral or not). For that reason after generated prediction of our models across multiple train/test splits we summarized the accuracy rate of each model considering a threshold of 1400 shares to consider an article viral. In the table 1 we can see the accuracy ratio for our three models plus a "null" model that always predicts the articles as "not viral". 
 
 **Table 1. Accuracy rate for models with Shares as objective variable**
-```{r echo=FALSE, warning= FALSE}
+```{r echo=FALSE, warning= FALSE, cache= TRUE}
 accdata = c(ACC_null,ACC_m1,ACC_km2,ACC_m3)
 accdata1=t(as.data.frame(accdata))
 colnames(accdata1) <- c("Accuracy Rate")
@@ -200,7 +201,7 @@ In table 1 we can observe so far the model with the best accuracy is the linear 
 Having found our best model for the prediction of number of shares we proceed to present the Confusion matrix and the requested stats:
 
 **Table 2. Confusion Matrix for the Linear Model of Log of Shares**
-```{r echo=FALSE, warning= FALSE}
+```{r echo=FALSE, warning= FALSE, cache= TRUE}
 CM_m3=as.data.frame(CM)
 colnames(CM_m3)<-c("Linear Model Log (Shares)")
 row.names(CM_m3) <- c("True Negative","False Negative","False Positive","True Positive")
@@ -221,7 +222,7 @@ table2
 ## Approach #2 Working with binary variable viral as objective 
 
 In the second approach we handled this problem from the standpoint of classification. That is, we defined a binary variable viral and built our very models for directly predicting viral status as a target variable. We worked with the same specification of our first lineal model, but using Linear probability model regression and a a logit model regression. In the case of the Knn approach we used the same variables of the knn model for shares.The table 3 summarized the accuracy rate for the three classification models.  
-```{r include=FALSE}
+```{r include=FALSE, cache= TRUE}
 ##### AVG accuracy for Linear Probability Model #4 built as a LPM model with y=viral
 
 lpm_viral = do(100)*{
@@ -342,7 +343,7 @@ l2=ACC_m5/ACC_m3
 ```
 
 **Table 3. Accuracy rate for models with  viral as objective variable**
-```{r echo=FALSE, warning= FALSE}
+```{r echo=FALSE, warning= FALSE, cache= TRUE}
   accdata2 = c(ACC_m4,ACC_m5,ACC_km6)
 accdata21=as.data.frame(accdata2)
 colnames(accdata21) <- c("Accuracy Rate")
@@ -355,7 +356,7 @@ In the table 3 we can see that the model with the best accuraccy is the Logit Mo
 
 
 **Table 4. Confusion Matrix for the Logistic Model of Viral**
-```{r echo=FALSE, warning= FALSE}
+```{r echo=FALSE, warning= FALSE, cache= TRUE}
 CM_m5=as.data.frame(CM1)
 colnames(CM_m5)<-c("Logit Model")
 row.names(CM_m5) <- c("True Negative","False Negative","False Positive","True Positive")
@@ -376,7 +377,7 @@ table4
 In addition, we decided to include a graph to see the advantages in accuracy of the probabilistic models over the Knn classification model with differents values of K (see graph 1).  
 
 **Graph 1. KNN models vs LPM and Logit Models**
-```{r echo=FALSE, warning= FALSE}
+```{r echo=FALSE, warning= FALSE, cache= TRUE}
 colnames(knngraph) <- c("k","AVG_ACC")
 k_min = knngraph$k[which.max(knngraph$AVG_ACC)]
 ###########Graph ACC vs k ################
@@ -397,7 +398,7 @@ plotknn
 By this point we have adressed the problem to find the best model to predict with the highest accuracy the binary output viral. But we also want to know what features would increase the probability of an article to go viral or not. However, since our best model is a logistic model we know that the coefficients generated do not have a direct interpretation as a causal effect, in this case a probability of succes. Therefore, in table 6 we compute the average marginal effect of all the variables we included in our logit model, because them can be readed as the partial causal effect of each variable over the probability of an article to go viral. Thus, if we want to increase the probability to be viral we should increase the features with the higher partial effect such as writing an article about social media or releasing the article in a weekend. In the other hand we should avoid the characteristic that have a negative partial effect such as writing about entertainment or including a large number of negative words. 
 
 **Table 6. Average Marginal Effects of the Logit Model**
-```{r echo=FALSE, warning= FALSE}
+```{r echo=FALSE, warning= FALSE, cache= TRUE}
 margins_m5=margins(m5, type='response')
 table5=kable(summary(margins_m5)) 
 table5
