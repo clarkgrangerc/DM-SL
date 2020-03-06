@@ -57,14 +57,38 @@ RMSE and in most cases increase error in out of sample prediction.
 So we decided to have the following model as our final best linear
 regression model for house prices.
 
-``` r
-Best Linear Regression Fit 
-lm(price ~ landValue+lotSize+ livingArea+ bedrooms+ bathrooms+ 
-               extrarooms +centralAir + heating + age+ newConstruction+ 
-                        fireplaces + fuel + age +pctCollege)
-```
+    ## % latex table generated in R 3.6.1 by xtable 1.8-4 package
+    ## % Thu Mar 05 20:43:58 2020
+    ## \begin{table}[ht]
+    ## \centering
+    ## \begin{tabular}{rrrrr}
+    ##   \hline
+    ##  & Estimate & Std. Error & t value & Pr($>$$|$t$|$) \\ 
+    ##   \hline
+    ## (Intercept) & 22376.2525 & 9848.8444 & 2.27 & 0.0232 \\ 
+    ##   landValue & 0.9805 & 0.0475 & 20.66 & 0.0000 \\ 
+    ##   lotSize & 7189.1818 & 2167.1758 & 3.32 & 0.0009 \\ 
+    ##   livingArea & 70.6978 & 4.6875 & 15.08 & 0.0000 \\ 
+    ##   bedrooms & -6110.1060 & 2426.4014 & -2.52 & 0.0119 \\ 
+    ##   bathrooms & 23655.9007 & 3416.2841 & 6.92 & 0.0000 \\ 
+    ##   extrarooms & 2848.3774 & 977.4766 & 2.91 & 0.0036 \\ 
+    ##   centralAirYes & 9173.3413 & 3526.7060 & 2.60 & 0.0094 \\ 
+    ##   heatinghot air & -1181.3351 & 12519.3972 & -0.09 & 0.9248 \\ 
+    ##   heatinghot water/steam & -12224.5384 & 13041.8981 & -0.94 & 0.3487 \\ 
+    ##   age & -131.3668 & 59.2143 & -2.22 & 0.0267 \\ 
+    ##   newConstructionYes & -48977.0560 & 7400.9384 & -6.62 & 0.0000 \\ 
+    ##   fireplaces & 1218.6589 & 3033.6448 & 0.40 & 0.6879 \\ 
+    ##   fuelgas & 11622.0815 & 12329.4124 & 0.94 & 0.3460 \\ 
+    ##   fueloil & 11667.3803 & 12951.5844 & 0.90 & 0.3678 \\ 
+    ##   pctCollege & -242.2089 & 151.2311 & -1.60 & 0.1094 \\ 
+    ##    \hline
+    ## \end{tabular}
+    ## \end{table}
 
-    ## [1] "RMSE for Best Linear Model"
+We applied this model on 1000 random train/ test splits of our data and
+calculated its out of sample root mean squared error.
+
+    ## [1] "Mean RMSE for Best Linear Model"
 
     ## [1] 59539.19
 
@@ -83,8 +107,7 @@ based on our 500 training/ tests sample splits. It gave an RMSE of
 
     ## [1] 80616.88
 
-Report: Pricing Model Comparison
---------------------------------
+### Report: Pricing Model Comparison
 
 We have two models for predicting the prices of houses in Saratoga. One
 is the linear regression model and the other one in KNN model. Both
@@ -165,7 +188,9 @@ Given the results, we can clearly say that Linear Regression model is a
 better model than KNN in this case. It has low error on average and also
 at extreme values.
 
-### Question 2: A Hospital Audit
+------------------------------------------------------------------------
+
+### **Question 2: A Hospital Audit**
 
 #### Part 1: Are some radiologists more clinically conservative than others in recalling patients, holding patient risk factors equal?
 
