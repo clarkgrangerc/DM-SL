@@ -34,7 +34,6 @@ ACC_null=null_m[1]/count(on_train)
 ACC_null
 
 
-
 ###############################################################
 #### Approach no. 1 = models with shares as dependent variable 
 
