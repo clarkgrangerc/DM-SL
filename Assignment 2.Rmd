@@ -1,6 +1,6 @@
 ---
 title: "Saratoga"
-author: "Clark, Zach, Zargham"
+author: "Clark Granger, Zachary Carlson, Zargham Khan"
 date: "3/4/2020"
 output: 
       md_document:
