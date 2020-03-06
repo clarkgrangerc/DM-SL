@@ -1,3 +1,6 @@
+Question 3. Predicting when articles go viral
+=============================================
+
 Using the data of 39,797 online articles published by Mashable during
 2013 and 2014, the goal is building a model to determine if an article
 goes viral or not. An article is considered viral if it was shared more
@@ -73,19 +76,19 @@ the table 1 we can see the accuracy ratio for our three models plus a
 <tbody>
 <tr class="odd">
 <td>Null Model</td>
-<td style="text-align: right;">0.5055021</td>
+<td style="text-align: right;">0.5074886</td>
 </tr>
 <tr class="even">
 <td>Linear Model</td>
-<td style="text-align: right;">0.4953462</td>
+<td style="text-align: right;">0.4959352</td>
 </tr>
 <tr class="odd">
 <td>KNN Model</td>
-<td style="text-align: right;">0.5275571</td>
+<td style="text-align: right;">0.5305839</td>
 </tr>
 <tr class="even">
 <td>Linear Model (Log Shares)</td>
-<td style="text-align: right;">0.5880376</td>
+<td style="text-align: right;">0.5874322</td>
 </tr>
 </tbody>
 </table>
@@ -93,8 +96,8 @@ the table 1 we can see the accuracy ratio for our three models plus a
 In table 1 we can observe so far the model with the best accuracy is the
 linear model over the log of shares. We can see that the linear model
 over shares is even worse that the null model. We can see that the
-linear model of log shares has a gain in accuracy of 8.2535455%
-comparing with the null model, it means a lift of 1.1632742.
+linear model of log shares has a gain in accuracy of 7.9943641%
+comparing with the null model, it means a lift of 1.157528.
 
 Having found our best model for the prediction of number of shares we
 proceed to present the Confusion matrix and the requested stats:
@@ -111,30 +114,30 @@ proceed to present the Confusion matrix and the requested stats:
 <tbody>
 <tr class="odd">
 <td>True Negative</td>
-<td style="text-align: right;">1318.97</td>
+<td style="text-align: right;">1314.87</td>
 </tr>
 <tr class="even">
 <td>False Negative</td>
-<td style="text-align: right;">572.91</td>
+<td style="text-align: right;">571.21</td>
 </tr>
 <tr class="odd">
 <td>False Positive</td>
-<td style="text-align: right;">2693.54</td>
+<td style="text-align: right;">2700.04</td>
 </tr>
 <tr class="even">
 <td>True Positive</td>
-<td style="text-align: right;">3343.58</td>
+<td style="text-align: right;">3342.88</td>
 </tr>
 </tbody>
 </table>
 
 **The stats are the following:**
 
-Overall error rate = 41.1962416%
+Overall error rate = 41.2567789%
 
-True positive rate = 85.3718508%
+True positive rate = 85.4063141%
 
-False positive rate = 67.1285554%
+False positive rate = 67.2503244%
 
 Approach \#2 Working with binary variable viral as objective
 ------------------------------------------------------------
@@ -160,29 +163,29 @@ the three classification models.
 <tbody>
 <tr class="odd">
 <td>Linear Probability Model</td>
-<td style="text-align: right;">0.6278749</td>
+<td style="text-align: right;">0.6269378</td>
 </tr>
 <tr class="even">
 <td>Logit Model</td>
-<td style="text-align: right;">0.6272405</td>
+<td style="text-align: right;">0.6284286</td>
 </tr>
 <tr class="odd">
 <td>KNN Classification Model</td>
-<td style="text-align: right;">0.5824190</td>
+<td style="text-align: right;">0.5863287</td>
 </tr>
 </tbody>
 </table>
 
 In the table 3 we can see that the model with the best accuraccy is the
 Logit Model, which is slightly superior to the Linear Probability model
-(0.6272405 vs 0.6278749). This result was expected since in this
+(0.6284286 vs 0.6269378). This result was expected since in this
 approach we are working directly over the binary variable, then the
 prediction rank will have less variation. In the first case we predicted
 the number of shares, which have a huge rank of possible outcomes. In
 the table 4, we present the confusion matrix for our best model and then
 we present the requested stats. We can see that the logistic model gives
-a gain of accuracy of 3.9202926% over the lineal model of log shares. It
-represents a lift of 1.0666674.
+a gain of accuracy of 4.0996343% over the lineal model of log shares. It
+represents a lift of 1.0697891.
 
 **Table 4. Confusion Matrix for the Logistic Model of Viral**
 
@@ -196,30 +199,30 @@ represents a lift of 1.0666674.
 <tbody>
 <tr class="odd">
 <td>True Negative</td>
-<td style="text-align: right;">2481.31</td>
+<td style="text-align: right;">2483.89</td>
 </tr>
 <tr class="even">
 <td>False Negative</td>
-<td style="text-align: right;">1417.38</td>
+<td style="text-align: right;">1414.25</td>
 </tr>
 <tr class="odd">
 <td>False Positive</td>
-<td style="text-align: right;">1538.23</td>
+<td style="text-align: right;">1531.94</td>
 </tr>
 <tr class="even">
 <td>True Positive</td>
-<td style="text-align: right;">2492.08</td>
+<td style="text-align: right;">2498.92</td>
 </tr>
 </tbody>
 </table>
 
 **The stats are the following:**
 
-Overall error rate = 37.275949%
+Overall error rate = 37.1571447%
 
-True positive rate = 63.744865%
+True positive rate = 63.8592241%
 
-False positive rate = 38.2688069%
+False positive rate = 38.1475311%
 
 In addition, we decided to include a graph to see the advantages in
 accuracy of the probabilistic models over the Knn classification model
@@ -264,174 +267,174 @@ including a large number of negative words.
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">average_token_length</td>
-<td style="text-align: right;">-0.0265127</td>
-<td style="text-align: right;">0.0036595</td>
-<td style="text-align: right;">-7.2449216</td>
+<td style="text-align: right;">-0.0256139</td>
+<td style="text-align: right;">0.0036413</td>
+<td style="text-align: right;">-7.034253</td>
 <td style="text-align: right;">0.0000000</td>
-<td style="text-align: right;">-0.0336851</td>
-<td style="text-align: right;">-0.0193402</td>
+<td style="text-align: right;">-0.0327507</td>
+<td style="text-align: right;">-0.0184771</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">data_channel_is_bus</td>
-<td style="text-align: right;">-0.0646881</td>
-<td style="text-align: right;">0.0105067</td>
-<td style="text-align: right;">-6.1568580</td>
+<td style="text-align: right;">-0.0644054</td>
+<td style="text-align: right;">0.0104587</td>
+<td style="text-align: right;">-6.158092</td>
 <td style="text-align: right;">0.0000000</td>
-<td style="text-align: right;">-0.0852809</td>
-<td style="text-align: right;">-0.0440954</td>
+<td style="text-align: right;">-0.0849040</td>
+<td style="text-align: right;">-0.0439068</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">data_channel_is_entertainment</td>
-<td style="text-align: right;">-0.1893377</td>
-<td style="text-align: right;">0.0095726</td>
-<td style="text-align: right;">-19.7791212</td>
+<td style="text-align: right;">-0.1963339</td>
+<td style="text-align: right;">0.0095150</td>
+<td style="text-align: right;">-20.634066</td>
 <td style="text-align: right;">0.0000000</td>
-<td style="text-align: right;">-0.2080997</td>
-<td style="text-align: right;">-0.1705757</td>
+<td style="text-align: right;">-0.2149831</td>
+<td style="text-align: right;">-0.1776848</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">data_channel_is_lifestyle</td>
-<td style="text-align: right;">-0.0356841</td>
-<td style="text-align: right;">0.0139291</td>
-<td style="text-align: right;">-2.5618307</td>
-<td style="text-align: right;">0.0104122</td>
-<td style="text-align: right;">-0.0629847</td>
-<td style="text-align: right;">-0.0083835</td>
+<td style="text-align: right;">-0.0467247</td>
+<td style="text-align: right;">0.0138914</td>
+<td style="text-align: right;">-3.363572</td>
+<td style="text-align: right;">0.0007694</td>
+<td style="text-align: right;">-0.0739514</td>
+<td style="text-align: right;">-0.0194981</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">data_channel_is_socmed</td>
-<td style="text-align: right;">0.1513588</td>
-<td style="text-align: right;">0.0142127</td>
-<td style="text-align: right;">10.6495212</td>
+<td style="text-align: right;">0.1499195</td>
+<td style="text-align: right;">0.0142640</td>
+<td style="text-align: right;">10.510316</td>
 <td style="text-align: right;">0.0000000</td>
-<td style="text-align: right;">0.1235024</td>
-<td style="text-align: right;">0.1792153</td>
+<td style="text-align: right;">0.1219625</td>
+<td style="text-align: right;">0.1778764</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">data_channel_is_tech</td>
-<td style="text-align: right;">0.0355696</td>
-<td style="text-align: right;">0.0101596</td>
-<td style="text-align: right;">3.5010749</td>
-<td style="text-align: right;">0.0004634</td>
-<td style="text-align: right;">0.0156571</td>
-<td style="text-align: right;">0.0554822</td>
+<td style="text-align: right;">0.0254192</td>
+<td style="text-align: right;">0.0101054</td>
+<td style="text-align: right;">2.515413</td>
+<td style="text-align: right;">0.0118893</td>
+<td style="text-align: right;">0.0056130</td>
+<td style="text-align: right;">0.0452253</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">data_channel_is_world</td>
-<td style="text-align: right;">-0.2068117</td>
-<td style="text-align: right;">0.0099538</td>
-<td style="text-align: right;">-20.7772437</td>
+<td style="text-align: right;">-0.2085528</td>
+<td style="text-align: right;">0.0098613</td>
+<td style="text-align: right;">-21.148701</td>
 <td style="text-align: right;">0.0000000</td>
-<td style="text-align: right;">-0.2263207</td>
-<td style="text-align: right;">-0.1873027</td>
+<td style="text-align: right;">-0.2278805</td>
+<td style="text-align: right;">-0.1892251</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">global_rate_negative_words</td>
-<td style="text-align: right;">-0.2814633</td>
-<td style="text-align: right;">0.2673487</td>
-<td style="text-align: right;">-1.0527947</td>
-<td style="text-align: right;">0.2924351</td>
-<td style="text-align: right;">-0.8054572</td>
-<td style="text-align: right;">0.2425306</td>
+<td style="text-align: right;">-0.3877736</td>
+<td style="text-align: right;">0.2665204</td>
+<td style="text-align: right;">-1.454949</td>
+<td style="text-align: right;">0.1456833</td>
+<td style="text-align: right;">-0.9101439</td>
+<td style="text-align: right;">0.1345967</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">global_rate_positive_words</td>
-<td style="text-align: right;">0.5292307</td>
-<td style="text-align: right;">0.1753671</td>
-<td style="text-align: right;">3.0178449</td>
-<td style="text-align: right;">0.0025458</td>
-<td style="text-align: right;">0.1855175</td>
-<td style="text-align: right;">0.8729438</td>
+<td style="text-align: right;">0.5197897</td>
+<td style="text-align: right;">0.1753182</td>
+<td style="text-align: right;">2.964835</td>
+<td style="text-align: right;">0.0030285</td>
+<td style="text-align: right;">0.1761723</td>
+<td style="text-align: right;">0.8634071</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">is_weekend</td>
-<td style="text-align: right;">0.1867856</td>
-<td style="text-align: right;">0.0081087</td>
-<td style="text-align: right;">23.0352335</td>
+<td style="text-align: right;">0.1961620</td>
+<td style="text-align: right;">0.0080755</td>
+<td style="text-align: right;">24.290943</td>
 <td style="text-align: right;">0.0000000</td>
-<td style="text-align: right;">0.1708929</td>
-<td style="text-align: right;">0.2026783</td>
+<td style="text-align: right;">0.1803342</td>
+<td style="text-align: right;">0.2119897</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">n_tokens_content</td>
-<td style="text-align: right;">0.0000330</td>
+<td style="text-align: right;">0.0000375</td>
 <td style="text-align: right;">0.0000072</td>
-<td style="text-align: right;">4.5915111</td>
-<td style="text-align: right;">0.0000044</td>
-<td style="text-align: right;">0.0000189</td>
-<td style="text-align: right;">0.0000471</td>
+<td style="text-align: right;">5.207723</td>
+<td style="text-align: right;">0.0000002</td>
+<td style="text-align: right;">0.0000234</td>
+<td style="text-align: right;">0.0000516</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">n_tokens_title</td>
-<td style="text-align: right;">-0.0016498</td>
-<td style="text-align: right;">0.0012993</td>
-<td style="text-align: right;">-1.2698028</td>
-<td style="text-align: right;">0.2041549</td>
-<td style="text-align: right;">-0.0041964</td>
-<td style="text-align: right;">0.0008967</td>
+<td style="text-align: right;">-0.0034511</td>
+<td style="text-align: right;">0.0012986</td>
+<td style="text-align: right;">-2.657632</td>
+<td style="text-align: right;">0.0078692</td>
+<td style="text-align: right;">-0.0059962</td>
+<td style="text-align: right;">-0.0009060</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">num_hrefs</td>
-<td style="text-align: right;">0.0030606</td>
-<td style="text-align: right;">0.0003201</td>
-<td style="text-align: right;">9.5610927</td>
+<td style="text-align: right;">0.0031005</td>
+<td style="text-align: right;">0.0003200</td>
+<td style="text-align: right;">9.689264</td>
 <td style="text-align: right;">0.0000000</td>
-<td style="text-align: right;">0.0024332</td>
-<td style="text-align: right;">0.0036880</td>
+<td style="text-align: right;">0.0024733</td>
+<td style="text-align: right;">0.0037276</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">num_imgs</td>
-<td style="text-align: right;">0.0014911</td>
-<td style="text-align: right;">0.0003889</td>
-<td style="text-align: right;">3.8336574</td>
-<td style="text-align: right;">0.0001263</td>
-<td style="text-align: right;">0.0007287</td>
-<td style="text-align: right;">0.0022534</td>
+<td style="text-align: right;">0.0016103</td>
+<td style="text-align: right;">0.0003917</td>
+<td style="text-align: right;">4.111125</td>
+<td style="text-align: right;">0.0000394</td>
+<td style="text-align: right;">0.0008426</td>
+<td style="text-align: right;">0.0023780</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">num_keywords</td>
-<td style="text-align: right;">0.0092986</td>
-<td style="text-align: right;">0.0014749</td>
-<td style="text-align: right;">6.3045487</td>
+<td style="text-align: right;">0.0100010</td>
+<td style="text-align: right;">0.0014690</td>
+<td style="text-align: right;">6.808244</td>
 <td style="text-align: right;">0.0000000</td>
-<td style="text-align: right;">0.0064079</td>
-<td style="text-align: right;">0.0121894</td>
+<td style="text-align: right;">0.0071219</td>
+<td style="text-align: right;">0.0128801</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">num_self_hrefs</td>
-<td style="text-align: right;">-0.0065039</td>
-<td style="text-align: right;">0.0008155</td>
-<td style="text-align: right;">-7.9751774</td>
+<td style="text-align: right;">-0.0065826</td>
+<td style="text-align: right;">0.0008151</td>
+<td style="text-align: right;">-8.075731</td>
 <td style="text-align: right;">0.0000000</td>
-<td style="text-align: right;">-0.0081022</td>
-<td style="text-align: right;">-0.0049055</td>
+<td style="text-align: right;">-0.0081801</td>
+<td style="text-align: right;">-0.0049850</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">num_videos</td>
-<td style="text-align: right;">0.0005186</td>
-<td style="text-align: right;">0.0007062</td>
-<td style="text-align: right;">0.7343504</td>
-<td style="text-align: right;">0.4627352</td>
-<td style="text-align: right;">-0.0008655</td>
-<td style="text-align: right;">0.0019027</td>
+<td style="text-align: right;">0.0011282</td>
+<td style="text-align: right;">0.0007176</td>
+<td style="text-align: right;">1.572214</td>
+<td style="text-align: right;">0.1159010</td>
+<td style="text-align: right;">-0.0002783</td>
+<td style="text-align: right;">0.0025347</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">self_reference_avg_sharess</td>
 <td style="text-align: right;">0.0000014</td>
 <td style="text-align: right;">0.0000002</td>
-<td style="text-align: right;">7.8813049</td>
+<td style="text-align: right;">7.843119</td>
 <td style="text-align: right;">0.0000000</td>
 <td style="text-align: right;">0.0000011</td>
 <td style="text-align: right;">0.0000018</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">title_subjectivity</td>
-<td style="text-align: right;">0.0382393</td>
-<td style="text-align: right;">0.0084912</td>
-<td style="text-align: right;">4.5034190</td>
-<td style="text-align: right;">0.0000067</td>
-<td style="text-align: right;">0.0215969</td>
-<td style="text-align: right;">0.0548818</td>
+<td style="text-align: right;">0.0320992</td>
+<td style="text-align: right;">0.0084751</td>
+<td style="text-align: right;">3.787483</td>
+<td style="text-align: right;">0.0001522</td>
+<td style="text-align: right;">0.0154884</td>
+<td style="text-align: right;">0.0487101</td>
 </tr>
 </tbody>
 </table>
