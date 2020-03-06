@@ -1,0 +1,295 @@
+---
+title: "Saratoga"
+author: "Clark, Zach, Zargham"
+date: "3/4/2020"
+output: 
+      md_document:
+        variant: markdown_github
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(mosaic)
+library(ggplot2)
+library(class)
+```
+
+# Homework. 2
+#### Group Members: Clark, Zach, Zargham
+
+### Question.1 : Saratoga Houses
+
+The question provides a data set of variables associated with house prices in Saratoga. We have data for more than 1,700 houses which include their prices, landvalue and other attributes like number of bedrooms, bathrooms, living area, lotsize etc. The task is to develop models for predicting the market prices of houses for tax authorities so that they can tax them at their market value. We use the given sample to construct two different models for this question. 
+
+#### Handbuild Linear Regression Model
+The first part of the question asks us to handbuild a linear regression model with price as dependent variable and using all other variables as independent variables. We start by assessing the medium model provided in Professor's script and check its RMSE by running it on 1000 different train/test samples. 
+
+```{r Professors_Model, eval= F, echo = T }
+Professors Medium model
+lm_medium = lm(price ~ lotSize + age + livingArea + pctCollege + bedrooms + 
+                   fireplaces + bathrooms + rooms + heating + fuel + centralAir
+```
+
+```{r medium model, echo=FALSE, cache=TRUE}
+Housing= read.csv("Housing.csv")
+
+Housing$extrarooms = Housing$rooms-Housing$bedrooms
+Housing$C_air= ifelse(Housing$centralAir == "Yes", 1, 0)
+Housing$new_c= ifelse(Housing$newConstruction == "Yes", 1, 0)
+Housing$heating_electric = ifelse(Housing$heating == "electric", 1, 0)
+Housing$heating_hotair = ifelse(Housing$heating == "hot air", 1, 0)
+Housing$heating_watersteam = ifelse(Housing$heating == "hot water/steam", 1, 0)
+
+n = nrow(Housing)
+n_train = round(0.8*n)  # round to nearest integer
+n_test = n - n_train
+
+rmse = function(y, yhat) {
+  sqrt( mean( (y - yhat)^2 ) )}
+
+
+Mean_medium = do(1000)*{
+  train_cases = sample.int(n, n_train, replace=FALSE)
+  test_cases = setdiff(1:n, train_cases)
+  Housing_train = Housing[train_cases,]
+  Housing_test = Housing[test_cases,]
+  
+  lm_medium = lm(price ~ lotSize + age + livingArea + pctCollege + bedrooms + 
+                   fireplaces + bathrooms + rooms + heating + fuel + centralAir, data=Housing_train)
+  
+  yhat_test = predict(lm_medium, Housing_test)
+  rmse(Housing_test$price, yhat_test)} 
+paste("RMSE" ,"for", "Medium") 
+mean(Mean_medium$result, na.rm = TRUE)
+
+```
+
+
+#### Part A
+We make new variables like extrarooms = rooms - bedrooms. Also we include two variables landvalue and newConstruction which improves our RMSE. However, trying composite variables like living area per lotsize, bathrooms per bedroom and using building value by subtracting landvalue from the property price  did not improve the out of sample RMSE of the model.We observed that adding more variables led to higher variance.  
+
+#### Part B
+We used Step() function to narrow down variables and interactions that can give us low variance but the lowest AIC model did not perform better at out of sample RMSE in multiple iterations. Including more interaction variables and polynomials manually and one by one also did not help. 
+
+Looking at the co-efficients, we can say that lotsize, no. of bedrooms, no. of bathrooms, living area, central air, heating, fuel and land value are the most important variables in explaining the prices of houses in the sample. Some interaction variables also come out to be significant in the regression model but they do not contribute much to out of sample RMSE and in most cases increase error in out of sample prediction. 
+
+So we decided to have the following model as our final best linear regression model for house prices.  
+
+```{r, echo=T, eval=F}
+Best Linear Regression Fit 
+lm(price ~ landValue+lotSize+ livingArea+ bedrooms+ bathrooms+ 
+               extrarooms +centralAir + heating + age+ newConstruction+ 
+                        fireplaces + fuel + age +pctCollege)
+```
+
+```{r best fit model regression, echo=F, cache=TRUE}
+Mean_rmse = do(1000)*{
+  train_cases = sample.int(n, n_train, replace=FALSE)
+  test_cases = setdiff(1:n, train_cases)
+  Housing_train = Housing[train_cases,]
+  Housing_test = Housing[test_cases,]
+  
+  lmbase = lm(price ~ landValue+lotSize+ livingArea+ bedrooms+ bathrooms+ extrarooms + centralAir + heating + age+ newConstruction+ fireplaces + fuel + age+ pctCollege , data=Housing_train)
+                
+                
+                ### Option 1 Livingperlotsize + lotSize+ centralAir + heating + extrarooms + 
+                    ## age + bedrooms +  bathperbed , data = Housing)
+    
+  
+  yhat_test = predict(lmbase, Housing_test)
+  rmse(Housing_test$price, yhat_test)} 
+paste("RMSE" ,"for", "Best", "Linear", "Model") 
+mean(Mean_rmse$result, na.rm = TRUE)
+
+```
+
+
+
+#### Part C KNN Model
+In the third part, the question asks us to fit a K-nearest neighbor model. We select the same variables as our linear model and scale them accordingly to fit a KNN model. We did 300 loops for each K starting from 1 to 300 K's. The average RMSE declines in the range of 100 to 150 K. However, exact value of K with minimum average RMSE changes with each iteration of 500 training/ test splits for each K.We selected K = 135 based on our 500 training/ tests sample splits. It gave an RMSE of 80616. 
+
+```{r, echo=F}
+k_grid = seq(75, 225, by=1)
+X=dplyr::select(Housing, landValue, lotSize, livingArea, bedrooms, bathrooms, extrarooms, age, new_c, heating_watersteam, heating_hotair, heating_electric, 
+                  fireplaces, age, C_air)
+y=Housing$price
+```
+
+
+```{r Loop for getting optimum k , echo=F, eval=F}
+X=dplyr::select(Housing, landValue, lotSize, livingArea, bedrooms, bathrooms, extrarooms, age, new_c, heating_watersteam, heating_hotair, heating_electric, 
+                  fireplaces, age, C_air)
+y=Housing$price
+
+
+k_grid = seq(75, 225, by=1)
+err_grid = foreach(k = k_grid,  .combine='c') %do% {
+  out = do(500)*{
+    train_ind = sample.int(n, n_train, replace = FALSE)
+    X_train = X[train_ind,]
+    X_test = X[-train_ind,]
+    y_train = y[train_ind]
+    y_test = y[-train_ind]
+    
+    # scale the training set features
+    scale_factors = apply(X_train, 2, sd)
+    X_train_sc = scale(X_train, scale=scale_factors)
+    
+    # scale the test set features using the same scale factors
+    X_test_sc = scale(X_test, scale=scale_factors)
+    
+    # Fit KNN models
+    knn_try = knn(train=X_train_sc, test= X_test_sc, cl=y_train, k=k)
+    # Calculating errors
+    ###knn_pred = data.frame(knn_try)
+    knn_pred = as.numeric(levels(knn_try))[as.integer(knn_try)]
+    error=rmse(y_test, knn_pred)
+  }   }
+
+knn_error=do.call(cbind.data.frame, err_grid)
+colnames(knn_error) = paste("K", k_grid, sep = "")
+Mean_knn_rmse=data.frame(colMeans(knn_error))
+colnames(Mean_knn_rmse) = ("RMSE")
+
+```
+```{r R vs RMSE graph, echo=F}
+meanrm = read.csv("meanrm.csv")
+ggplot(meanrm, aes(x = k_grid, y = RMSE)) +
+    geom_point()+geom_vline(xintercept= k_grid[meanrm$RMSE == min(meanrm$RMSE)] , col = "red")+
+    geom_text(mapping = aes(x= 130, y = 80500, label= paste("K135")), angle = 0,)+
+  labs(title="K vs Mean RMSE",
+       caption = " Mean RMSE over 500 iterations for each K")+
+  theme(
+  plot.title = element_text(hjust = 0.5))
+
+min(meanrm$RMSE)
+```
+
+
+## Report: Pricing Model Comparison
+We have two models for predicting the prices of houses in Saratoga. One is the linear regression model and the other one in KNN model. Both these models have their strengths and weaknesses. The main metric for comparing these two models is to check their out of sample prediction error or RMSE. By running the model on more than 500 different train/ test samples we find out that Linear regression model has lower RMSE which means that on average linear model is predicting prices accurately as compared to KNN model. 
+
+Linear Regression model Mean RMSE = 59,536.05 
+KNN Model Mean RMSE at K-135      = 80,616.88
+
+### Single Random Train/Test Performance
+We run both these models on a same train set and predict values for both these models on same test to compare their RMSE and Fit for same data points. 
+
+
+```{r actual vs predicted, echo=F, warning=FALSE}
+Test1= train_ind = sample.int(n, n_train, replace = FALSE)
+    fulltrn = Housing[train_ind,]
+    Xtra = X[train_ind,]
+    Xtst = X[-train_ind,]
+    fulltst = Housing[-train_ind,]
+    ytrn = y[train_ind]
+    actual = y[-train_ind]
+    
+    # scale the training set features
+    scale_factors = apply(Xtra, 2, sd)
+    Xtrasc = scale(Xtra, scale=scale_factors)
+    
+    # scale the test set features using the same scale factors
+    Xtstsc = scale(Xtst, scale=scale_factors)
+    
+    knnmodel = knn(train=Xtrasc, test= Xtstsc, cl=ytrn, k=135)
+    knnpredict = as.numeric(levels(knnmodel))[as.integer(knnmodel)]
+    
+    lmmodel = lm(price ~ lotSize+ livingArea+ bedrooms+ bathrooms+ extrarooms + centralAir + heating + age+ newConstruction+ 
+                   fireplaces + fuel + age , data=fulltrn)
+    lm_predict = predict(lmmodel, fulltst)
+    
+    RMSE_LM = rmse(fulltst$price, lm_predict)
+    RMSE_Knn = rmse(actual, knnpredict)
+
+library(reshape2)
+    
+PvAtest= melt(data.frame(cbind(actual, lm_predict, knnpredict)), "actual" )   
+### Predicted vs Actual Plot    
+ggplot(data= PvAtest)+ geom_point(mapping = aes(x=actual, y= value, color= variable), alpha = 0.3)+
+  geom_abline(intercept= 0, slope=1,)+
+  labs(title="Actual vs Predicted Plot",
+       caption = "Plot for both LM and KNN model",
+        x="Actual Prices",
+        y = "Predicted Prices")+
+  theme(
+  plot.title = element_text(hjust = 0.5))
+```
+```{r, echo = F}
+paste("LM", "RMSE")
+RMSE_LM
+paste("KNN", "RMSE")
+RMSE_Knn
+```
+
+Looking at the actual vs predicted plot we see that KNN model's predictions are more spread out than LM's model predictions. We can see that LM model's prediction are evenly distributed around the center line whereas the KNN model's predictions tend to be on the lower side of the line thus indicating on average lower prediction of prices as compared to the actual one.Here we see that LM model has better predictions with lower RMSE.  
+
+We can also see that the predictions for higher prices are far from the actual prices for both models. This means that both models are not performing good at extreme values. We check the performance of both models on prices in lower and higher percentiles and check how their RMSE perform at the fringe. 
+
+We run 100 train/ test random splits of the sample and run both models for every train/test case and then check for RMSE of both models at different percentile of prices. The table below shows that the KNN model has higher error for higher percentile data. That means houses with higher prices are predicted more inaccurately as compared to houses with average prices. The RMSE of LM model is also high but lower than KNN model but for lower percentiles, LM model has slightly higher RMSE than KNN, however the difference is not as stark as for higher percentile values. Here we can also prefer LM model over KNN as it also performs better at extreme values. 
+
+Furthermore, root mean square errors for houses that have average prices are almost the same for both models. This means that both models have almost similar performance for values around the average.  
+
+```{r percentile plot, echo=F, eval=F}
+
+variance = do(100)*{{train_ind = sample.int(n, n_train, replace = FALSE)
+    fulltrain = Housing[train_ind,]
+    Xtrain = X[train_ind,]
+    Xtest = X[-train_ind,]
+    fulltest = Housing[-train_ind,]
+    ytrain = y[train_ind]
+    ytest = y[-train_ind]
+
+    # scale the training set features
+    scale_factors = apply(Xtrain, 2, sd)
+    Xtrainsc = scale(Xtrain, scale=scale_factors)
+    
+    # scale the test set features using the same scale factors
+    Xtestsc = scale(Xtest, scale=scale_factors)
+    
+    knnmodel = knn(train=Xtrainsc, test= Xtestsc, cl=ytrain, k=120)
+    knnpred = as.numeric(levels(knnmodel))[as.integer(knnmodel)]
+    
+    lmmodel = lm(price ~ lotSize+ livingArea+ bedrooms+ bathrooms+ extrarooms + centralAir + heating + age+ newConstruction+ 
+                   fireplaces + fuel + age , data=fulltrain)
+    lm_pred = predict(lmmodel, fulltest)
+}    
+    modelcom = cbind(ytest, lm_pred, knnpred)
+}   
+ 
+####  
+variance$lm_sqerror = (variance$ytest-variance$lm_pred)^2
+variance$knn_sqerror = (variance$ytest-variance$knnpred)^2
+
+variance <- within(variance, Percentile <- as.integer(cut(ytest, quantile(ytest, probs=0:20/20), include.lowest=TRUE)))
+
+var = variance %>%
+  group_by(Percentile)  %>%  # group the data points by model nae
+  summarize(lm_rmse = sqrt(mean((lm_sqerror))), 
+            knn_rmse = sqrt(mean((knn_sqerror))))
+
+var$Percentile= (var$Percentile*5)-5
+vardata = melt(var, "Percentile")
+
+```
+```{r graph, echo=F}
+vardata = read.csv("vardata.csv")
+
+ggplot(data=vardata, aes(x=Percentile, y=value , fill = variable)) +
+  geom_bar(stat="identity", position ="identity", alpha=.3 )+
+    labs(title="RMSE of Prediction at Different Percentiles of Prices",
+       caption = "Bin width = 5 percentile",
+        x="Prices Percentile",
+        y = "Mean RMSE")+
+  theme(
+  plot.title = element_text(hjust = 0.5) )
+```
+
+### Conclusion
+
+We can see that Linear regression model performs better for predicting prices of houses in Saratoga. The linear model is easily interpretable and we can see which variables affect prices more. 
+
+KNN model is a non parametric model and is known as a slow learning model where it has to train on the data everytime to make a prediction for new values. Furthermore, we cannot easily see which variables are contributing more towards price changes. With more dimensions or variables the performance of the KNN model deteriorates as compared to Linear model where adding more variables might improve prediction.  
+
+Given the results, we can clearly say that Linear Regression model is a better model than KNN in this case. It has low error on average and also at extreme values. 
