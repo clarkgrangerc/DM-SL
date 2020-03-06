@@ -329,44 +329,159 @@ relative to each other.
 
     brca = read.csv("brca.csv")
     model_recall = glm(recall ~ . - cancer, data=brca, family=binomial)
-    summary(model_recall)
+    pander(summary(model_recall))
 
-    ## 
-    ## Call:
-    ## glm(formula = recall ~ . - cancer, family = binomial, data = brca)
-    ## 
-    ## Deviance Residuals: 
-    ##     Min       1Q   Median       3Q      Max  
-    ## -1.0445  -0.6185  -0.5186  -0.3761   2.7939  
-    ## 
-    ## Coefficients:
-    ##                          Estimate Std. Error z value Pr(>|z|)    
-    ## (Intercept)              -3.27515    0.64028  -5.115 3.13e-07 ***
-    ## radiologistradiologist34 -0.52171    0.32764  -1.592  0.11132    
-    ## radiologistradiologist66  0.35466    0.27895   1.271  0.20358    
-    ## radiologistradiologist89  0.46376    0.28026   1.655  0.09797 .  
-    ## radiologistradiologist95 -0.05219    0.29380  -0.178  0.85900    
-    ## ageage5059                0.11121    0.29534   0.377  0.70651    
-    ## ageage6069                0.15683    0.36212   0.433  0.66494    
-    ## ageage70plus              0.10782    0.36923   0.292  0.77028    
-    ## history                   0.21588    0.23301   0.926  0.35419    
-    ## symptoms                  0.72928    0.35897   2.032  0.04219 *  
-    ## menopausepostmenoNoHT    -0.19342    0.23732  -0.815  0.41506    
-    ## menopausepostmenounknown  0.40267    0.46399   0.868  0.38548    
-    ## menopausepremeno          0.34208    0.31269   1.094  0.27396    
-    ## densitydensity2           1.22015    0.53897   2.264  0.02358 *  
-    ## densitydensity3           1.41907    0.53562   2.649  0.00806 ** 
-    ## densitydensity4           1.00034    0.60196   1.662  0.09656 .  
-    ## ---
-    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-    ## 
-    ## (Dispersion parameter for binomial family taken to be 1)
-    ## 
-    ##     Null deviance: 834.25  on 986  degrees of freedom
-    ## Residual deviance: 799.99  on 971  degrees of freedom
-    ## AIC: 831.99
-    ## 
-    ## Number of Fisher Scoring iterations: 5
+<table>
+<colgroup>
+<col style="width: 40%" />
+<col style="width: 14%" />
+<col style="width: 16%" />
+<col style="width: 12%" />
+<col style="width: 15%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;"> </th>
+<th style="text-align: center;">Estimate</th>
+<th style="text-align: center;">Std. Error</th>
+<th style="text-align: center;">z value</th>
+<th style="text-align: center;">Pr(&gt;|z|)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><strong>(Intercept)</strong></td>
+<td style="text-align: center;">-3.275</td>
+<td style="text-align: center;">0.6403</td>
+<td style="text-align: center;">-5.115</td>
+<td style="text-align: center;">3.134e-07</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><strong>radiologistradiologist34</strong></td>
+<td style="text-align: center;">-0.5217</td>
+<td style="text-align: center;">0.3276</td>
+<td style="text-align: center;">-1.592</td>
+<td style="text-align: center;">0.1113</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><strong>radiologistradiologist66</strong></td>
+<td style="text-align: center;">0.3547</td>
+<td style="text-align: center;">0.2789</td>
+<td style="text-align: center;">1.271</td>
+<td style="text-align: center;">0.2036</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><strong>radiologistradiologist89</strong></td>
+<td style="text-align: center;">0.4638</td>
+<td style="text-align: center;">0.2803</td>
+<td style="text-align: center;">1.655</td>
+<td style="text-align: center;">0.09797</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><strong>radiologistradiologist95</strong></td>
+<td style="text-align: center;">-0.05219</td>
+<td style="text-align: center;">0.2938</td>
+<td style="text-align: center;">-0.1776</td>
+<td style="text-align: center;">0.859</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><strong>ageage5059</strong></td>
+<td style="text-align: center;">0.1112</td>
+<td style="text-align: center;">0.2953</td>
+<td style="text-align: center;">0.3765</td>
+<td style="text-align: center;">0.7065</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><strong>ageage6069</strong></td>
+<td style="text-align: center;">0.1568</td>
+<td style="text-align: center;">0.3621</td>
+<td style="text-align: center;">0.4331</td>
+<td style="text-align: center;">0.6649</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><strong>ageage70plus</strong></td>
+<td style="text-align: center;">0.1078</td>
+<td style="text-align: center;">0.3692</td>
+<td style="text-align: center;">0.292</td>
+<td style="text-align: center;">0.7703</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><strong>history</strong></td>
+<td style="text-align: center;">0.2159</td>
+<td style="text-align: center;">0.233</td>
+<td style="text-align: center;">0.9265</td>
+<td style="text-align: center;">0.3542</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><strong>symptoms</strong></td>
+<td style="text-align: center;">0.7293</td>
+<td style="text-align: center;">0.359</td>
+<td style="text-align: center;">2.032</td>
+<td style="text-align: center;">0.04219</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><strong>menopausepostmenoNoHT</strong></td>
+<td style="text-align: center;">-0.1934</td>
+<td style="text-align: center;">0.2373</td>
+<td style="text-align: center;">-0.815</td>
+<td style="text-align: center;">0.4151</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><strong>menopausepostmenounknown</strong></td>
+<td style="text-align: center;">0.4027</td>
+<td style="text-align: center;">0.464</td>
+<td style="text-align: center;">0.8678</td>
+<td style="text-align: center;">0.3855</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><strong>menopausepremeno</strong></td>
+<td style="text-align: center;">0.3421</td>
+<td style="text-align: center;">0.3127</td>
+<td style="text-align: center;">1.094</td>
+<td style="text-align: center;">0.274</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><strong>densitydensity2</strong></td>
+<td style="text-align: center;">1.22</td>
+<td style="text-align: center;">0.539</td>
+<td style="text-align: center;">2.264</td>
+<td style="text-align: center;">0.02358</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><strong>densitydensity3</strong></td>
+<td style="text-align: center;">1.419</td>
+<td style="text-align: center;">0.5356</td>
+<td style="text-align: center;">2.649</td>
+<td style="text-align: center;">0.008063</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><strong>densitydensity4</strong></td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">0.602</td>
+<td style="text-align: center;">1.662</td>
+<td style="text-align: center;">0.09656</td>
+</tr>
+</tbody>
+</table>
+
+(Dispersion parameter for binomial family taken to be 1 )
+
+<table style="width:68%;">
+<colgroup>
+<col style="width: 29%" />
+<col style="width: 38%" />
+</colgroup>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Null deviance:</td>
+<td style="text-align: center;">834.3 on 986 degrees of freedom</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Residual deviance:</td>
+<td style="text-align: center;">800.0 on 971 degrees of freedom</td>
+</tr>
+</tbody>
+</table>
 
 In this output, we can see the estimates on the different radiologists,
 which tells us how conservative they are. Notice, our output only has
@@ -413,45 +528,166 @@ cancer on recall decision and risk factors) shouldn’t be any better than
 all the risk factor information to the fullest of its potential.
 
     model_cancer = glm(cancer ~ ., data=brca, family=binomial)
-    summary(model_cancer)
+    pander(summary(model_cancer))
 
-    ## 
-    ## Call:
-    ## glm(formula = cancer ~ ., family = binomial, data = brca)
-    ## 
-    ## Deviance Residuals: 
-    ##     Min       1Q   Median       3Q      Max  
-    ## -1.1394  -0.2468  -0.1670  -0.1380   3.2213  
-    ## 
-    ## Coefficients:
-    ##                           Estimate Std. Error z value Pr(>|z|)    
-    ## (Intercept)              -5.475184   1.308560  -4.184 2.86e-05 ***
-    ## radiologistradiologist34  0.019054   0.564041   0.034   0.9731    
-    ## radiologistradiologist66 -0.369522   0.541216  -0.683   0.4948    
-    ## radiologistradiologist89 -0.233148   0.569854  -0.409   0.6824    
-    ## radiologistradiologist95 -0.384849   0.578076  -0.666   0.5056    
-    ## recall                    2.335523   0.368592   6.336 2.35e-10 ***
-    ## ageage5059                0.477893   0.639295   0.748   0.4547    
-    ## ageage6069                0.398328   0.812756   0.490   0.6241    
-    ## ageage70plus              1.436443   0.736670   1.950   0.0512 .  
-    ## history                   0.247484   0.438785   0.564   0.5727    
-    ## symptoms                 -0.008199   0.715848  -0.011   0.9909    
-    ## menopausepostmenoNoHT    -0.173097   0.455574  -0.380   0.7040    
-    ## menopausepostmenounknown  0.819953   0.728254   1.126   0.2602    
-    ## menopausepremeno          0.230478   0.661825   0.348   0.7277    
-    ## densitydensity2           0.718016   1.079528   0.665   0.5060    
-    ## densitydensity3           0.834956   1.081480   0.772   0.4401    
-    ## densitydensity4           1.998087   1.133849   1.762   0.0780 .  
-    ## ---
-    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-    ## 
-    ## (Dispersion parameter for binomial family taken to be 1)
-    ## 
-    ##     Null deviance: 315.59  on 986  degrees of freedom
-    ## Residual deviance: 260.27  on 970  degrees of freedom
-    ## AIC: 294.27
-    ## 
-    ## Number of Fisher Scoring iterations: 7
+<table>
+<colgroup>
+<col style="width: 39%" />
+<col style="width: 15%" />
+<col style="width: 16%" />
+<col style="width: 13%" />
+<col style="width: 15%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;"> </th>
+<th style="text-align: center;">Estimate</th>
+<th style="text-align: center;">Std. Error</th>
+<th style="text-align: center;">z value</th>
+<th style="text-align: center;">Pr(&gt;|z|)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><strong>(Intercept)</strong></td>
+<td style="text-align: center;">-5.475</td>
+<td style="text-align: center;">1.309</td>
+<td style="text-align: center;">-4.184</td>
+<td style="text-align: center;">2.863e-05</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><strong>radiologistradiologist34</strong></td>
+<td style="text-align: center;">0.01905</td>
+<td style="text-align: center;">0.564</td>
+<td style="text-align: center;">0.03378</td>
+<td style="text-align: center;">0.9731</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><strong>radiologistradiologist66</strong></td>
+<td style="text-align: center;">-0.3695</td>
+<td style="text-align: center;">0.5412</td>
+<td style="text-align: center;">-0.6828</td>
+<td style="text-align: center;">0.4948</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><strong>radiologistradiologist89</strong></td>
+<td style="text-align: center;">-0.2331</td>
+<td style="text-align: center;">0.5699</td>
+<td style="text-align: center;">-0.4091</td>
+<td style="text-align: center;">0.6824</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><strong>radiologistradiologist95</strong></td>
+<td style="text-align: center;">-0.3848</td>
+<td style="text-align: center;">0.5781</td>
+<td style="text-align: center;">-0.6657</td>
+<td style="text-align: center;">0.5056</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><strong>recall</strong></td>
+<td style="text-align: center;">2.336</td>
+<td style="text-align: center;">0.3686</td>
+<td style="text-align: center;">6.336</td>
+<td style="text-align: center;">2.353e-10</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><strong>ageage5059</strong></td>
+<td style="text-align: center;">0.4779</td>
+<td style="text-align: center;">0.6393</td>
+<td style="text-align: center;">0.7475</td>
+<td style="text-align: center;">0.4547</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><strong>ageage6069</strong></td>
+<td style="text-align: center;">0.3983</td>
+<td style="text-align: center;">0.8128</td>
+<td style="text-align: center;">0.4901</td>
+<td style="text-align: center;">0.6241</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><strong>ageage70plus</strong></td>
+<td style="text-align: center;">1.436</td>
+<td style="text-align: center;">0.7367</td>
+<td style="text-align: center;">1.95</td>
+<td style="text-align: center;">0.05119</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><strong>history</strong></td>
+<td style="text-align: center;">0.2475</td>
+<td style="text-align: center;">0.4388</td>
+<td style="text-align: center;">0.564</td>
+<td style="text-align: center;">0.5727</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><strong>symptoms</strong></td>
+<td style="text-align: center;">-0.008199</td>
+<td style="text-align: center;">0.7158</td>
+<td style="text-align: center;">-0.01145</td>
+<td style="text-align: center;">0.9909</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><strong>menopausepostmenoNoHT</strong></td>
+<td style="text-align: center;">-0.1731</td>
+<td style="text-align: center;">0.4556</td>
+<td style="text-align: center;">-0.38</td>
+<td style="text-align: center;">0.704</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><strong>menopausepostmenounknown</strong></td>
+<td style="text-align: center;">0.82</td>
+<td style="text-align: center;">0.7283</td>
+<td style="text-align: center;">1.126</td>
+<td style="text-align: center;">0.2602</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><strong>menopausepremeno</strong></td>
+<td style="text-align: center;">0.2305</td>
+<td style="text-align: center;">0.6618</td>
+<td style="text-align: center;">0.3482</td>
+<td style="text-align: center;">0.7277</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><strong>densitydensity2</strong></td>
+<td style="text-align: center;">0.718</td>
+<td style="text-align: center;">1.08</td>
+<td style="text-align: center;">0.6651</td>
+<td style="text-align: center;">0.506</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><strong>densitydensity3</strong></td>
+<td style="text-align: center;">0.835</td>
+<td style="text-align: center;">1.081</td>
+<td style="text-align: center;">0.772</td>
+<td style="text-align: center;">0.4401</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><strong>densitydensity4</strong></td>
+<td style="text-align: center;">1.998</td>
+<td style="text-align: center;">1.134</td>
+<td style="text-align: center;">1.762</td>
+<td style="text-align: center;">0.07803</td>
+</tr>
+</tbody>
+</table>
+
+(Dispersion parameter for binomial family taken to be 1 )
+
+<table style="width:68%;">
+<colgroup>
+<col style="width: 29%" />
+<col style="width: 38%" />
+</colgroup>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Null deviance:</td>
+<td style="text-align: center;">315.6 on 986 degrees of freedom</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Residual deviance:</td>
+<td style="text-align: center;">260.3 on 970 degrees of freedom</td>
+</tr>
+</tbody>
+</table>
 
 This result implies that Model B is better than Model A from above
 because the model is giving esimates to some of the risk factors even
@@ -489,51 +725,131 @@ and family history of breast cancer more heavily in our decision to
 perform addition diagnostic tests or not. There are other factors with
 similar results but I just went over two of them.
 
-    xtabs(~cancer + recall + history, brca) %>% prop.table(margin=c(2, 3))
+    pander((xtabs(~cancer + recall + history, brca) %>% prop.table(margin=c(2, 3))))
 
-    ## , , history = 0
-    ## 
-    ##       recall
-    ## cancer          0          1
-    ##      0 0.98414986 0.84873950
-    ##      1 0.01585014 0.15126050
-    ## 
-    ## , , history = 1
-    ## 
-    ##       recall
-    ## cancer          0          1
-    ##      0 0.97241379 0.86206897
-    ##      1 0.02758621 0.13793103
+<table style="width:67%;">
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 13%" />
+<col style="width: 13%" />
+<col style="width: 13%" />
+</colgroup>
+<tbody>
+<tr class="odd">
+<td></td>
+<td></td>
+<td style="text-align: center;">history</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1</td>
+</tr>
+<tr class="even">
+<td>cancer</td>
+<td>recall</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td>0</td>
+<td>0</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">0.9841</td>
+<td style="text-align: center;">0.9724</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>1</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">0.8487</td>
+<td style="text-align: center;">0.8621</td>
+</tr>
+<tr class="odd">
+<td>1</td>
+<td>0</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">0.01585</td>
+<td style="text-align: center;">0.02759</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>1</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">0.1513</td>
+<td style="text-align: center;">0.1379</td>
+</tr>
+</tbody>
+</table>
 
-    xtabs(~cancer + recall + density, brca) %>% prop.table(margin=c(2, 3))
+    pander(xtabs(~cancer + recall + density, brca) %>% prop.table(margin=c(2, 3)))
 
-    ## , , density = density1
-    ## 
-    ##       recall
-    ## cancer          0          1
-    ##      0 1.00000000 0.75000000
-    ##      1 0.00000000 0.25000000
-    ## 
-    ## , , density = density2
-    ## 
-    ##       recall
-    ## cancer          0          1
-    ##      0 0.98591549 0.85416667
-    ##      1 0.01408451 0.14583333
-    ## 
-    ## , , density = density3
-    ## 
-    ##       recall
-    ## cancer          0          1
-    ##      0 0.98153034 0.87654321
-    ##      1 0.01846966 0.12345679
-    ## 
-    ## , , density = density4
-    ## 
-    ##       recall
-    ## cancer          0          1
-    ##      0 0.95604396 0.73333333
-    ##      1 0.04395604 0.26666667
+<table>
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 13%" />
+<col style="width: 15%" />
+<col style="width: 15%" />
+<col style="width: 15%" />
+<col style="width: 15%" />
+</colgroup>
+<tbody>
+<tr class="odd">
+<td></td>
+<td></td>
+<td style="text-align: center;">density</td>
+<td style="text-align: center;">density1</td>
+<td style="text-align: center;">density2</td>
+<td style="text-align: center;">density3</td>
+<td style="text-align: center;">density4</td>
+</tr>
+<tr class="even">
+<td>cancer</td>
+<td>recall</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td>0</td>
+<td>0</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">0.9859</td>
+<td style="text-align: center;">0.9815</td>
+<td style="text-align: center;">0.956</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>1</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">0.75</td>
+<td style="text-align: center;">0.8542</td>
+<td style="text-align: center;">0.8765</td>
+<td style="text-align: center;">0.7333</td>
+</tr>
+<tr class="odd">
+<td>1</td>
+<td>0</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0.01408</td>
+<td style="text-align: center;">0.01847</td>
+<td style="text-align: center;">0.04396</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>1</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">0.25</td>
+<td style="text-align: center;">0.1458</td>
+<td style="text-align: center;">0.1235</td>
+<td style="text-align: center;">0.2667</td>
+</tr>
+</tbody>
+</table>
 
 In conclusion, the doctors could adjust how they are currently weighting
 different risk factors to make more accurate evidence-based decisions
