@@ -1,7 +1,7 @@
 Homework. 2
 ===========
 
-#### Group Members: Clark, Zach, Zargham
+#### Group Members: Clark Granger, Zachary Carlson and Zargham Khan
 
 ### Question.1 : Saratoga Houses
 
@@ -1109,7 +1109,7 @@ weekend. In the other hand we should avoid the characteristic that have
 a negative partial effect such as writing about entertainment or
 including a large number of negative words.
 
-**Table 6. Average Marginal Effects of the Logit Model**
+**Table 5. Average Marginal Effects of the Logit Model**
 
 <table>
 <thead>
