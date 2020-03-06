@@ -115,13 +115,13 @@ mileage.
 
 The figure 2.2. shows the series of RMSE at every value of K, the red
 line indicate the k which generate the minimum RMSE. In this case the k
-value is 34. However this value will change any time we generate a new
+value is 17. However this value will change any time we generate a new
 random sample, to decide the best k we repeated the process ten times
 and then we took the average of the minium k.
 
 ### Figure 2.3.
 
-    ## [1] 9642.307
+    ## [1] 8033.326
 
 ![](Assignment-1_files/figure-markdown_strict/unnamed-chunk-13-1.png)
 
@@ -145,7 +145,7 @@ for the S65 AMG class.
 
 The figure 2.5. shows the series of RMSE at every value of K, the red
 line indicate the k which generate the minimum RMSE. In this case the k
-value which minimize the RMSE for S65 AMG trim is 9. However this value
+value which minimize the RMSE for S65 AMG trim is 13. However this value
 will change any time we generate a new random sample, to decide the best
 k we repeated the process ten times and then we took the average of the
 minimum k.
