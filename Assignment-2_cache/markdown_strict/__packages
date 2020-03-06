@@ -17,3 +17,8 @@ mosaic
 class
 reshape2
 pander
+FNN
+foreach
+jtools
+knitr
+margins
