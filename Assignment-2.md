@@ -7,7 +7,7 @@ Homework. 2
 
 The question provides a data set of variables associated with house
 prices in Saratoga. We have data for more than 1,700 houses which
-include their prices, landvalue and other attributes like number of
+includes their prices, landvalue and other attributes like number of
 bedrooms, bathrooms, living area, lotsize etc. The task is to develop
 models for predicting the market prices of houses for tax authorities so
 that they can tax them at their market value. We use the given sample to
@@ -34,9 +34,9 @@ train/test samples.
 We make new variables like extrarooms = rooms - bedrooms. Also we
 include two variables landvalue and newConstruction which improves our
 RMSE. However, trying composite variables like living area per lotsize,
-bathrooms per bedroom and using building value by subtracting landvalue
-from the property price did not improve the out of sample RMSE of the
-model.We observed that adding more variables led to higher variance.
+bathrooms per bedroom and building value(subtracting landvalue from the
+property price) did not improve the out of sample RMSE of the model. We
+observed that adding more variables led to higher variance.
 
 #### Part B
 
@@ -45,12 +45,13 @@ can give us low variance but the lowest AIC model did not perform better
 at out of sample RMSE in multiple iterations. Including more interaction
 variables and polynomials manually and one by one also did not help.
 
-Looking at the co-efficients, we can say that lotsize, no. of bedrooms,
-no. of bathrooms, living area, central air, heating, fuel and land value
-are the most important variables in explaining the prices of houses in
-the sample. Some interaction variables also come out to be significant
-in the regression model but they do not contribute much to out of sample
-RMSE and in most cases increase error in out of sample prediction.
+Looking at the co-efficients, we can say that lotsize, number of
+bedrooms, number of bathrooms, living area, central air, heating, fuel
+and land value are the most important variables in explaining the prices
+of houses in the sample. Some interaction variables also come out to be
+significant in the regression model but they do not contribute much to
+out of sample RMSE and in most cases increase error in out of sample
+prediction.
 
 So we decided to have the following model as our final best linear
 regression model for house prices.
@@ -226,8 +227,8 @@ calculated its out of sample root mean squared error.
 In the third part, the question asks us to fit a K-nearest neighbor
 model. We select the same variables as our linear model and scale them
 accordingly to fit a KNN model. We did 300 loops for each K starting
-from 1 to 300 K’s. The average RMSE declines in the range of 100 to 150
-K. However, exact value of K with minimum average RMSE changes with each
+from 1 to 300 K. The average RMSE declines in the range of 100 to 150 K.
+However, exact value of K with minimum average RMSE changes with each
 iteration of 500 training/ test splits for each K.We selected K = 135
 based on our 500 training/ tests sample splits. It gave an RMSE of
 80616.
@@ -244,8 +245,8 @@ these models have their strengths and weaknesses. The main metric for
 comparing these two models is to check their out of sample prediction
 error or RMSE. By running the model on more than 500 different train/
 test samples we find out that Linear regression model has lower RMSE
-which means that on average linear model is predicting prices accurately
-as compared to KNN model.
+which means that on average linear model is predicting prices more
+accurately than the KNN model.
 
 Linear Regression model Mean RMSE = 59,536.05 KNN Model Mean RMSE at
 K-135 = 80,616.88
@@ -1089,6 +1090,16 @@ accuracy of the probabilistic models over the Knn classification model
 with differents values of K (see graph 1).
 
 **Graph 1. KNN models vs LPM and Logit Models**
+
+    ## $x
+    ## [1] "K"
+    ## 
+    ## $y
+    ## [1] "Accuracy Rate"
+    ## 
+    ## attr(,"class")
+    ## [1] "labels"
+
 ![](Assignment-2_files/figure-markdown_strict/unnamed-chunk-11-1.png)
 
 \#\#\#How can we increase the probability that an article goes viral?
