@@ -21,15 +21,13 @@ independent variables. We start by assessing the medium model provided
 in Professor’s script and check its RMSE by running it on 1000 different
 train/test samples.
 
-``` r
-Professors Medium model
-lm_medium = lm(price ~ lotSize + age + livingArea + pctCollege + bedrooms + 
-                   fireplaces + bathrooms + rooms + heating + fuel + centralAir
-```
+    Professors Medium model
+    lm_medium = lm(price ~ lotSize + age + livingArea + pctCollege + bedrooms + 
+                       fireplaces + bathrooms + rooms + heating + fuel + centralAir
 
     ## [1] "RMSE for Medium"
 
-    ## [1] 66554.15
+    ## [1] 66790.95
 
 #### Part A
 
@@ -57,40 +55,171 @@ RMSE and in most cases increase error in out of sample prediction.
 So we decided to have the following model as our final best linear
 regression model for house prices.
 
-    ## % latex table generated in R 3.6.1 by xtable 1.8-4 package
-    ## % Thu Mar 05 20:43:58 2020
-    ## \begin{table}[ht]
-    ## \centering
-    ## \begin{tabular}{rrrrr}
-    ##   \hline
-    ##  & Estimate & Std. Error & t value & Pr($>$$|$t$|$) \\ 
-    ##   \hline
-    ## (Intercept) & 22376.2525 & 9848.8444 & 2.27 & 0.0232 \\ 
-    ##   landValue & 0.9805 & 0.0475 & 20.66 & 0.0000 \\ 
-    ##   lotSize & 7189.1818 & 2167.1758 & 3.32 & 0.0009 \\ 
-    ##   livingArea & 70.6978 & 4.6875 & 15.08 & 0.0000 \\ 
-    ##   bedrooms & -6110.1060 & 2426.4014 & -2.52 & 0.0119 \\ 
-    ##   bathrooms & 23655.9007 & 3416.2841 & 6.92 & 0.0000 \\ 
-    ##   extrarooms & 2848.3774 & 977.4766 & 2.91 & 0.0036 \\ 
-    ##   centralAirYes & 9173.3413 & 3526.7060 & 2.60 & 0.0094 \\ 
-    ##   heatinghot air & -1181.3351 & 12519.3972 & -0.09 & 0.9248 \\ 
-    ##   heatinghot water/steam & -12224.5384 & 13041.8981 & -0.94 & 0.3487 \\ 
-    ##   age & -131.3668 & 59.2143 & -2.22 & 0.0267 \\ 
-    ##   newConstructionYes & -48977.0560 & 7400.9384 & -6.62 & 0.0000 \\ 
-    ##   fireplaces & 1218.6589 & 3033.6448 & 0.40 & 0.6879 \\ 
-    ##   fuelgas & 11622.0815 & 12329.4124 & 0.94 & 0.3460 \\ 
-    ##   fueloil & 11667.3803 & 12951.5844 & 0.90 & 0.3678 \\ 
-    ##   pctCollege & -242.2089 & 151.2311 & -1.60 & 0.1094 \\ 
-    ##    \hline
-    ## \end{tabular}
-    ## \end{table}
+<table>
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 14%" />
+<col style="width: 17%" />
+<col style="width: 14%" />
+<col style="width: 15%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;"> </th>
+<th style="text-align: center;">Estimate</th>
+<th style="text-align: center;">Std. Error</th>
+<th style="text-align: center;">t value</th>
+<th style="text-align: center;">Pr(&gt;|t|)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><strong>(Intercept)</strong></td>
+<td style="text-align: center;">22376</td>
+<td style="text-align: center;">9849</td>
+<td style="text-align: center;">2.272</td>
+<td style="text-align: center;">0.02321</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><strong>landValue</strong></td>
+<td style="text-align: center;">0.9805</td>
+<td style="text-align: center;">0.04746</td>
+<td style="text-align: center;">20.66</td>
+<td style="text-align: center;">7.455e-85</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><strong>lotSize</strong></td>
+<td style="text-align: center;">7189</td>
+<td style="text-align: center;">2167</td>
+<td style="text-align: center;">3.317</td>
+<td style="text-align: center;">0.0009279</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><strong>livingArea</strong></td>
+<td style="text-align: center;">70.7</td>
+<td style="text-align: center;">4.687</td>
+<td style="text-align: center;">15.08</td>
+<td style="text-align: center;">2.345e-48</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><strong>bedrooms</strong></td>
+<td style="text-align: center;">-6110</td>
+<td style="text-align: center;">2426</td>
+<td style="text-align: center;">-2.518</td>
+<td style="text-align: center;">0.01189</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><strong>bathrooms</strong></td>
+<td style="text-align: center;">23656</td>
+<td style="text-align: center;">3416</td>
+<td style="text-align: center;">6.924</td>
+<td style="text-align: center;">6.169e-12</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><strong>extrarooms</strong></td>
+<td style="text-align: center;">2848</td>
+<td style="text-align: center;">977.5</td>
+<td style="text-align: center;">2.914</td>
+<td style="text-align: center;">0.003614</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><strong>centralAirYes</strong></td>
+<td style="text-align: center;">9173</td>
+<td style="text-align: center;">3527</td>
+<td style="text-align: center;">2.601</td>
+<td style="text-align: center;">0.009372</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><strong>heatinghot air</strong></td>
+<td style="text-align: center;">-1181</td>
+<td style="text-align: center;">12519</td>
+<td style="text-align: center;">-0.09436</td>
+<td style="text-align: center;">0.9248</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><strong>heatinghot water/steam</strong></td>
+<td style="text-align: center;">-12225</td>
+<td style="text-align: center;">13042</td>
+<td style="text-align: center;">-0.9373</td>
+<td style="text-align: center;">0.3487</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><strong>age</strong></td>
+<td style="text-align: center;">-131.4</td>
+<td style="text-align: center;">59.21</td>
+<td style="text-align: center;">-2.218</td>
+<td style="text-align: center;">0.02665</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><strong>newConstructionYes</strong></td>
+<td style="text-align: center;">-48977</td>
+<td style="text-align: center;">7401</td>
+<td style="text-align: center;">-6.618</td>
+<td style="text-align: center;">4.866e-11</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><strong>fireplaces</strong></td>
+<td style="text-align: center;">1219</td>
+<td style="text-align: center;">3034</td>
+<td style="text-align: center;">0.4017</td>
+<td style="text-align: center;">0.6879</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><strong>fuelgas</strong></td>
+<td style="text-align: center;">11622</td>
+<td style="text-align: center;">12329</td>
+<td style="text-align: center;">0.9426</td>
+<td style="text-align: center;">0.346</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><strong>fueloil</strong></td>
+<td style="text-align: center;">11667</td>
+<td style="text-align: center;">12952</td>
+<td style="text-align: center;">0.9008</td>
+<td style="text-align: center;">0.3678</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><strong>pctCollege</strong></td>
+<td style="text-align: center;">-242.2</td>
+<td style="text-align: center;">151.2</td>
+<td style="text-align: center;">-1.602</td>
+<td style="text-align: center;">0.1094</td>
+</tr>
+</tbody>
+</table>
+
+<table style="width:88%;">
+<caption>Fitting linear model: price ~ landValue + lotSize + livingArea + bedrooms + bathrooms + extrarooms + centralAir + heating + age + newConstruction + fireplaces + fuel + age + pctCollege</caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 30%" />
+<col style="width: 12%" />
+<col style="width: 23%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Observations</th>
+<th style="text-align: center;">Residual Std. Error</th>
+<th style="text-align: center;"><span class="math inline"><em>R</em><sup>2</sup></span></th>
+<th style="text-align: center;">Adjusted <span class="math inline"><em>R</em><sup>2</sup></span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">1728</td>
+<td style="text-align: center;">59222</td>
+<td style="text-align: center;">0.6412</td>
+<td style="text-align: center;">0.6381</td>
+</tr>
+</tbody>
+</table>
 
 We applied this model on 1000 random train/ test splits of our data and
 calculated its out of sample root mean squared error.
 
     ## [1] "Mean RMSE for Best Linear Model"
 
-    ## [1] 59539.19
+    ## [1] 59503.94
 
 #### Part C KNN Model
 
@@ -103,7 +232,7 @@ iteration of 500 training/ test splits for each K.We selected K = 135
 based on our 500 training/ tests sample splits. It gave an RMSE of
 80616.
 
-![](Assignment-2_files/figure-markdown_github/R%20vs%20RMSE%20graph-1.png)
+![](Assignment-2_files/figure-markdown_strict/R%20vs%20RMSE%20graph-1.png)
 
     ## [1] 80616.88
 
@@ -127,15 +256,15 @@ We run both these models on a same train set and predict values for both
 these models on same test to compare their RMSE and Fit for same data
 points.
 
-![](Assignment-2_files/figure-markdown_github/actual%20vs%20predicted-1.png)
+![](Assignment-2_files/figure-markdown_strict/actual%20vs%20predicted-1.png)
 
     ## [1] "LM RMSE"
 
-    ## [1] 68159.41
+    ## [1] 67298.18
 
     ## [1] "KNN RMSE"
 
-    ## [1] 79442.51
+    ## [1] 82549.58
 
 Looking at the actual vs predicted plot we see that KNN model’s
 predictions are more spread out than LM’s model predictions. We can see
@@ -166,7 +295,7 @@ Furthermore, root mean square errors for houses that have average prices
 are almost the same for both models. This means that both models have
 almost similar performance for values around the average.
 
-![](Assignment-2_files/figure-markdown_github/graph-1.png)
+![](Assignment-2_files/figure-markdown_strict/graph-1.png)
 
 ### Conclusion
 
@@ -198,11 +327,9 @@ Here, we model recall decisions on all risk factors and the radiologist
 that made the decision to gauge how conservative the doctors are
 relative to each other.
 
-``` r
-brca = read.csv("brca.csv")
-model_recall = glm(recall ~ . - cancer, data=brca, family=binomial)
-summary(model_recall)
-```
+    brca = read.csv("brca.csv")
+    model_recall = glm(recall ~ . - cancer, data=brca, family=binomial)
+    summary(model_recall)
 
     ## 
     ## Call:
@@ -285,10 +412,8 @@ cancer on recall decision and risk factors) shouldn’t be any better than
 “Model A”(regresses cancer on only recall decision) if doctors are using
 all the risk factor information to the fullest of its potential.
 
-``` r
-model_cancer = glm(cancer ~ ., data=brca, family=binomial)
-summary(model_cancer)
-```
+    model_cancer = glm(cancer ~ ., data=brca, family=binomial)
+    summary(model_cancer)
 
     ## 
     ## Call:
@@ -364,9 +489,7 @@ and family history of breast cancer more heavily in our decision to
 perform addition diagnostic tests or not. There are other factors with
 similar results but I just went over two of them.
 
-``` r
-xtabs(~cancer + recall + history, brca) %>% prop.table(margin=c(2, 3))
-```
+    xtabs(~cancer + recall + history, brca) %>% prop.table(margin=c(2, 3))
 
     ## , , history = 0
     ## 
@@ -382,9 +505,7 @@ xtabs(~cancer + recall + history, brca) %>% prop.table(margin=c(2, 3))
     ##      0 0.97241379 0.86206897
     ##      1 0.02758621 0.13793103
 
-``` r
-xtabs(~cancer + recall + density, brca) %>% prop.table(margin=c(2, 3))
-```
+    xtabs(~cancer + recall + density, brca) %>% prop.table(margin=c(2, 3))
 
     ## , , density = density1
     ## 

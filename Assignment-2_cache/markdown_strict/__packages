@@ -14,7 +14,6 @@ ggformula
 mosaicData
 Matrix
 mosaic
-foreach
 class
 reshape2
-xtable
+pander

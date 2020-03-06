@@ -4,7 +4,8 @@ author: "Clark, Zach, Zargham"
 date: "3/4/2020"
 output: 
       md_document:
-        variant: markdown_github
+      variant: markdown_github
+        
 ---
 
 ```{r setup, include=FALSE}
@@ -14,7 +15,7 @@ library(mosaic)
 library(ggplot2)
 library(class)
 library(reshape2)
-library(xtable)
+library(pander)
 ```
 
 # Homework. 2
@@ -81,7 +82,7 @@ So we decided to have the following model as our final best linear regression mo
 
 ```{r coef, echo=F}
 lmbase = lm(price ~ landValue+lotSize+ livingArea+ bedrooms+ bathrooms+ extrarooms + centralAir + heating + age+ newConstruction+ fireplaces + fuel + age+ pctCollege , data=Housing)
-xtable(lmbase)
+pander(summary(lmbase))
 ```
 
 We applied this model on 1000 random train/ test splits of our data and calculated its out of sample root mean squared error.
