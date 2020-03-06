@@ -1,7 +1,6 @@
 ---
 title: "Question 3. Predicting when articles go viral"
-output:  md_document:
-                    variant: markdown_github
+output: md_document
 ---
 
 ```{r include=FALSE}
