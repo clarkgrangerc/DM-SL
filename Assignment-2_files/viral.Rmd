@@ -1,0 +1,406 @@
+---
+title: "Question 3. Predicting when articles go viral"
+output: html_document
+---
+
+```{r include=FALSE}
+ #### Libraries 
+library(tidyverse)
+library(mosaic)
+library(class)
+library(FNN)
+library(foreach)
+library(class)
+library(jtools)
+library(knitr)
+library(margins)
+
+###Data reading
+on = read.csv('online_news.csv')
+###on = read.csv("https://raw.githubusercontent.com/jgscott/ECO395M/master/data/online_news.csv")
+###### Adding Viral Binary Variable and Log Shares Variable to the dataset
+on$viral = ifelse(on$shares > 1400, 1, 0)
+summary(on$viral)
+on$lshares =log(on$shares)
+
+```
+
+
+Using the data of 39,797 online articles published by Mashable during 2013 and 2014, the goal is bulding a model to determine if an article goes viral or not. An article is considered viral if it was shared more than 1400 times. We have a set o features of each article such as things like how long the headline is, how long the article is, how positive or negative the "sentiment" of the article was, among others. Beyond to get the best model to classify, Mashable wants to know if there is anything they can learn about how to improve an article's chance of reaching this threshold. 
+
+To deal with this problem we are going to work with two approach. The first approach is from the standpoint of regression. we will build three models following techniques such as linear regression, K neares neighboor and transforming the objective variable. In this first approach the objective variable will be the number of shares. The second approach is from the standpoint of classification. In this case our objective variable will be a binary entry Viral, which is 1 if the article is viral or 0 otherwise. In both approach, we have measures that help us to classify the model performance. 
+
+
+## Approach #1 Working with Shares as objective variable
+```{r include=FALSE}
+### AVG Accuracy model # 0 Null model for comparison (Accuraccy)
+n = nrow(on)
+n_train = round(0.8*n)  # round to nearest integer
+n_test = n - n_train
+train_cases = sample.int(n, n_train, replace=FALSE)
+test_cases = setdiff(1:n, train_cases)
+on_train = on[train_cases,]
+null_m=table(on_train$viral)
+null_m
+ACC_null=null_m[1]/count(on_train)
+ACC_null
+
+##### AVG accuracy for Linear Model #1 built manually
+
+lm_shares = do(100)*{
+  #	resample data with replacement
+    # Split into training and testing sets
+  n = nrow(on)
+  n_train = round(0.8*n)  # round to nearest integer
+  n_test = n - n_train
+  train_cases = sample.int(n, n_train, replace=FALSE)
+  test_cases = setdiff(1:n, train_cases)
+  on_train = on[train_cases,]
+  on_test = on[test_cases,]
+  y_test   = on$viral[test_cases]
+  
+    m1 = lm(shares ~ n_tokens_title + n_tokens_content + num_hrefs + 
+            num_self_hrefs + num_imgs + num_videos + 
+            average_token_length + num_keywords + data_channel_is_lifestyle +
+            data_channel_is_entertainment + data_channel_is_bus + 
+            data_channel_is_socmed + data_channel_is_tech +
+            data_channel_is_world + self_reference_avg_sharess +
+            is_weekend + global_rate_negative_words + global_rate_positive_words + title_subjectivity,data=on_train)
+  
+  pred_test = predict(m1, on_test)
+  yhat_test = ifelse((pred_test>1400),yes=1,no=0)
+  1-sum(yhat_test != y_test)/n_test 
+  
+}
+ACC_m1=colMeans(lm_shares)
+
+##### AVG accuracy for Linear Model #2 built using KNN with shares
+X = dplyr::select(on, n_tokens_title, n_tokens_content, num_hrefs, 
+                  num_self_hrefs, num_imgs, num_videos, 
+                  average_token_length, num_keywords, self_reference_avg_sharess) 
+y = on$shares
+
+k_grid = seq(1, 100, by=10)
+err_grid = foreach(k = k_grid,  .combine='c') %do% {
+  knn_shares = do(1)*{
+    n = length(y)
+    n_train = round(0.8*n)
+    n_test = n - n_train
+    train_ind = sample.int(n, n_train)
+    X_train = X[train_ind,]
+    X_test = X[-train_ind,]
+    y_train = y[train_ind]
+    y_test = y[-train_ind]
+    y_test_valid=on$viral[-train_ind]
+    
+    # scale the training set features
+    scale_factors = apply(X_train, 2, sd)
+    X_train_sc = scale(X_train, scale=scale_factors)
+    
+    # scale the test set features using the same scale factors
+    X_test_sc = scale(X_test, scale=scale_factors)
+    
+    # Fit two KNN models (notice the odd values of K)
+    knn_m2= knn.reg(train=X_train_sc, test= X_test_sc, y=y_train, k=k)
+    
+   # Calculating classification errors
+    phat_test = knn_m2$pred
+    yhat_test = ifelse((phat_test>1400),1 , 0)
+    sum(yhat_test != y_test_valid)/n_test 
+    
+  } 
+  colMeans(knn_shares)
+}
+acc_k=1-err_grid
+ACC_km2=max(acc_k)
+ACC_km2
+
+##### AVG accuracy for Linear Model #3 built using ln of shares 
+
+lm_lshares = do(100)*{
+  #	resample data with replacement
+  # Split into training and testing sets
+  n = nrow(on)
+  n_train = round(0.8*n)  # round to nearest integer
+  n_test = n - n_train
+  train_cases = sample.int(n, n_train, replace=FALSE)
+  test_cases = setdiff(1:n, train_cases)
+  on_train = on[train_cases,]
+  on_test = on[test_cases,]
+  y_test   = on$viral[test_cases]
+  
+  
+  m3 = lm(lshares ~ n_tokens_title + n_tokens_content + num_hrefs + 
+            num_self_hrefs + num_imgs + num_videos + 
+            average_token_length + num_keywords + data_channel_is_lifestyle +
+            data_channel_is_entertainment + data_channel_is_bus + 
+            data_channel_is_socmed + data_channel_is_tech +
+            data_channel_is_world + self_reference_avg_sharess +
+            is_weekend + global_rate_negative_words + global_rate_positive_words + title_subjectivity,data=on_train)
+  
+  pred_test = predict(m3, on_test)
+  yhat_test = ifelse(pred_test>log(1400),1 ,0)
+  #1-sum(yhat_test != y_test)/n_test ###Accuracy rate
+  confusion_out = table(y = on_test$viral, yhat = yhat_test)
+}
+CM=colMeans(lm_lshares)
+tp=CM[4]
+tn=CM[1]
+fp=CM[3]
+fn=CM[2]
+tpr = tp / (tp + fn)
+tpr
+fpr = fp / (fp + tn)
+fpr
+ACC_m3 = (tp+tn)/(tp+tn+fp+fn)
+ACC_m3
+ERR_m3=1-ACC_m3
+ERR_m3
+
+
+```
+
+
+In the first approach our objective variable is number of shares. To start  we anylized all the set of features([see features](https://github.com/jgscott/ECO395M/blob/master/data/online_news_codes.txt)) we have to decide which of them are important to include in the models. Then we start fitting linear models with several combinations of variables. We used the function step to test if including some interactions in the model would be helpful, but finally we decided work with a more parsimonious model, given it has a good fitting. Below we can see the variables we used in our linear models, we ran the first using shares as epxlained variable and then we used log of shares as explanatory variable. Then, we decided to try with a knn model as well. For this last model, we did not consider the binary variables since they do not add too much information in this methodology. The variables used in the knn model are summarized below. 
+
+**Specification for Linear models:**
+
+Shares or log(Shares) ~ n_tokens_title + n_tokens_content + num_hrefs + 
+            num_self_hrefs + num_imgs + num_videos + 
+            average_token_length + num_keywords + data_channel_is_lifestyle +
+            data_channel_is_entertainment + data_channel_is_bus + 
+            data_channel_is_socmed + data_channel_is_tech +
+            data_channel_is_world + self_reference_avg_sharess +
+            is_weekend + global_rate_negative_words + global_rate_positive_words + title_subjectivity
+
+**For KNN model the specification:** 
+
+Shares ~ n_tokens_title, n_tokens_content, num_hrefs, 
+                  num_self_hrefs, num_imgs, num_videos, 
+                  average_token_length, num_keywords, self_reference_avg_sharess
+
+Since the predictions of our model are numerical (number of shares), we needed the evaluation in terms of a binary prediction (viral or not). For that reason after generated prediction of our models across multiple train/test splits we summarized the accuracy rate of each one considering a threeshold of 1400 shares to consider an article viral. In the table 1 we can see the accuracy ratio for our thre models plus "null" model that always predicts the articles as "not viral". 
+
+**Table 1. Accuracy rate for models with Shares as objective variable**
+```{r echo=FALSE, warning= FALSE}
+accdata = c(ACC_null,ACC_m1,ACC_km2,ACC_m3)
+accdata1=t(as.data.frame(accdata))
+colnames(accdata1) <- c("Accuracy Rate")
+row.names(accdata1) <- c("Null Model","Linear Model","KNN Model","Linear Model (Log Shares)")
+table1=kable(accdata1) 
+table1
+```
+In table 1 we can observe so far the model with the best accuracy is the linear model over the log of shares. We can see that the linear model over shares is even worse that the null model.  
+
+
+Having found our best model for the prediction of number of shares we proceed to present the Confusion matrix and the requested stats:
+
+**Table 2. Confusion Matrix for the Linear Model of Log of Shares 
+```{r echo=FALSE, warning= FALSE}
+CM_m3=as.data.frame(CM)
+colnames(CM_m3)<-c("Linear Model Log (Shares)")
+row.names(CM_m3) <- c("True Negative","False Negative","False Positive","True Positive")
+table2=kable(CM_m3)
+table2
+```
+
+**The stats are the Following** 
+
+ Overall error rate = `r ERR_m3*100`%
+ 
+ True positive rate = `r tpr*100`%
+ 
+ False positive rate = `r fpr*100`%
+ 
+ 
+## Approach #2 Working with binary variable viral as objective 
+
+In the second approach we handled this problem from the standpoint of classification. That is, we defined a binary variable viral and built our very models for directly predicting viral status as a target variable. We worked with the same specification of our first lineal model, but using Linear probability model regression and a a logit model regression. In the case of the Knn approach we used the same variables of the knn model for shares.
+  
+```{r include=FALSE}
+##### AVG accuracy for Linear Probability Model #4 built as a LPM model with y=viral
+
+lpm_viral = do(100)*{
+  #	resample data with replacement
+  # Split into training and testing sets
+  n = nrow(on)
+  n_train = round(0.8*n)  # round to nearest integer
+  n_test = n - n_train
+  train_cases = sample.int(n, n_train, replace=FALSE)
+  test_cases = setdiff(1:n, train_cases)
+  on_train = on[train_cases,]
+  on_test = on[test_cases,]
+  
+  
+  m4 = lm(viral ~ n_tokens_title + n_tokens_content + num_hrefs + 
+            num_self_hrefs + num_imgs + num_videos + 
+            average_token_length + num_keywords + data_channel_is_lifestyle +
+            data_channel_is_entertainment + data_channel_is_bus + 
+            data_channel_is_socmed + data_channel_is_tech +
+            data_channel_is_world + self_reference_avg_sharess +
+            is_weekend + global_rate_negative_words + global_rate_positive_words + title_subjectivity,data=on_train)
+  
+  pred_test = predict(m4, on_test) #type='response'#)
+  yhat_test = ifelse(pred_test> 0.5,1 ,0)
+  1-sum(yhat_test != on_test$viral)/n_test ###Accuracy rate
+  ###confusion_out = table(y = on_test$viral, yhat = yhat_test)
+}
+ACC_m4=colMeans(lpm_viral)
+
+
+##### AVG accuracy for logistic Model #5 built as a logit model with y=viral
+glm_viral = do(100)*{
+  #	resample data with replacement
+  # Split into training and testing sets
+  n = nrow(on)
+  n_train = round(0.8*n)  # round to nearest integer
+  n_test = n - n_train
+  train_cases = sample.int(n, n_train, replace=FALSE)
+  test_cases = setdiff(1:n, train_cases)
+  on_train = on[train_cases,]
+  on_test = on[test_cases,]
+  
+    m5 = glm(viral ~ n_tokens_title + n_tokens_content + num_hrefs + 
+            num_self_hrefs + num_imgs + num_videos + 
+            average_token_length + num_keywords + data_channel_is_lifestyle +
+            data_channel_is_entertainment + data_channel_is_bus + 
+            data_channel_is_socmed + data_channel_is_tech +
+            data_channel_is_world + self_reference_avg_sharess +
+            is_weekend + global_rate_negative_words + global_rate_positive_words + title_subjectivity,data=on_train, family = binomial)
+  
+  pred_test = predict(m5, on_test,type='response')
+  yhat_test = ifelse(pred_test> 0.5,1 ,0)
+  ###1-sum(yhat_test != on_test$viral)/n_test ###Accuracy rate
+  confusion_out = table(y = on_test$viral, yhat = yhat_test)
+}
+CM1=colMeans(glm_viral)
+tp1=CM1[4]
+tn1=CM1[1]
+fp1=CM1[3]
+fn1=CM1[2]
+tpr1 = tp1 / (tp1 + fn1)
+tpr1
+fpr1 = fp1 / (fp1 + tn1)
+fpr1
+ACC_m5 = (tp1+tn1)/(tp1+tn1+fp1+fn1)
+ACC_m5
+ERR_m5=1-ACC_m5
+ERR_m5
+
+
+########## AVG accuracy for Model #6 built as a KNN model with y=viral
+###Define subsample
+
+X = dplyr::select(on, n_tokens_title, n_tokens_content, num_hrefs, 
+                  num_self_hrefs, num_imgs, num_videos, 
+                  average_token_length, num_keywords, self_reference_avg_sharess) 
+
+y = on$viral
+
+
+k_grid = seq(1, 100, by=10)
+err_grid = foreach(k = k_grid,  .combine='c') %do% {
+  knn_viral = do(1)*{
+    n = length(y)
+    n_train = round(0.8*n)
+    n_test = n - n_train
+    train_ind = sample.int(n, n_train)
+    X_train = X[train_ind,]
+    X_test = X[-train_ind,]
+    y_train = y[train_ind]
+    y_test = y[-train_ind]
+    
+    # scale the training set features
+    scale_factors = apply(X_train, 2, sd)
+    X_train_sc = scale(X_train, scale=scale_factors)
+    
+    # scale the test set features using the same scale factors
+    X_test_sc = scale(X_test, scale=scale_factors)
+    
+    # Fit two KNN models (notice the odd values of K)
+    knn_m5 = class::knn(train=X_train_sc, test= X_test_sc, cl=y_train, k=k)
+    
+    # Calculating classification errors
+    sum(knn_m5 != y_test)/n_test
+  } 
+  colMeans(knn_viral)
+}
+
+acc_k6=1-err_grid
+ACC_km6=max(acc_k6)
+knngraph <- data.frame(K=c(k_grid), acc=c(acc_k6))
+
+
+```
+
+
+**Table 3. Accuracy rate for models with  viral as objective variable**
+
+```{r echo=FALSE, warning= FALSE}
+  accdata2 = c(ACC_m4,ACC_m5,ACC_km6)
+accdata21=as.data.frame(accdata2)
+colnames(accdata21) <- c("Accuracy Rate")
+row.names(accdata21) <- c("Linear Probability Model","Logit Model","KNN Classification Model")
+table3=kable(accdata21) 
+table3
+```
+ 
+
+
+
+
+Table with Confusion matrix of logistic model 
+```{r echo=FALSE, warning= FALSE}
+CM_m5=as.data.frame(CM1)
+colnames(CM_m5)<-c("Logit Model")
+row.names(CM_m5) <- c("True Negative","False Negative","False Positive","True Positive")
+table4=kable(CM_m5) 
+table4
+```
+
+Requested Stats 
+The stats are the Following 
+
+ Overall error rate = `r ERR_m5*100`%
+ 
+ True positive rate = `r tpr1*100`%
+ 
+ False positive rate = `r fpr1*100`%
+
+
+
+
+Graph comparing with KNN
+
+Explanations 
+ppp
+
+```{r echo=FALSE, warning= FALSE}
+colnames(knngraph) <- c("k","AVG_ACC")
+k_min = knngraph$k[which.max(knngraph$AVG_ACC)]
+###########Graph ACC vs k ################
+plotknn= ggplot(data = knngraph)+
+  geom_line(aes(x = k, y = AVG_ACC))+
+  geom_line(aes(x =k_min , y = AVG_ACC), col = "blue")+
+  geom_line(aes(x= k, y = ACC_m4, col="red"))+
+  geom_line(aes(x= k, y = ACC_m5, col="green"))+
+  labs(title="KNN's Models for Viral vs LPM and Logit ",
+       x="K",
+       y = "Accuracy Rate", fill="LPM")
+plotknn
+```
+
+
+Table with coeff of my best model 
+
+## How can we increase the probability that an article goes viral?
+
+
+TABLE of MArgins
+
+```{r echo=FALSE, warning= FALSE}
+margins_m5=margins(m5, type='response')
+table5=kable(summary(margins_m5)) 
+table5
+
+```
