@@ -67,7 +67,7 @@ mean(Mean_medium$result, na.rm = TRUE)
 
 
 #### Part A
-We make new variables like extrarooms = rooms - bedrooms. Also we include two variables landvalue and newConstruction which improves our RMSE. However, trying composite variables like livingarea per lotsize, bathrooms per bedroom and using building value by subtracting landvalue from the property price, did not improve the out of sample RMSE of the model. 
+We make new variables like extrarooms = rooms - bedrooms. Also we include two variables landvalue and newConstruction which improves our RMSE. However, trying composite variables like living area per lotsize, bathrooms per bedroom and using building value by subtracting landvalue from the property price  did not improve the out of sample RMSE of the model.We observed that adding more variables led to higher variance.  
 
 #### Part B
 We used Step() function to narrow down variables and interactions that can give us low variance but the lowest AIC model did not perform better at out of sample RMSE in multiple iterations. Including more interaction variables and polynomials manually and one by one also did not help. 
@@ -78,7 +78,9 @@ So we decided to have the following model as our final best linear regression mo
 
 ```{r, echo=T, eval=F}
 Best Linear Regression Fit 
-lm(price ~ landValue+lotSize+ livingArea+ bedrooms+ bathrooms+ extrarooms + centralAir + heating + age+ newConstruction+ fireplaces + fuel + age + pctCollege)
+lm(price ~ landValue+lotSize+ livingArea+ bedrooms+ bathrooms+ 
+               extrarooms +centralAir + heating + age+ newConstruction+ 
+                        fireplaces + fuel + age +pctCollege)
 ```
 
 ```{r best fit model regression, echo=F, cache=TRUE}
@@ -88,8 +90,7 @@ Mean_rmse = do(1000)*{
   Housing_train = Housing[train_cases,]
   Housing_test = Housing[test_cases,]
   
-  lmbase = lm(price ~ landValue+lotSize+ livingArea+ bedrooms+ bathrooms+ extrarooms + centralAir + heating + age+ newConstruction+ 
-                fireplaces + fuel + age+ pctCollege , data=Housing_train)
+  lmbase = lm(price ~ landValue+lotSize+ livingArea+ bedrooms+ bathrooms+ extrarooms + centralAir + heating + age+ newConstruction+ fireplaces + fuel + age+ pctCollege , data=Housing_train)
                 
                 
                 ### Option 1 Livingperlotsize + lotSize+ centralAir + heating + extrarooms + 
@@ -172,10 +173,11 @@ We have two models for predicting the prices of houses in Saratoga. One is the l
 Linear Regression model Mean RMSE = 59,536.05 
 KNN Model Mean RMSE at K-135      = 80,616.88
 
+### Single Random Train/Test Performance
 We run both these models on a same train set and predict values for both these models on same test to compare their RMSE and Fit for same data points. 
 
 
-```{r actual vs predicted, echo=F}
+```{r actual vs predicted, echo=F, warning=FALSE}
 Test1= train_ind = sample.int(n, n_train, replace = FALSE)
     fulltrn = Housing[train_ind,]
     Xtra = X[train_ind,]
@@ -286,6 +288,8 @@ ggplot(data=vardata, aes(x=Percentile, y=value , fill = variable)) +
 
 ### Conclusion
 
-We can see that Linear regression model performs better for predicting prices of houses in Saratoga. The linear model is easily interpretable and we can see which variables affect prices more. KNN model is a non parametric model so it is a slow learning model where it has to train on the data everytime we want to make a new prediction. Furthermore, we cannot easily see which variables are contributing more towards price changes. 
+We can see that Linear regression model performs better for predicting prices of houses in Saratoga. The linear model is easily interpretable and we can see which variables affect prices more. 
+
+KNN model is a non parametric model and is known as a slow learning model where it has to train on the data everytime to make a prediction for new values. Furthermore, we cannot easily see which variables are contributing more towards price changes. With more dimensions or variables the performance of the KNN model deteriorates as compared to Linear model where adding more variables might improve prediction.  
 
 Given the results, we can clearly say that Linear Regression model is a better model than KNN in this case. It has low error on average and also at extreme values. 
