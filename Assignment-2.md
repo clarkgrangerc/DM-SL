@@ -35,10 +35,10 @@ lm_medium = lm(price ~ lotSize + age + livingArea + pctCollege + bedrooms +
 
 We make new variables like extrarooms = rooms - bedrooms. Also we
 include two variables landvalue and newConstruction which improves our
-RMSE. However, trying composite variables like livingarea per lotsize,
+RMSE. However, trying composite variables like living area per lotsize,
 bathrooms per bedroom and using building value by subtracting landvalue
-from the property price, did not improve the out of sample RMSE of the
-model.
+from the property price did not improve the out of sample RMSE of the
+model.We observed that adding more variables led to higher variance.
 
 #### Part B
 
@@ -59,7 +59,9 @@ regression model for house prices.
 
 ``` r
 Best Linear Regression Fit 
-lm(price ~ landValue+lotSize+ livingArea+ bedrooms+ bathrooms+ extrarooms + centralAir + heating + age+ newConstruction+ fireplaces + fuel + age + pctCollege)
+lm(price ~ landValue+lotSize+ livingArea+ bedrooms+ bathrooms+ 
+               extrarooms +centralAir + heating + age+ newConstruction+ 
+                        fireplaces + fuel + age +pctCollege)
 ```
 
     ## [1] "RMSE for Best Linear Model"
@@ -96,18 +98,11 @@ as compared to KNN model.
 Linear Regression model Mean RMSE = 59,536.05 KNN Model Mean RMSE at
 K-135 = 80,616.88
 
+### Single Random Train/Test Performance
+
 We run both these models on a same train set and predict values for both
 these models on same test to compare their RMSE and Fit for same data
 points.
-
-    ## Warning: package 'reshape2' was built under R version 3.6.3
-
-    ## 
-    ## Attaching package: 'reshape2'
-
-    ## The following object is masked from 'package:tidyr':
-    ## 
-    ##     smiths
 
 ![](Assignment-2_files/figure-markdown_github/actual%20vs%20predicted-1.png)
 
@@ -154,11 +149,14 @@ almost similar performance for values around the average.
 
 We can see that Linear regression model performs better for predicting
 prices of houses in Saratoga. The linear model is easily interpretable
-and we can see which variables affect prices more. KNN model is a non
-parametric model so it is a slow learning model where it has to train on
-the data everytime we want to make a new prediction. Furthermore, we
-cannot easily see which variables are contributing more towards price
-changes.
+and we can see which variables affect prices more.
+
+KNN model is a non parametric model and is known as a slow learning
+model where it has to train on the data everytime to make a prediction
+for new values. Furthermore, we cannot easily see which variables are
+contributing more towards price changes. With more dimensions or
+variables the performance of the KNN model deteriorates as compared to
+Linear model where adding more variables might improve prediction.
 
 Given the results, we can clearly say that Linear Regression model is a
 better model than KNN in this case. It has low error on average and also

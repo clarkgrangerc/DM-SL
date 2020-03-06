@@ -13,6 +13,7 @@ library(tidyverse)
 library(mosaic)
 library(ggplot2)
 library(class)
+library(reshape2)
 ```
 
 # Homework. 2
@@ -177,7 +178,7 @@ KNN Model Mean RMSE at K-135      = 80,616.88
 We run both these models on a same train set and predict values for both these models on same test to compare their RMSE and Fit for same data points. 
 
 
-```{r actual vs predicted, echo=F, warning=FALSE}
+```{r actual vs predicted, echo=F, warning= F}
 Test1= train_ind = sample.int(n, n_train, replace = FALSE)
     fulltrn = Housing[train_ind,]
     Xtra = X[train_ind,]
@@ -203,7 +204,7 @@ Test1= train_ind = sample.int(n, n_train, replace = FALSE)
     RMSE_LM = rmse(fulltst$price, lm_predict)
     RMSE_Knn = rmse(actual, knnpredict)
 
-library(reshape2)
+
     
 PvAtest= melt(data.frame(cbind(actual, lm_predict, knnpredict)), "actual" )   
 ### Predicted vs Actual Plot    
