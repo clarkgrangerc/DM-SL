@@ -25,7 +25,10 @@ on$lshares =log(on$shares)
 
 ```
 
-Description task objectives 
+
+Using the data of 39,797 online articles published by Mashable during 2013 and 2014, the goal is bulding a model to determine if an article goes viral or not. An article is considered viral if it was shared more than 1400 times. We have a set o features of each article such as things like how long the headline is, how long the article is, how positive or negative the "sentiment" of the article was, among others. Beyond to get the best model to classify, Mashable wants to know if there is anything they can learn about how to improve an article's chance of reaching this threshold. 
+
+To deal with this problem we are going to work with two approach. The first approach is from the standpoint of regression. we will build three models following techniques such as linear regression, K neares neighboor and transforming the objective variable. In this first approach the objective variable will be the number of shares. The second approach is from the standpoint of classification. In this case our objective variable will be a binary entry Viral, which is 1 if the article is viral or 0 otherwise. In both approach, we have measures that help us to classify the model performance. 
 
 
 ## Approach #1 Working with Shares as objective variable
@@ -158,9 +161,9 @@ ERR_m3
 ```
 
 
+In the first approach our objective variable is number of shares. To start  we anylized all the set of features([see features](https://github.com/jgscott/ECO395M/blob/master/data/online_news_codes.txt)) we have to decide which of them are important to include in the models. Then we start fitting linear models with several combinations of variables. We used the function step to test if including some interactions in the model would be helpful, but finally we decided work with a more parsimonious model, given it has a good fitting. Below we can see the variables we used in our linear models, we ran the first using shares as epxlained variable and then we used log of shares as explanatory variable. Then, we decided to try with a knn model as well. For this last model, we did not consider the binary variables since they do not add too much information in this methodology. The variables used in the knn model are summarized below. 
 
-Present a table with ACC of the models and comment, then present the Conf matrix for the best model and the requested ratios. Comment. 
-
+**Specification for Linear models:**
 
 Shares or log(Shares) ~ n_tokens_title + n_tokens_content + num_hrefs + 
             num_self_hrefs + num_imgs + num_videos + 
@@ -168,17 +171,17 @@ Shares or log(Shares) ~ n_tokens_title + n_tokens_content + num_hrefs +
             data_channel_is_entertainment + data_channel_is_bus + 
             data_channel_is_socmed + data_channel_is_tech +
             data_channel_is_world + self_reference_avg_sharess +
-            is_weekend + global_rate_negative_words + global_rate_positive_words +       title_subjectivity
+            is_weekend + global_rate_negative_words + global_rate_positive_words + title_subjectivity
 
-For KNN model the specification: 
+**For KNN model the specification:** 
 
 Shares ~ n_tokens_title, n_tokens_content, num_hrefs, 
                   num_self_hrefs, num_imgs, num_videos, 
                   average_token_length, num_keywords, self_reference_avg_sharess
 
+Since the predictions of our model are numerical (number of shares), we needed the evaluation in terms of a binary prediction (viral or not). For that reason after generated prediction of our models across multiple train/test splits we summarized the accuracy rate of each one considering a threeshold of 1400 shares to consider an article viral. In the table 1 we can see the accuracy ratio for our thre models plus "null" model that always predicts the articles as "not viral". 
 
-
-
+**Table 1. Accuracy rate for models with Shares as objective variable**
 ```{r echo=FALSE, warning= FALSE}
 accdata = c(ACC_null,ACC_m1,ACC_km2,ACC_m3)
 accdata1=t(as.data.frame(accdata))
@@ -187,11 +190,12 @@ row.names(accdata1) <- c("Null Model","Linear Model","KNN Model","Linear Model (
 table1=kable(accdata1) 
 table1
 ```
+In table 1 we can observe so far the model with the best accuracy is the linear model over the log of shares. We can see that the linear model over shares is even worse that the null model.  
 
 
-For my best model I have to present the Confusion matrix and the requested stats
+Having found our best model for the prediction of number of shares we proceed to present the Confusion matrix and the requested stats:
 
-
+**Table 2. Confusion Matrix for the Linear Model of Log of Shares 
 ```{r echo=FALSE, warning= FALSE}
 CM_m3=as.data.frame(CM)
 colnames(CM_m3)<-c("Linear Model Log (Shares)")
@@ -200,23 +204,18 @@ table2=kable(CM_m3)
 table2
 ```
 
+**The stats are the Following** 
 
-The stats are the Following 
+ Overall error rate = `r ERR_m3*100`%
+ 
+ True positive rate = `r tpr*100`%
+ 
+ False positive rate = `r fpr*100`%
+ 
+ 
+## Approach #2 Working with binary variable viral as objective 
 
- Overall error rate = `r ERR_m3`
- 
- True positive rate = `r tpr`
- 
- False positive rate = ` r fpr`
- 
- 
- Explanations...
- 
- 
- # Approach #2 Working with binary variable viral as objective 
- 
- We work with the specification of model 1, but using Linear probability model,
-  a logit model and KNN for clasification
+In the second approach we handled this problem from the standpoint of classification. That is, we defined a binary variable viral and built our very models for directly predicting viral status as a target variable. We worked with the same specification of our first lineal model, but using Linear probability model regression and a a logit model regression. In the case of the Knn approach we used the same variables of the knn model for shares.
   
 ```{r include=FALSE}
 ##### AVG accuracy for Linear Probability Model #4 built as a LPM model with y=viral
@@ -335,8 +334,7 @@ knngraph <- data.frame(K=c(k_grid), acc=c(acc_k6))
 ```
 
 
-
-Table Comparing ACC Viral models 
+**Table 3. Accuracy rate for models with  viral as objective variable**
 
 ```{r echo=FALSE, warning= FALSE}
   accdata2 = c(ACC_m4,ACC_m5,ACC_km6)
@@ -347,6 +345,8 @@ table3=kable(accdata21)
 table3
 ```
  
+
+
 
 
 Table with Confusion matrix of logistic model 
@@ -361,11 +361,11 @@ table4
 Requested Stats 
 The stats are the Following 
 
- Overall error rate = `r ERR_m5`
+ Overall error rate = `r ERR_m5*100`%
  
- True positive rate = `r tpr1`
+ True positive rate = `r tpr1*100`%
  
- False positive rate = ` r fpr1`
+ False positive rate = `r fpr1*100`%
 
 
 
@@ -374,6 +374,7 @@ Graph comparing with KNN
 
 Explanations 
 ppp
+
 ```{r echo=FALSE, warning= FALSE}
 colnames(knngraph) <- c("k","AVG_ACC")
 k_min = knngraph$k[which.max(knngraph$AVG_ACC)]
@@ -392,10 +393,14 @@ plotknn
 
 Table with coeff of my best model 
 
-## How can we increase the probability that an article goes viral? 
+## How can we increase the probability that an article goes viral?
+
+
+TABLE of MArgins
 
 ```{r echo=FALSE, warning= FALSE}
-options("jtools-digits" = 5)
-export_summs(m5) ##, scale = TRUE)
+margins_m5=margins(m5, type='response')
+table5=kable(summary(margins_m5)) 
+table5
 
 ```
