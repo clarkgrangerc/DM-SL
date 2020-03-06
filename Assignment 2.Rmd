@@ -14,6 +14,7 @@ library(mosaic)
 library(ggplot2)
 library(class)
 library(reshape2)
+library(xtable)
 ```
 
 # Homework. 2
@@ -77,12 +78,13 @@ Looking at the co-efficients, we can say that lotsize, no. of bedrooms, no. of b
 
 So we decided to have the following model as our final best linear regression model for house prices.  
 
-```{r, echo=T, eval=F}
-Best Linear Regression Fit 
-lm(price ~ landValue+lotSize+ livingArea+ bedrooms+ bathrooms+ 
-               extrarooms +centralAir + heating + age+ newConstruction+ 
-                        fireplaces + fuel + age +pctCollege)
+
+```{r coef, echo=F}
+lmbase = lm(price ~ landValue+lotSize+ livingArea+ bedrooms+ bathrooms+ extrarooms + centralAir + heating + age+ newConstruction+ fireplaces + fuel + age+ pctCollege , data=Housing)
+xtable(lmbase)
 ```
+
+We applied this model on 1000 random train/ test splits of our data and calculated its out of sample root mean squared error.
 
 ```{r best fit model regression, echo=F, cache=TRUE}
 Mean_rmse = do(1000)*{
@@ -100,7 +102,7 @@ Mean_rmse = do(1000)*{
   
   yhat_test = predict(lmbase, Housing_test)
   rmse(Housing_test$price, yhat_test)} 
-paste("RMSE" ,"for", "Best", "Linear", "Model") 
+paste("Mean", "RMSE" ,"for", "Best", "Linear", "Model") 
 mean(Mean_rmse$result, na.rm = TRUE)
 
 ```
@@ -168,7 +170,7 @@ min(meanrm$RMSE)
 ```
 
 
-## Report: Pricing Model Comparison
+### Report: Pricing Model Comparison
 We have two models for predicting the prices of houses in Saratoga. One is the linear regression model and the other one in KNN model. Both these models have their strengths and weaknesses. The main metric for comparing these two models is to check their out of sample prediction error or RMSE. By running the model on more than 500 different train/ test samples we find out that Linear regression model has lower RMSE which means that on average linear model is predicting prices accurately as compared to KNN model. 
 
 Linear Regression model Mean RMSE = 59,536.05 
@@ -295,7 +297,9 @@ KNN model is a non parametric model and is known as a slow learning model where 
 
 Given the results, we can clearly say that Linear Regression model is a better model than KNN in this case. It has low error on average and also at extreme values.
 
-### Question 2: A Hospital Audit
+***
+
+### **Question 2: A Hospital Audit**
 #### Part 1: Are some radiologists more clinically conservative than others in recalling patients, holding patient risk factors equal?
 Here, we model recall decisions on all risk factors and the radiologist that made the decision to gauge how conservative the doctors are relative to each other.
 
