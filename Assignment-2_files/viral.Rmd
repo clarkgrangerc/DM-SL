@@ -195,7 +195,7 @@ In table 1 we can observe so far the model with the best accuracy is the linear 
 
 Having found our best model for the prediction of number of shares we proceed to present the Confusion matrix and the requested stats:
 
-**Table 2. Confusion Matrix for the Linear Model of Log of Shares 
+**Table 2. Confusion Matrix for the Linear Model of Log of Shares**
 ```{r echo=FALSE, warning= FALSE}
 CM_m3=as.data.frame(CM)
 colnames(CM_m3)<-c("Linear Model Log (Shares)")
@@ -204,7 +204,7 @@ table2=kable(CM_m3)
 table2
 ```
 
-**The stats are the Following** 
+**The stats are the following:** 
 
  Overall error rate = `r ERR_m3*100`%
  
@@ -215,7 +215,7 @@ table2
  
 ## Approach #2 Working with binary variable viral as objective 
 
-In the second approach we handled this problem from the standpoint of classification. That is, we defined a binary variable viral and built our very models for directly predicting viral status as a target variable. We worked with the same specification of our first lineal model, but using Linear probability model regression and a a logit model regression. In the case of the Knn approach we used the same variables of the knn model for shares.
+In the second approach we handled this problem from the standpoint of classification. That is, we defined a binary variable viral and built our very models for directly predicting viral status as a target variable. We worked with the same specification of our first lineal model, but using Linear probability model regression and a a logit model regression. In the case of the Knn approach we used the same variables of the knn model for shares.The table 3 summarized the accuracy rate for the three classification models.  
   
 ```{r include=FALSE}
 ##### AVG accuracy for Linear Probability Model #4 built as a LPM model with y=viral
@@ -349,7 +349,7 @@ table3
 
 
 
-Table with Confusion matrix of logistic model 
+**Table 2. Confusion Matrix for the Logistic Model of Viral**
 ```{r echo=FALSE, warning= FALSE}
 CM_m5=as.data.frame(CM1)
 colnames(CM_m5)<-c("Logit Model")
@@ -358,8 +358,7 @@ table4=kable(CM_m5)
 table4
 ```
 
-Requested Stats 
-The stats are the Following 
+**The stats are the following:** 
 
  Overall error rate = `r ERR_m5*100`%
  
@@ -368,13 +367,10 @@ The stats are the Following
  False positive rate = `r fpr1*100`%
 
 
+We decided to include a graph to see the advantages in accuracy of the probabilistic models over the Knn classification model. 
 
 
-Graph comparing with KNN
-
-Explanations 
-ppp
-
+**Graph 1. KNN model for several K's vs the LPM and Logit Models**
 ```{r echo=FALSE, warning= FALSE}
 colnames(knngraph) <- c("k","AVG_ACC")
 k_min = knngraph$k[which.max(knngraph$AVG_ACC)]
@@ -396,8 +392,7 @@ Table with coeff of my best model
 ## How can we increase the probability that an article goes viral?
 
 
-TABLE of MArgins
-
+**Table 6. Average Marginal Effects of the Logit Model 
 ```{r echo=FALSE, warning= FALSE}
 margins_m5=margins(m5, type='response')
 table5=kable(summary(margins_m5)) 
