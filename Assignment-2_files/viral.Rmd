@@ -345,7 +345,7 @@ table3=kable(accdata21)
 table3
 ```
  
-In the table 3 we can see that the model with the best accuraccy is the Logit Model, which is slightly superior to the Linear Probability model (`r ACC_m5 vs ACC_m4`). This result was expected since in this approach we are working directly over the binary variable, then the prediction rank will have less variation. In the first case we predicted the number of shares, which have a huge rank of possible outcomes. In the table 4, we present the confusion matrix for our best model and then we present the requested stats. We can see that the logistic model gives a gain of accuracy of `r (ACC_m5-ACC_m3)*100`% over the lineal model of log shares. It represents a lift of `r ACC_m5/ACCm3`.
+In the table 3 we can see that the model with the best accuraccy is the Logit Model, which is slightly superior to the Linear Probability model (`r ACC_m5 vs ACC_m4`). This result was expected since in this approach we are working directly over the binary variable, then the prediction rank will have less variation. In the first case we predicted the number of shares, which have a huge rank of possible outcomes. In the table 4, we present the confusion matrix for our best model and then we present the requested stats. We can see that the logistic model gives a gain of accuracy of `r (ACC_m5-ACC_m3)*100`% over the lineal model of log shares. It represents a lift of `r ACC_m5/ACC_m3`.
 
 
 **Table 4. Confusion Matrix for the Logistic Model of Viral**
@@ -356,6 +356,7 @@ row.names(CM_m5) <- c("True Negative","False Negative","False Positive","True Po
 table4=kable(CM_m5) 
 table4
 ```
+
 
 **The stats are the following:** 
 
