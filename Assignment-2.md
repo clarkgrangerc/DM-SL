@@ -1092,7 +1092,7 @@ with differents values of K (see graph 1).
 **Graph 1. KNN models vs LPM and Logit Models**
 ![](Assignment-2_files/figure-markdown_strict/unnamed-chunk-11-1.png)
 
-\#\#\#How can we increase the probability that an article goes viral?
+### How can we increase the probability that an article goes viral?
 
 By this point we have adressed the problem of finding the best model to
 predict viral with the most accuracy. But we also want to know what
