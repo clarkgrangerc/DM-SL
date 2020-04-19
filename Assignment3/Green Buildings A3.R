@@ -124,6 +124,9 @@ cvm5= cv.gamlr(x_train, y, nfold=10,  verb=TRUE)
   c(rmse(gb_test$Rent,yhat_test5),lambda,coef.lasso)
 }
 info.lasso=colMeans(rmse_lasso)
+lambda1=info.lasso[2]
+coef.lasso1=info.lasso[3]
+
 
 info.lasso=as.data.frame(info.lasso)
 colnames(info.lasso)<-c("Lasso Model")
@@ -132,6 +135,8 @@ row.names(info.lasso) <- c("RMSE","Log Lambda",
 table2=kable(info.lasso)%>%
   kable_styling()  
 table2
+
+
 
 ##############################################################
 ####### APPROACH 3 Tree model,random forest and boosting######
