@@ -144,13 +144,13 @@ kmeans clustering which can be seen in the table below.
 <tbody>
 <tr class="odd">
 <td style="text-align: center;"><strong>red</strong></td>
-<td style="text-align: center;">24</td>
 <td style="text-align: center;">1575</td>
+<td style="text-align: center;">24</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;"><strong>white</strong></td>
-<td style="text-align: center;">4830</td>
 <td style="text-align: center;">68</td>
+<td style="text-align: center;">4830</td>
 </tr>
 </tbody>
 </table>
@@ -219,8 +219,6 @@ we stuck with kmeans clustering.
 
     ## Warning: Quick-TRANSfer stage steps exceeded maximum (= 324850)
 
-    ## Warning: Quick-TRANSfer stage steps exceeded maximum (= 324850)
-
 <table style="width:36%;">
 <caption>Wine Color on Vertical axis vs Cluster group on Horizontal axis for kmeans Clustering on PCA</caption>
 <colgroup>
@@ -238,13 +236,13 @@ we stuck with kmeans clustering.
 <tbody>
 <tr class="odd">
 <td style="text-align: center;"><strong>red</strong></td>
-<td style="text-align: center;">1582</td>
 <td style="text-align: center;">17</td>
+<td style="text-align: center;">1582</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;"><strong>white</strong></td>
-<td style="text-align: center;">20</td>
 <td style="text-align: center;">4878</td>
+<td style="text-align: center;">20</td>
 </tr>
 </tbody>
 </table>
@@ -267,10 +265,6 @@ there is no pattern of sorting based on quality of wine. For 6 quality
 wines, the alogrithm places it evenly in almost all clusters. This shows
 that kmeans is not picking up the differences in wine quality
 succesfully.
-
-    ## Warning: did not converge in 10 iterations
-
-    ## Warning: did not converge in 10 iterations
 
 <table style="width:69%;">
 <caption>Wine Quality on Vertical axis vs Cluster group on Horizontal axis for kmeans clustering on original scaled data</caption>
@@ -299,73 +293,73 @@ succesfully.
 <tbody>
 <tr class="odd">
 <td style="text-align: center;"><strong>3</strong></td>
-<td style="text-align: center;">3</td>
-<td style="text-align: center;">2</td>
-<td style="text-align: center;">3</td>
 <td style="text-align: center;">4</td>
-<td style="text-align: center;">7</td>
-<td style="text-align: center;">6</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">2</td>
 <td style="text-align: center;">5</td>
+<td style="text-align: center;">7</td>
+<td style="text-align: center;">7</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;"><strong>4</strong></td>
+<td style="text-align: center;">21</td>
 <td style="text-align: center;">15</td>
-<td style="text-align: center;">26</td>
 <td style="text-align: center;">2</td>
-<td style="text-align: center;">20</td>
-<td style="text-align: center;">24</td>
+<td style="text-align: center;">27</td>
+<td style="text-align: center;">64</td>
 <td style="text-align: center;">63</td>
-<td style="text-align: center;">66</td>
+<td style="text-align: center;">24</td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;"><strong>5</strong></td>
-<td style="text-align: center;">193</td>
-<td style="text-align: center;">266</td>
-<td style="text-align: center;">52</td>
 <td style="text-align: center;">77</td>
-<td style="text-align: center;">639</td>
-<td style="text-align: center;">472</td>
-<td style="text-align: center;">439</td>
+<td style="text-align: center;">200</td>
+<td style="text-align: center;">20</td>
+<td style="text-align: center;">269</td>
+<td style="text-align: center;">446</td>
+<td style="text-align: center;">471</td>
+<td style="text-align: center;">655</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;"><strong>6</strong></td>
-<td style="text-align: center;">258</td>
-<td style="text-align: center;">476</td>
-<td style="text-align: center;">43</td>
-<td style="text-align: center;">554</td>
-<td style="text-align: center;">635</td>
-<td style="text-align: center;">346</td>
-<td style="text-align: center;">524</td>
+<td style="text-align: center;">548</td>
+<td style="text-align: center;">265</td>
+<td style="text-align: center;">9</td>
+<td style="text-align: center;">475</td>
+<td style="text-align: center;">549</td>
+<td style="text-align: center;">350</td>
+<td style="text-align: center;">640</td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;"><strong>7</strong></td>
-<td style="text-align: center;">140</td>
-<td style="text-align: center;">192</td>
-<td style="text-align: center;">2</td>
-<td style="text-align: center;">444</td>
-<td style="text-align: center;">122</td>
+<td style="text-align: center;">446</td>
+<td style="text-align: center;">141</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">189</td>
+<td style="text-align: center;">137</td>
 <td style="text-align: center;">43</td>
-<td style="text-align: center;">136</td>
+<td style="text-align: center;">122</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;"><strong>8</strong></td>
+<td style="text-align: center;">97</td>
 <td style="text-align: center;">14</td>
-<td style="text-align: center;">30</td>
 <td style="text-align: center;">0</td>
-<td style="text-align: center;">96</td>
-<td style="text-align: center;">22</td>
+<td style="text-align: center;">31</td>
+<td style="text-align: center;">27</td>
 <td style="text-align: center;">2</td>
-<td style="text-align: center;">29</td>
+<td style="text-align: center;">22</td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;"><strong>9</strong></td>
-<td style="text-align: center;">0</td>
-<td style="text-align: center;">0</td>
-<td style="text-align: center;">0</td>
 <td style="text-align: center;">4</td>
 <td style="text-align: center;">0</td>
 <td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
 <td style="text-align: center;">1</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
 </tr>
 </tbody>
 </table>
@@ -375,17 +369,15 @@ We then run kmeans clustering on principal components and sort data into
 simple kmeans clustering. So even with PCA we are not able to sort wines
 based on their quality.
 
-    ## Warning: did not converge in 10 iterations
-
 <table style="width:69%;">
 <caption>Wine Quality on Vertical axis vs Cluster group on Horizontal axis for kmeans Clustering on PCA</caption>
 <colgroup>
 <col style="width: 12%" />
 <col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 8%" />
 <col style="width: 6%" />
-<col style="width: 8%" />
-<col style="width: 8%" />
-<col style="width: 8%" />
 <col style="width: 8%" />
 <col style="width: 8%" />
 </colgroup>
@@ -404,73 +396,73 @@ based on their quality.
 <tbody>
 <tr class="odd">
 <td style="text-align: center;"><strong>3</strong></td>
+<td style="text-align: center;">7</td>
+<td style="text-align: center;">4</td>
 <td style="text-align: center;">5</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">3</td>
 <td style="text-align: center;">3</td>
 <td style="text-align: center;">6</td>
-<td style="text-align: center;">4</td>
-<td style="text-align: center;">2</td>
-<td style="text-align: center;">7</td>
-<td style="text-align: center;">3</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;"><strong>4</strong></td>
-<td style="text-align: center;">29</td>
-<td style="text-align: center;">4</td>
-<td style="text-align: center;">70</td>
-<td style="text-align: center;">9</td>
-<td style="text-align: center;">24</td>
 <td style="text-align: center;">65</td>
+<td style="text-align: center;">9</td>
+<td style="text-align: center;">29</td>
+<td style="text-align: center;">24</td>
+<td style="text-align: center;">4</td>
 <td style="text-align: center;">15</td>
+<td style="text-align: center;">70</td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;"><strong>5</strong></td>
-<td style="text-align: center;">139</td>
-<td style="text-align: center;">53</td>
-<td style="text-align: center;">494</td>
-<td style="text-align: center;">156</td>
-<td style="text-align: center;">324</td>
 <td style="text-align: center;">611</td>
+<td style="text-align: center;">153</td>
+<td style="text-align: center;">139</td>
+<td style="text-align: center;">324</td>
+<td style="text-align: center;">53</td>
 <td style="text-align: center;">361</td>
+<td style="text-align: center;">497</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;"><strong>6</strong></td>
-<td style="text-align: center;">704</td>
-<td style="text-align: center;">52</td>
-<td style="text-align: center;">334</td>
-<td style="text-align: center;">266</td>
-<td style="text-align: center;">225</td>
 <td style="text-align: center;">722</td>
+<td style="text-align: center;">266</td>
+<td style="text-align: center;">704</td>
+<td style="text-align: center;">225</td>
+<td style="text-align: center;">52</td>
 <td style="text-align: center;">533</td>
+<td style="text-align: center;">334</td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;"><strong>7</strong></td>
-<td style="text-align: center;">525</td>
-<td style="text-align: center;">2</td>
-<td style="text-align: center;">41</td>
-<td style="text-align: center;">143</td>
-<td style="text-align: center;">29</td>
 <td style="text-align: center;">199</td>
+<td style="text-align: center;">143</td>
+<td style="text-align: center;">525</td>
+<td style="text-align: center;">29</td>
+<td style="text-align: center;">2</td>
 <td style="text-align: center;">140</td>
+<td style="text-align: center;">41</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;"><strong>8</strong></td>
-<td style="text-align: center;">110</td>
-<td style="text-align: center;">0</td>
-<td style="text-align: center;">2</td>
-<td style="text-align: center;">13</td>
-<td style="text-align: center;">7</td>
 <td style="text-align: center;">33</td>
+<td style="text-align: center;">13</td>
+<td style="text-align: center;">110</td>
+<td style="text-align: center;">7</td>
+<td style="text-align: center;">0</td>
 <td style="text-align: center;">28</td>
+<td style="text-align: center;">2</td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;"><strong>9</strong></td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
 <td style="text-align: center;">4</td>
 <td style="text-align: center;">0</td>
 <td style="text-align: center;">0</td>
-<td style="text-align: center;">0</td>
-<td style="text-align: center;">0</td>
-<td style="text-align: center;">0</td>
 <td style="text-align: center;">1</td>
+<td style="text-align: center;">0</td>
 </tr>
 </tbody>
 </table>
