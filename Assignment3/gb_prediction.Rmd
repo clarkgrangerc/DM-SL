@@ -1,8 +1,6 @@
 ---
 title: "gb_prediction"
-output:
-  html_document: default
-  pdf_document: default
+output: md_document
 ---
 
 ```{r include=FALSE, cache= TRUE}
@@ -26,6 +24,7 @@ gb$size = gb$size/1000
 ```
 
 # Question 1. Predictive model for Green Buildings
+
 Using the data on 7,984 commercial rental properties from the United States, the goal is to build a predictive model for rental income per square foot. To build the model we have several key features of each property such as size in square foot, leasing rate, number of stories, amenities, among others. We also have information about building's "neiborhood", weather in the area and kind of contract that the property offers. Beyond the amount of variables we have, we are specially interested in quantifying the average change in rental income per square foot  associated with green certification, holding other features of the building constant. In this dataset, 685 properties have been awarded either LEED or EnergyStar certification as a green building.
 
 To adress this problem we use different approachs we have seen in class. The first approach is from the point of view of linear models, including model regularization techniques and stepwise selection. In the second approach we use a Lasso regression model and cross validation, to try to find a best model. Finally we implement tree models, random forest and boosting. 
