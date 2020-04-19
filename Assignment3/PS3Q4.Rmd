@@ -15,13 +15,14 @@ library(foreach)
 library(mosaic)
 library(cluster)
 library(simEd)
+library(pander)
 ```
 
 ## Market Segmentation
 ### Initial Perception
 ```{r}
 set.seed(1)
-social_marketing= read.csv('/Users/kelly_carlson/Documents/ECO395M/social_marketing.csv', header=TRUE)
+social_marketing= read.csv('/Users/kelly_carlson/Documents/GitHub/DM-SL/Assignment3/social_marketing.csv', header=TRUE)
 summary(social_marketing)
 ```
 The top three most shared things by mean: chatter, photo sharing, health/nutrition. The chatter makes since given that this is twitter. The other two makes sense given these are people following a health/nutrition company.
@@ -61,21 +62,61 @@ Based on this elbow plot, k=12 is probably reasonable. This is prety arbitrary. 
   clust2$betweenss
 ```
 The K++ clustering had a total sum of squares between that was 658 more and a total sum of squares within that was 658 less, so cluster 2, the Kmeans++, seems to do a better job here. This is because generally we want more "distance" between clusters and less "distance" within clusters. So, lets move forward with cluster 2
+
+### Cluster Summaries
+
+#### Cluster 1
 ```{r}
-clust2$center 
-  clust2$center[1,]*sigma + mu #into beauty/fashion/photosharing       
-  clust2$center[2,]*sigma + mu #current events/travel/photo sharing/health nutrition
-  clust2$center[3,]*sigma + mu #really into news/politics, travelling and computers #photo sharing and chatter  
-  clust2$center[4,]*sigma + mu #news, politics, and cars   
-  clust2$center[5,]*sigma + mu #mostly chatter, but shopping and photo sharing; maybe ads 
-  clust2$center[6,]*sigma + mu #outdoors, fitness, photo sharing and food/cooking maybe athletes
-  clust2$center[7,]*sigma + mu #chatter, sports playing, and photo sharing  
-  clust2$center[8,]*sigma + mu #Sports fans that are religious and parents 
-  clust2$center[9,]*sigma + mu #adult
-  clust2$center[10,]*sigma + mu #adult twitters that also have health/nutrition chatter, photo sharing, and a little politics/travel/sports fandom/current events.   
-  clust2$center[11,]*sigma + mu #high in dating and chatter; maybe the "gossip people" 
-  clust2$center[12,]*sigma + mu #into TV/Film/Art/music also likely in college
-  clust2$size
+pander(clust2$center[1,]*sigma + mu) #into beauty/fashion/photosharing  
+```
+
+#### Cluster 2
+```{r}
+pander(clust2$center[2,]*sigma + mu) #really into news/politics, travelling and computers #photo sharing and chatter    
+```
+#### Cluster 3
+```{r}
+pander( clust2$center[3,]*sigma + mu) #really into news/politics, travelling and computers #photo sharing and chatter
+```
+#### Cluster 4
+```{r}
+  pander(clust2$center[4,]*sigma + mu) #news, politics, and cars  
+```
+#### Cluster 5
+```{r}
+pander(clust2$center[5,]*sigma + mu) #mostly chatter, but shopping and photo sharing; maybe ads 
+```
+#### Cluster 6
+```{r}
+pander(clust2$center[6,]*sigma + mu) #outdoors, fitness, photo sharing and food/cooking maybe athletes
+```
+#### Cluster 7
+```{r}
+pander(clust2$center[7,]*sigma + mu) #chatter, sports playing, and photo sharing  
+```
+#### Cluster 8
+```{r}
+pander(clust2$center[8,]*sigma + mu) #Sports fans that are religious and parents 
+```
+#### Cluster 9
+```{r}
+pander(clust2$center[9,]*sigma + mu) #adult
+```
+#### Cluster 10
+```{r}
+pander(clust2$center[10,]*sigma + mu) #adult twitters that also have health/nutrition chatter, photo sharing, and a little politics/travel/sports fandom/current events.
+```
+#### Cluster 11
+```{r}
+pander(clust2$center[11,]*sigma + mu) #high in dating and chatter; maybe the "gossip people" 
+```
+#### Cluster 12
+```{r}
+pander(clust2$center[12,]*sigma + mu) #into TV/Film/Art/music also likely in college
+```
+#### Cluster sizes
+```{r}
+  pander(clust2$size)
 ```
 These are giving us the values for the center of the different clusters which will help us see patterns of tweeting in different market segments. I also called the cluster sizes so we can see how many people fell into each market segment/cluster
 
