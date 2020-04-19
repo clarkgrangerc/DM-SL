@@ -219,8 +219,6 @@ which equals to an error rate of 0.5%. We can also run a logit model on
 PCAs but since the question asks us to use only unsupervised learning,
 we stuck with kmeans clustering.
 
-    ## Warning: Quick-TRANSfer stage steps exceeded maximum (= 324850)
-
 <table style="width:36%;">
 <caption>Wine Color on Vertical axis vs Cluster group on Horizontal axis for kmeans Clustering on PCA</caption>
 <colgroup>
@@ -267,8 +265,6 @@ there is no pattern of sorting based on quality of wine. For 6 quality
 wines, the alogrithm places it evenly in almost all clusters. This shows
 that kmeans is not picking up the differences in wine quality
 succesfully.
-
-    ## Warning: did not converge in 10 iterations
 
 <table style="width:71%;">
 <caption>Wine Quality on Vertical axis vs Cluster group on Horizontal axis for kmeans clustering on original scaled data</caption>
@@ -372,12 +368,6 @@ We then run kmeans clustering on principal components and sort data into
 7 clusters. The consfusion matrix does not look much different than
 simple kmeans clustering. So even with PCA we are not able to sort wines
 based on their quality.
-
-    ## Warning: did not converge in 10 iterations
-
-    ## Warning: did not converge in 10 iterations
-
-    ## Warning: did not converge in 10 iterations
 
 <table style="width:69%;">
 <caption>Wine Quality on Vertical axis vs Cluster group on Horizontal axis for kmeans Clustering on PCA</caption>
