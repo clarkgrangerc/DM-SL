@@ -53,7 +53,7 @@ In this question we are provided with a dataset of more than six thousand differ
 
 We start with classfication of wines based on its color. We have two colors; red and white. We plot boxplots of wine color against their chemical properties to see which properties are different across these two colors. We see that amount of chlorides, total sulfur dioxide and volatile acidity are major variables that have different distribution for red and white wines.
 
-```{r, eval= F, echo = F}
+```{r, echo = F, cache= TRUE}
 wine2= melt(wine[,-c(12,14)], id.vars = "color")
 ggplot(data = wine2, aes(x=factor(color), y=value)) + geom_boxplot()+ facet_wrap(~variable, scales = "free") +ggtitle("Component Analysis of Wines on color basis") 
 ```
@@ -87,7 +87,7 @@ pander(table(wine$color, clust2$cluster), caption = "Wine Color on Vertical axis
 
 However when using hiearchial clustering, we do not see see clustering based on color of wines. By cutting tree at 2 we get almost all wines sorted into one cluster. Even with cutting tress at 5 or 10 levels, we dont see any balance in the distribution of wines into different clusters. It looks to be a very uneven hiearchial clustering. We try all distance measuring approaches but they all give similar results.
 
-```{r, echo = F, cache= TRUE}
+```{r, echo = F}
 x_dist = dist(X, method = 'euclidean')
 h1 = hclust(x_dist, method ='average')
 c1 = cutree(h1, 2)
