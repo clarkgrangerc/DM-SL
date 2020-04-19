@@ -81,6 +81,8 @@ two colors. We see that amount of chlorides, total sulfur dioxide and
 volatile acidity are major variables that have different distribution
 for red and white wines.
 
+<img src="question3_files/figure-markdown_github/unnamed-chunk-1-1.png" style="display: block; margin: auto;" />
+
 ### Clustering Kmeans and Kmeanspp
 
 We run a simple kmeans clustering technique and chose centers as 2
@@ -144,13 +146,13 @@ kmeans clustering which can be seen in the table below.
 <tbody>
 <tr class="odd">
 <td style="text-align: center;"><strong>red</strong></td>
-<td style="text-align: center;">1575</td>
 <td style="text-align: center;">24</td>
+<td style="text-align: center;">1575</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;"><strong>white</strong></td>
-<td style="text-align: center;">68</td>
 <td style="text-align: center;">4830</td>
+<td style="text-align: center;">68</td>
 </tr>
 </tbody>
 </table>
@@ -217,8 +219,6 @@ which equals to an error rate of 0.5%. We can also run a logit model on
 PCAs but since the question asks us to use only unsupervised learning,
 we stuck with kmeans clustering.
 
-    ## Warning: Quick-TRANSfer stage steps exceeded maximum (= 324850)
-
 <table style="width:36%;">
 <caption>Wine Color on Vertical axis vs Cluster group on Horizontal axis for kmeans Clustering on PCA</caption>
 <colgroup>
@@ -236,13 +236,13 @@ we stuck with kmeans clustering.
 <tbody>
 <tr class="odd">
 <td style="text-align: center;"><strong>red</strong></td>
-<td style="text-align: center;">17</td>
 <td style="text-align: center;">1582</td>
+<td style="text-align: center;">17</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;"><strong>white</strong></td>
-<td style="text-align: center;">4878</td>
 <td style="text-align: center;">20</td>
+<td style="text-align: center;">4878</td>
 </tr>
 </tbody>
 </table>
@@ -266,13 +266,13 @@ wines, the alogrithm places it evenly in almost all clusters. This shows
 that kmeans is not picking up the differences in wine quality
 succesfully.
 
-<table style="width:69%;">
+<table style="width:71%;">
 <caption>Wine Quality on Vertical axis vs Cluster group on Horizontal axis for kmeans clustering on original scaled data</caption>
 <colgroup>
 <col style="width: 12%" />
 <col style="width: 8%" />
 <col style="width: 8%" />
-<col style="width: 6%" />
+<col style="width: 8%" />
 <col style="width: 8%" />
 <col style="width: 8%" />
 <col style="width: 8%" />
@@ -295,69 +295,69 @@ succesfully.
 <td style="text-align: center;"><strong>3</strong></td>
 <td style="text-align: center;">4</td>
 <td style="text-align: center;">4</td>
-<td style="text-align: center;">1</td>
 <td style="text-align: center;">2</td>
 <td style="text-align: center;">5</td>
+<td style="text-align: center;">6</td>
 <td style="text-align: center;">7</td>
-<td style="text-align: center;">7</td>
+<td style="text-align: center;">2</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;"><strong>4</strong></td>
+<td style="text-align: center;">14</td>
 <td style="text-align: center;">21</td>
-<td style="text-align: center;">15</td>
-<td style="text-align: center;">2</td>
-<td style="text-align: center;">27</td>
+<td style="text-align: center;">26</td>
+<td style="text-align: center;">65</td>
 <td style="text-align: center;">64</td>
-<td style="text-align: center;">63</td>
 <td style="text-align: center;">24</td>
+<td style="text-align: center;">2</td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;"><strong>5</strong></td>
+<td style="text-align: center;">183</td>
 <td style="text-align: center;">77</td>
-<td style="text-align: center;">200</td>
-<td style="text-align: center;">20</td>
 <td style="text-align: center;">269</td>
-<td style="text-align: center;">446</td>
-<td style="text-align: center;">471</td>
-<td style="text-align: center;">655</td>
+<td style="text-align: center;">449</td>
+<td style="text-align: center;">479</td>
+<td style="text-align: center;">651</td>
+<td style="text-align: center;">30</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;"><strong>6</strong></td>
-<td style="text-align: center;">548</td>
-<td style="text-align: center;">265</td>
-<td style="text-align: center;">9</td>
-<td style="text-align: center;">475</td>
+<td style="text-align: center;">259</td>
 <td style="text-align: center;">549</td>
-<td style="text-align: center;">350</td>
+<td style="text-align: center;">474</td>
+<td style="text-align: center;">549</td>
+<td style="text-align: center;">346</td>
 <td style="text-align: center;">640</td>
+<td style="text-align: center;">19</td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;"><strong>7</strong></td>
+<td style="text-align: center;">138</td>
 <td style="text-align: center;">446</td>
-<td style="text-align: center;">141</td>
-<td style="text-align: center;">1</td>
-<td style="text-align: center;">189</td>
+<td style="text-align: center;">191</td>
 <td style="text-align: center;">137</td>
 <td style="text-align: center;">43</td>
 <td style="text-align: center;">122</td>
+<td style="text-align: center;">2</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;"><strong>8</strong></td>
+<td style="text-align: center;">12</td>
 <td style="text-align: center;">97</td>
-<td style="text-align: center;">14</td>
-<td style="text-align: center;">0</td>
 <td style="text-align: center;">31</td>
 <td style="text-align: center;">27</td>
-<td style="text-align: center;">2</td>
+<td style="text-align: center;">4</td>
 <td style="text-align: center;">22</td>
+<td style="text-align: center;">0</td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;"><strong>9</strong></td>
+<td style="text-align: center;">0</td>
 <td style="text-align: center;">4</td>
 <td style="text-align: center;">0</td>
-<td style="text-align: center;">0</td>
-<td style="text-align: center;">0</td>
 <td style="text-align: center;">1</td>
+<td style="text-align: center;">0</td>
 <td style="text-align: center;">0</td>
 <td style="text-align: center;">0</td>
 </tr>
@@ -375,9 +375,9 @@ based on their quality.
 <col style="width: 12%" />
 <col style="width: 8%" />
 <col style="width: 8%" />
-<col style="width: 8%" />
-<col style="width: 8%" />
 <col style="width: 6%" />
+<col style="width: 8%" />
+<col style="width: 8%" />
 <col style="width: 8%" />
 <col style="width: 8%" />
 </colgroup>
@@ -396,73 +396,73 @@ based on their quality.
 <tbody>
 <tr class="odd">
 <td style="text-align: center;"><strong>3</strong></td>
-<td style="text-align: center;">7</td>
-<td style="text-align: center;">4</td>
-<td style="text-align: center;">5</td>
+<td style="text-align: center;">6</td>
 <td style="text-align: center;">2</td>
 <td style="text-align: center;">3</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">7</td>
+<td style="text-align: center;">5</td>
 <td style="text-align: center;">3</td>
-<td style="text-align: center;">6</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;"><strong>4</strong></td>
-<td style="text-align: center;">65</td>
-<td style="text-align: center;">9</td>
-<td style="text-align: center;">29</td>
+<td style="text-align: center;">70</td>
 <td style="text-align: center;">24</td>
 <td style="text-align: center;">4</td>
+<td style="text-align: center;">9</td>
+<td style="text-align: center;">65</td>
+<td style="text-align: center;">29</td>
 <td style="text-align: center;">15</td>
-<td style="text-align: center;">70</td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;"><strong>5</strong></td>
-<td style="text-align: center;">611</td>
-<td style="text-align: center;">153</td>
-<td style="text-align: center;">139</td>
+<td style="text-align: center;">502</td>
 <td style="text-align: center;">324</td>
-<td style="text-align: center;">53</td>
+<td style="text-align: center;">52</td>
+<td style="text-align: center;">149</td>
+<td style="text-align: center;">611</td>
+<td style="text-align: center;">139</td>
 <td style="text-align: center;">361</td>
-<td style="text-align: center;">497</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;"><strong>6</strong></td>
-<td style="text-align: center;">722</td>
-<td style="text-align: center;">266</td>
-<td style="text-align: center;">704</td>
-<td style="text-align: center;">225</td>
-<td style="text-align: center;">52</td>
-<td style="text-align: center;">533</td>
 <td style="text-align: center;">334</td>
+<td style="text-align: center;">228</td>
+<td style="text-align: center;">51</td>
+<td style="text-align: center;">262</td>
+<td style="text-align: center;">722</td>
+<td style="text-align: center;">705</td>
+<td style="text-align: center;">534</td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;"><strong>7</strong></td>
-<td style="text-align: center;">199</td>
-<td style="text-align: center;">143</td>
-<td style="text-align: center;">525</td>
+<td style="text-align: center;">41</td>
 <td style="text-align: center;">29</td>
 <td style="text-align: center;">2</td>
+<td style="text-align: center;">142</td>
+<td style="text-align: center;">199</td>
+<td style="text-align: center;">526</td>
 <td style="text-align: center;">140</td>
-<td style="text-align: center;">41</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;"><strong>8</strong></td>
-<td style="text-align: center;">33</td>
-<td style="text-align: center;">13</td>
-<td style="text-align: center;">110</td>
+<td style="text-align: center;">2</td>
 <td style="text-align: center;">7</td>
 <td style="text-align: center;">0</td>
+<td style="text-align: center;">13</td>
+<td style="text-align: center;">33</td>
+<td style="text-align: center;">110</td>
 <td style="text-align: center;">28</td>
-<td style="text-align: center;">2</td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;"><strong>9</strong></td>
 <td style="text-align: center;">0</td>
 <td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
 <td style="text-align: center;">4</td>
-<td style="text-align: center;">0</td>
-<td style="text-align: center;">0</td>
 <td style="text-align: center;">1</td>
-<td style="text-align: center;">0</td>
 </tr>
 </tbody>
 </table>
