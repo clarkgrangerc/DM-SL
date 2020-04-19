@@ -1,0 +1,105 @@
+library(ggplot2)
+library(tidyverse)
+library(dplyr)
+library(foreach)
+library(mosaic)
+library(LICORS)
+
+
+getwd()
+
+wine= read.csv("wine.csv")
+
+head(wine)
+
+red = filter(wine, color == "red")
+white = filter(wine, color == "white")
+
+summary(red)
+summary(white)
+
+
+## SCaling of data
+X = wine[,-(12:13)]
+X = scale(X, center = TRUE, scale = TRUE)
+
+### calculating means and sd
+mu = attr(X,"scaled:center")
+sigma = attr(X, "scaled:scale")
+
+### clustering with kmeans 2 clusters
+clust1 = kmeans(X, centers = 2, nstart = 25)
+
+clust1$center[1,]*sigma + mu
+
+which(clust1$cluster == 1)
+
+qplot(fixed.acidity, volatile.acidity, data=wine, color=factor(clust1$cluster))
+qplot(fixed.acidity, residual.sugar, data=wine, color=factor(clust1$cluster))
+qplot(chlorides, residual.sugar, data=wine, color=factor(clust1$cluster))
+qplot(total.sulfur.dioxide, chlorides, data=wine, color=factor(clust2$cluster))
+
+final = cbind(wine, result, clust2$cluster)
+
+length(which(final$color == "white" & final$clust1.cluster == 2))
+result = data.frame(clust1$cluster)
+
+error1 = table(final$color, final$clust1.cluster) 
+error1
+
+
+### clustering with kmeans++ initialization
+clust2 = kmeanspp(X, k=10, nstart=50)
+
+error2 = table(final$quality, clust2$cluster)
+error2
+clust1$withinss
+clust2$withinss
+
+sum(clust1$withinss)
+sum(clust2$withinss)
+
+clust1$tot.withinss
+clust2$tot.withinss
+
+
+### weighted kmeans
+Y= data.frame(X)
+Y= mutate(Y , chlorides = chlorides*1.3, total.sulfur.dioxide = total.sulfur.dioxide*1.3)
+
+clust4= kmeans(X, centers = 10, nstart = 50, iter.max = 20)
+ero = table(final$quality, clust4$cluster)
+ero
+error
+
+
+###Hiearchial clusters
+x_dist = dist(X, method = 'euclidean')
+h1 = hclust(x_dist, method ='average')
+c1 = cutree(h1, 20)
+final= cbind(final, c1)
+error3 = table(final$color, c1)
+rm(error,error1,error2,error3, error4, error5, error6, error7)
+plot(h1, cex=0.3)
+ggplot(final) + geom_point(aes(x=residual.sugar, y=chlorides,col=factor(color)),alpha = 0.4, size = 3.5) + 
+  geom_point(aes(density))
+
+ggplot(final, aes(residual.sugar, chlorides, col = factor(color)), alpha = 0.4, size = 3.5)+ geom_point(col = factor(c1))
+
+h2= hclust(x_dist, method = "complete")
+c2 = cutree(h2,6)
+final = cbind(final, c2)
+error4= table(final$color, final$c2)
+summary(factor(c1))
+
+h3= hclust(x_dist, method = "average")
+c3= cutree(h3, 2)
+final = cbind(final, c3)
+error5 = table(final$color, final$c3)
+error5
+
+h4= hclust(x_dist, method = "centroid")
+c4 = cutree(h4, 2)
+final= cbind(final, c4)
+error6 = table(final$color, final$c4)
+error6

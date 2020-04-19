@@ -1,0 +1,12 @@
+cars = read.csv("cars.csv", header = TRUE)
+X = cars[,-(1:9)]
+X = scale(X, center=TRUE, scale=TRUE)
+
+mu = attr(X,"scaled:center")
+sigma = attr(X,"scaled:scale")
+
+clust1 = kmeans(na.omit(X), centers = 6, nstart = 25)
+clust1$center[1,]*sigma + mu
+
+qplot(Horsepower, CityMPG, data=cars, color=factor(clust1$cluster))
+qplot(Weight, Length, data=cars, color=factor(clust1$cluster))
