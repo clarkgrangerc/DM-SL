@@ -1,5 +1,5 @@
 ---
-title: "gb_prediction"
+title: "Question 1"
 output: md_document
 ---
 
@@ -13,7 +13,6 @@ library(margins)
 library(rpart)
 library(caret)
 library(knitr)
-library(kableExtra)
 library(randomForest)
 library(gbm)
 greenbuildings = read.csv("greenbuildings.csv", header=TRUE)
@@ -108,8 +107,7 @@ a=cbind(rmse.lm,AIC,BIC,DF)
 colnames(a)<-c("RMSE","AIC","BIC","DF")
 row.names(a) <- c("Model 1: Manual built","Model 2: Interactions
                         ","Model 3: Manual built + step","Model 4: Interactions + step")
-table1=kable(a, digits=2, padding = 2)%>%
-  kable_styling()
+table1=kable(a, digits=2, padding = 2)
 table1
 ```
 
@@ -161,8 +159,7 @@ info.lasso=as.data.frame(info.lasso)
 colnames(info.lasso)<-c("Model 5: Lasso Model")
 row.names(info.lasso) <- c("RMSE","Log Lambda",
                         "Number of coefficients")
-table2=kable(info.lasso,digits=2)%>%
-  kable_styling()
+table2=kable(info.lasso,digits=2)
 table2
 ```
 
@@ -241,8 +238,7 @@ table3=as.data.frame(c(info.trees[1],rmse.rf,rmse.boost))
 colnames(table3)<-c("RMSE")
 row.names(table3) <- c("Model 6: Tree model","Model 7:Random Forest",
                            "Model 8: Boosting")
-table3=kable(table3,digits=2)%>%
-  kable_styling()  
+table3=kable(table3,digits=2) 
 table3
 ```
 
