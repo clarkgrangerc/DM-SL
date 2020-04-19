@@ -202,15 +202,15 @@ Number of coefficients
 </table>
 
 Table 2 contains the average results of the lasso cross validation. The
-model found has in average a log lambda of -2.1837253 and in average
-includes 32 coefficients. However, the findings suggests that the lasso
+model found has in average a log lambda of -2.1649544 and in average
+includes 30 coefficients. However, the findings suggests that the lasso
 selected model does not improve the best linear model built in the
 previous section according with the boostrapped out of sample RSME
-computed. In graph 1, we show the evolution of a lasso regression. We
-can appreciate how lasso approach found the minimum RMSE in a number of
-coefficients similar to the coefficients included in the best linear
-regression. The last reinforces that the linear model could be a good
-predictor of rent price.
+computed. In graph 1, we show the evolution of a lasso regression for
+one case. We can appreciate how lasso approach found the minimum RMSE in
+a number of coefficients similar to the coefficients included in the
+best linear regression. The last reinforces that the linear model could
+be a good predictor of rent price.
 
 **Graph 1. Lasso model: Errror vs Log Lambda**
 ![](gb_prediction_files/figure-markdown_strict/unnamed-chunk-6-1.png)
