@@ -669,39 +669,16 @@ Market Segmentation
 
 ### Initial Perception
 
-``` r
-set.seed(1)
-social_marketing= read.csv('social_marketing.csv', header=TRUE)
-```
-
 The top three most shared things in our data by mean: chatter, photo
 sharing, health/nutrition. The chatter makes since given that this is
 twitter. The other two makes sense given these are people following a
 health/nutrition company.
-
-``` r
-#center and scale
-X = social_marketing[,-1]
-X = scale(X, center=TRUE, scale=TRUE)
-#extract the centers and scales from the rescaled data for later use
-mu = attr(X, "scaled:center")
-sigma = attr(X, "scaled:scale")
-```
 
 Now that I have the data scaled for clustering, I’d like to figure what
 value of K to use so I’m going to get an elbow plot to get a ballpark
 for what k to use.
 
 ### Elbow Plot
-
-``` r
-k_grid = seq(2, 20, by=1)
-SSE_grid = foreach(k = k_grid, .combine='c') %do% {
-  cluster_k = kmeans(X, k, nstart=50)
-  cluster_k$tot.withinss
-}
-  plot(k_grid, SSE_grid)
-```
 
 <img src="gb_prediction_files/figure-markdown_github/unnamed-chunk-25-1.png" style="display: block; margin: auto;" />
 
@@ -751,206 +728,59 @@ clusters. So, lets move forward with cluster 2
 
 #### Cluster 1
 
-``` r
-pander(clust2$center[1,]*sigma + mu) #into beauty/fashion/photosharing  
-```
-
-<table>
-<caption>Table continues below</caption>
-<colgroup>
-<col style="width: 12%" />
-<col style="width: 21%" />
-<col style="width: 11%" />
-<col style="width: 20%" />
-<col style="width: 20%" />
-<col style="width: 12%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: center;">chatter</th>
-<th style="text-align: center;">current_events</th>
-<th style="text-align: center;">travel</th>
-<th style="text-align: center;">photo_sharing</th>
-<th style="text-align: center;">uncategorized</th>
-<th style="text-align: center;">tv_film</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: center;">4.14</td>
-<td style="text-align: center;">1.758</td>
-<td style="text-align: center;">1.461</td>
-<td style="text-align: center;">6.126</td>
-<td style="text-align: center;">1.275</td>
-<td style="text-align: center;">0.8448</td>
-</tr>
-</tbody>
-</table>
-
-<table>
-<caption>Table continues below</caption>
-<colgroup>
-<col style="width: 20%" />
-<col style="width: 14%" />
-<col style="width: 10%" />
-<col style="width: 11%" />
-<col style="width: 23%" />
-<col style="width: 10%" />
-<col style="width: 10%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: center;">sports_fandom</th>
-<th style="text-align: center;">politics</th>
-<th style="text-align: center;">food</th>
-<th style="text-align: center;">family</th>
-<th style="text-align: center;">home_and_garden</th>
-<th style="text-align: center;">music</th>
-<th style="text-align: center;">news</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: center;">1.115</td>
-<td style="text-align: center;">1.386</td>
-<td style="text-align: center;">1.038</td>
-<td style="text-align: center;">0.9024</td>
-<td style="text-align: center;">0.6164</td>
-<td style="text-align: center;">1.251</td>
-<td style="text-align: center;">1.027</td>
-</tr>
-</tbody>
-</table>
-
-<table>
-<caption>Table continues below</caption>
-<colgroup>
-<col style="width: 20%" />
-<col style="width: 14%" />
-<col style="width: 24%" />
-<col style="width: 18%" />
-<col style="width: 22%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: center;">online_gaming</th>
-<th style="text-align: center;">shopping</th>
-<th style="text-align: center;">health_nutrition</th>
-<th style="text-align: center;">college_uni</th>
-<th style="text-align: center;">sports_playing</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: center;">1.169</td>
-<td style="text-align: center;">1.754</td>
-<td style="text-align: center;">2.275</td>
-<td style="text-align: center;">1.532</td>
-<td style="text-align: center;">0.8248</td>
-</tr>
-</tbody>
-</table>
-
-<table>
-<caption>Table continues below</caption>
-<colgroup>
-<col style="width: 13%" />
-<col style="width: 12%" />
-<col style="width: 16%" />
-<col style="width: 14%" />
-<col style="width: 14%" />
-<col style="width: 12%" />
-<col style="width: 17%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: center;">cooking</th>
-<th style="text-align: center;">eco</th>
-<th style="text-align: center;">computers</th>
-<th style="text-align: center;">business</th>
-<th style="text-align: center;">outdoors</th>
-<th style="text-align: center;">crafts</th>
-<th style="text-align: center;">automotive</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: center;">11.85</td>
-<td style="text-align: center;">0.5122</td>
-<td style="text-align: center;">0.7317</td>
-<td style="text-align: center;">0.5787</td>
-<td style="text-align: center;">0.8071</td>
-<td style="text-align: center;">0.5831</td>
-<td style="text-align: center;">0.8448</td>
-</tr>
-</tbody>
-</table>
-
-<table>
-<caption>Table continues below</caption>
-<colgroup>
-<col style="width: 11%" />
-<col style="width: 14%" />
-<col style="width: 11%" />
-<col style="width: 15%" />
-<col style="width: 11%" />
-<col style="width: 11%" />
-<col style="width: 24%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: center;">art</th>
-<th style="text-align: center;">religion</th>
-<th style="text-align: center;">beauty</th>
-<th style="text-align: center;">parenting</th>
-<th style="text-align: center;">dating</th>
-<th style="text-align: center;">school</th>
-<th style="text-align: center;">personal_fitness</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: center;">0.7517</td>
-<td style="text-align: center;">0.8514</td>
-<td style="text-align: center;">4.288</td>
-<td style="text-align: center;">0.816</td>
-<td style="text-align: center;">0.6275</td>
-<td style="text-align: center;">0.929</td>
-<td style="text-align: center;">1.361</td>
-</tr>
-</tbody>
-</table>
-
-<table style="width:67%;">
-<colgroup>
-<col style="width: 13%" />
-<col style="width: 23%" />
-<col style="width: 16%" />
-<col style="width: 12%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: center;">fashion</th>
-<th style="text-align: center;">small_business</th>
-<th style="text-align: center;">spam</th>
-<th style="text-align: center;">adult</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: center;">6.058</td>
-<td style="text-align: center;">0.4457</td>
-<td style="text-align: center;">4.337e-17</td>
-<td style="text-align: center;">0.2195</td>
-</tr>
-</tbody>
-</table>
+    ## 
+    ## -----------------------------------------------------------------------------
+    ##  chatter   current_events   travel   photo_sharing   uncategorized   tv_film 
+    ## --------- ---------------- -------- --------------- --------------- ---------
+    ##   4.14         1.758        1.461        6.126           1.275       0.8448  
+    ## -----------------------------------------------------------------------------
+    ## 
+    ## Table: Table continues below
+    ## 
+    ##  
+    ## -----------------------------------------------------------------------------
+    ##  sports_fandom   politics   food    family   home_and_garden   music   news  
+    ## --------------- ---------- ------- -------- ----------------- ------- -------
+    ##      1.115        1.386     1.038   0.9024       0.6164        1.251   1.027 
+    ## -----------------------------------------------------------------------------
+    ## 
+    ## Table: Table continues below
+    ## 
+    ##  
+    ## ----------------------------------------------------------------------------
+    ##  online_gaming   shopping   health_nutrition   college_uni   sports_playing 
+    ## --------------- ---------- ------------------ ------------- ----------------
+    ##      1.169        1.754          2.275            1.532          0.8248     
+    ## ----------------------------------------------------------------------------
+    ## 
+    ## Table: Table continues below
+    ## 
+    ##  
+    ## --------------------------------------------------------------------------
+    ##  cooking    eco     computers   business   outdoors   crafts   automotive 
+    ## --------- -------- ----------- ---------- ---------- -------- ------------
+    ##   11.85    0.5122    0.7317      0.5787     0.8071    0.5831     0.8448   
+    ## --------------------------------------------------------------------------
+    ## 
+    ## Table: Table continues below
+    ## 
+    ##  
+    ## -----------------------------------------------------------------------------
+    ##   art     religion   beauty   parenting   dating   school   personal_fitness 
+    ## -------- ---------- -------- ----------- -------- -------- ------------------
+    ##  0.7517    0.8514    4.288      0.816     0.6275   0.929         1.361       
+    ## -----------------------------------------------------------------------------
+    ## 
+    ## Table: Table continues below
+    ## 
+    ##  
+    ## -----------------------------------------------
+    ##  fashion   small_business     spam      adult  
+    ## --------- ---------------- ----------- --------
+    ##   6.058        0.4457       4.337e-17   0.2195 
+    ## -----------------------------------------------
 
 #### Cluster 2
-
-``` r
-pander(clust2$center[2,]*sigma + mu) #really into news/politics, travelling and computers #photo sharing and chatter    
-```
 
 <table>
 <caption>Table continues below</caption>
@@ -1145,10 +975,6 @@ pander(clust2$center[2,]*sigma + mu) #really into news/politics, travelling and 
 
 #### Cluster 3
 
-``` r
-pander( clust2$center[3,]*sigma + mu) #really into news/politics, travelling and computers #photo sharing and chatter
-```
-
 <table>
 <caption>Table continues below</caption>
 <colgroup>
@@ -1341,10 +1167,6 @@ pander( clust2$center[3,]*sigma + mu) #really into news/politics, travelling and
 </table>
 
 #### Cluster 4
-
-``` r
-  pander(clust2$center[4,]*sigma + mu) #news, politics, and cars  
-```
 
 <table>
 <caption>Table continues below</caption>
@@ -1539,10 +1361,6 @@ pander( clust2$center[3,]*sigma + mu) #really into news/politics, travelling and
 
 #### Cluster 5
 
-``` r
-pander(clust2$center[5,]*sigma + mu) #mostly chatter, but shopping and photo sharing; maybe ads 
-```
-
 <table>
 <caption>Table continues below</caption>
 <colgroup>
@@ -1735,10 +1553,6 @@ pander(clust2$center[5,]*sigma + mu) #mostly chatter, but shopping and photo sha
 </table>
 
 #### Cluster 6
-
-``` r
-pander(clust2$center[6,]*sigma + mu) #outdoors, fitness, photo sharing and food/cooking maybe athletes
-```
 
 <table>
 <caption>Table continues below</caption>
@@ -1933,10 +1747,6 @@ pander(clust2$center[6,]*sigma + mu) #outdoors, fitness, photo sharing and food/
 
 #### Cluster 7
 
-``` r
-pander(clust2$center[7,]*sigma + mu) #chatter, sports playing, and photo sharing  
-```
-
 <table>
 <caption>Table continues below</caption>
 <colgroup>
@@ -2129,10 +1939,6 @@ pander(clust2$center[7,]*sigma + mu) #chatter, sports playing, and photo sharing
 </table>
 
 #### Cluster 8
-
-``` r
-pander(clust2$center[8,]*sigma + mu) #Sports fans that are religious and parents 
-```
 
 <table>
 <caption>Table continues below</caption>
@@ -2327,10 +2133,6 @@ pander(clust2$center[8,]*sigma + mu) #Sports fans that are religious and parents
 
 #### Cluster 9
 
-``` r
-pander(clust2$center[9,]*sigma + mu) #adult
-```
-
 <table>
 <caption>Table continues below</caption>
 <colgroup>
@@ -2523,10 +2325,6 @@ pander(clust2$center[9,]*sigma + mu) #adult
 </table>
 
 #### Cluster 10
-
-``` r
-pander(clust2$center[10,]*sigma + mu) #adult twitters that also have health/nutrition chatter, photo sharing, and a little politics/travel/sports fandom/current events.
-```
 
 <table>
 <caption>Table continues below</caption>
@@ -2721,10 +2519,6 @@ pander(clust2$center[10,]*sigma + mu) #adult twitters that also have health/nutr
 
 #### Cluster 11
 
-``` r
-pander(clust2$center[11,]*sigma + mu) #high in dating and chatter; maybe the "gossip people" 
-```
-
 <table>
 <caption>Table continues below</caption>
 <colgroup>
@@ -2917,10 +2711,6 @@ pander(clust2$center[11,]*sigma + mu) #high in dating and chatter; maybe the "go
 </table>
 
 #### Cluster 12
-
-``` r
-pander(clust2$center[12,]*sigma + mu) #into TV/Film/Art/music also likely in college
-```
 
 <table>
 <caption>Table continues below</caption>
@@ -3115,10 +2905,6 @@ pander(clust2$center[12,]*sigma + mu) #into TV/Film/Art/music also likely in col
 
 #### Cluster sizes
 
-``` r
-  pander(clust2$size)
-```
-
 *451*, *3184*, *341*, *417*, *936*, *732*, *341*, *641*, *195*, *49*,
 *192* and *403* These are giving us the values for the center of the
 different clusters which will help us see patterns of tweeting in
@@ -3131,18 +2917,7 @@ like to look at what a PCA approach would look like for this.
 
 ### PCAs
 
-``` r
-  PCAs = prcomp(X, scale=TRUE)
-  
-  # variance plot
-  plot(PCAs)
-```
-
 <img src="gb_prediction_files/figure-markdown_github/unnamed-chunk-40-1.png" style="display: block; margin: auto;" />
-
-``` r
-  summary(PCAs)
-```
 
     ## Importance of components:
     ##                           PC1     PC2     PC3     PC4     PC5     PC6     PC7
@@ -3221,10 +2996,6 @@ sports they are fans of, or through their children/ religious
 institution. You can see below that cluster 8 is dominating when it
 comes to sharing a lot about both religion and sports fandom.
 
-``` r
-  fviz_cluster(clust2 , data = X, choose.vars= c(7,27), geom="point")
-```
-
 <img src="gb_prediction_files/figure-markdown_github/unnamed-chunk-41-1.png" style="display: block; margin: auto;" />
 
 ### Cluster 3 and 4
@@ -3234,10 +3005,6 @@ in automotive, computer and travelling twitter posts. This market
 segment seems like they are probably older, given their posts about news
 and politics. In the plot below, you see that many of the members with
 high news and politics shares are in clusters 3 and 4.
-
-``` r
-fviz_cluster(clust2 , data = X, choose.vars= c(8,13), geom="point")
-```
 
 <img src="gb_prediction_files/figure-markdown_github/unnamed-chunk-42-1.png" style="display: block; margin: auto;" />
 
@@ -3254,13 +3021,6 @@ order. The fact that cluster 2 represent a fairly inactive group on
 twitter can best be seen from our PCA analysis. We see all the variation
 vectors pointing left because the first PCA coincides with inactiveness
 on twitter.
-
-``` r
-fviz_pca_var(PCAs, col.var="contrib",
-             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
-             repel = TRUE, title = "Variables Contribution in first two PCAs " )
-```
-
 <img src="gb_prediction_files/figure-markdown_github/unnamed-chunk-43-1.png" style="display: block; margin: auto;" />
 
 ### Cluster 5
@@ -3273,11 +3033,6 @@ around twitter so maybe Nutrient H2O needs to start sharing some photos
 of fashionable people using their product or vouching for their brand,
 etc. You can see below that cluster 5 is dominating when it comes to
 shopping and photo sharing posts.
-
-``` r
-fviz_cluster(clust2 , data = X, choose.vars= c(4,15), geom="point")
-```
-
 <img src="gb_prediction_files/figure-markdown_github/unnamed-chunk-44-1.png" style="display: block; margin: auto;" />
 
 ### Conclusion
@@ -3286,13 +3041,6 @@ These are just a few of the interesting market segments I saw in the
 clusters, but you could formulate advertising plans for more or less of
 the clusters here. It’s up to the advertising firm which of these
 clusters of the NutrientH2O audience they want to utilize.
-
-``` r
-fviz_pca_var(PCAs,axes = c(2,3), col.var="contrib",
-             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
-             repel = TRUE, title = "Variables Contribution in second two PCAs " )
-```
-
 <img src="gb_prediction_files/figure-markdown_github/unnamed-chunk-45-1.png" style="display: block; margin: auto;" />
 Looking at PCA 2 and PCA 3(we took out the PCA1 because this largely
 represent how inactive people are), you can see the related topics, and

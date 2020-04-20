@@ -439,13 +439,13 @@ ggplot(data = wine3, aes(x=factor(quality), y=value)) + geom_boxplot()+ facet_wr
 
 ## Market Segmentation
 ### Initial Perception
-```{r}
+```{r, echo = F}
 set.seed(1)
 social_marketing= read.csv('social_marketing.csv', header=TRUE)
 ```
 The top three most shared things in our data by mean: chatter, photo sharing, health/nutrition. The chatter makes since given that this is twitter. The other two makes sense given these are people following a health/nutrition company.
 
-```{r}
+```{r, echo = F}
 #center and scale
 X = social_marketing[,-1]
 X = scale(X, center=TRUE, scale=TRUE)
@@ -457,7 +457,7 @@ sigma = attr(X, "scaled:scale")
 Now that I have the data scaled for clustering, I'd like to figure what value of K to use so I'm going to get an elbow plot to get a ballpark for what k to use.
 
 ### Elbow Plot
-```{r warning=FALSE}
+```{r, echo = F, warning=FALSE}
 k_grid = seq(2, 20, by=1)
 SSE_grid = foreach(k = k_grid, .combine='c') %do% {
   cluster_k = kmeans(X, k, nstart=50)
@@ -484,56 +484,57 @@ The K++ clustering had a total sum of squares between that was 658 more and a to
 ### Cluster Summaries
 
 #### Cluster 1
-```{r}
-pander(clust2$center[1,]*sigma + mu) #into beauty/fashion/photosharing  
+```{r, echo = F}
+
+pandoc.table(clust2$center[1,]*sigma + mu) #into beauty/fashion/photosharing  
 ```
 
 #### Cluster 2
-```{r}
+```{r,echo = F}
 pander(clust2$center[2,]*sigma + mu) #really into news/politics, travelling and computers #photo sharing and chatter    
 ```
 #### Cluster 3
-```{r}
+```{r,echo = F}
 pander( clust2$center[3,]*sigma + mu) #really into news/politics, travelling and computers #photo sharing and chatter
 ```
 #### Cluster 4
-```{r}
+```{r,echo = F}
   pander(clust2$center[4,]*sigma + mu) #news, politics, and cars  
 ```
 #### Cluster 5
-```{r}
+```{r,echo = F}
 pander(clust2$center[5,]*sigma + mu) #mostly chatter, but shopping and photo sharing; maybe ads 
 ```
 #### Cluster 6
-```{r}
+```{r,echo = F}
 pander(clust2$center[6,]*sigma + mu) #outdoors, fitness, photo sharing and food/cooking maybe athletes
 ```
 #### Cluster 7
-```{r}
+```{r,echo = F}
 pander(clust2$center[7,]*sigma + mu) #chatter, sports playing, and photo sharing  
 ```
 #### Cluster 8
-```{r}
+```{r,echo = F}
 pander(clust2$center[8,]*sigma + mu) #Sports fans that are religious and parents 
 ```
 #### Cluster 9
-```{r}
+```{r,echo = F}
 pander(clust2$center[9,]*sigma + mu) #adult
 ```
 #### Cluster 10
-```{r}
+```{r,echo = F}
 pander(clust2$center[10,]*sigma + mu) #adult twitters that also have health/nutrition chatter, photo sharing, and a little politics/travel/sports fandom/current events.
 ```
 #### Cluster 11
-```{r}
+```{r,echo = F}
 pander(clust2$center[11,]*sigma + mu) #high in dating and chatter; maybe the "gossip people" 
 ```
 #### Cluster 12
-```{r}
+```{r,echo = F}
 pander(clust2$center[12,]*sigma + mu) #into TV/Film/Art/music also likely in college
 ```
 #### Cluster sizes
-```{r}
+```{r,echo = F}
   pander(clust2$size)
 ```
 These are giving us the values for the center of the different clusters which will help us see patterns of tweeting in different market segments. I also called the cluster sizes so we can see how many people fell into each market segment/cluster
@@ -542,12 +543,14 @@ These are giving us the values for the center of the different clusters which wi
 There are definitely some distinct groups that can be seen in these clusters.I will come back to these at the end of the report. Now, I'd like to look at what a PCA approach would look like for this.
 
 ### PCAs
-```{r}
+```{r,echo = F}
   PCAs = prcomp(X, scale=TRUE)
   
   # variance plot
-  plot(PCAs)
+  fviz_screeplot(PCAs, addlabels = TRUE, ylim = c(0, 17), main = "% of Variation Explained by each PCAs")
   summary(PCAs)
+  
+  
 ```
 Examining the summary, we can see that to conserve 75% of the variance, you'd have to go with 16 PCAs, which makes it seem like most of the features are relatively uncorrelated and shouldn't be compressed. I would rather go with clustering here, which won't be as destructive to the variance.
 
@@ -580,7 +583,7 @@ Cluster 12 was sharing a lot about TV/film/art and college, which could be usefu
 Cluster 8 was sharing a lot about sports fandom, parenting, food and religion. This could be another interesting market segment to try to appeal to through targetted marketing somehow since they are the fourth biggest market segment. NutrientH2O could try to advertise through the sports they are fans of, or through their children/ religious institution. You can see below that cluster 8 is dominating when it comes to sharing a lot about both religion and sports fandom.
 
 
-```{r}
+```{r,echo = F}
   fviz_cluster(clust2 , data = X, choose.vars= c(7,27), geom="point")
 ```
 
@@ -589,14 +592,14 @@ Cluster 8 was sharing a lot about sports fandom, parenting, food and religion. T
 
 Clusters 3 and 4 are very high in politics, news, and  cluster 3 is high in automotive, computer and travelling twitter posts. This market segment seems like they are probably older, given their posts about news and politics. In the plot below, you see that many of the members with high news and politics shares are in clusters 3 and 4.
 
-```{r}
+```{r,echo = F}
 fviz_cluster(clust2 , data = X, choose.vars= c(8,13), geom="point")
 ```
 
 
 ### Cluster 2
 Our biggest cluster was cluster 2. Cluster 2 has 3184 members, whearas the next biggest cluster only has 936. Basiaclly, cluster 2 is massive. Cluster 2 is tricky because the cluster center is below average on every category of tweet. This suggests to me that cluster 2 may be capturing the inactive/relatively inactive group of followers that NutrientH2O has. The categories they are most active in are chatter, photo sharing, current events, health and nutrition, travel, and sports fandom, in that order. The fact that cluster 2 represent a fairly inactive group on twitter can best be seen from our PCA analysis. We see all the variation vectors pointing left because the first PCA coincides with inactiveness on twitter.
-```{r}
+```{r,echo = F}
 fviz_pca_var(PCAs, col.var="contrib",
              gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
              repel = TRUE, title = "Variables Contribution in first two PCAs " )
@@ -605,13 +608,13 @@ fviz_pca_var(PCAs, col.var="contrib",
 ### Cluster 5
 
 This was our second biggest cluster, cluster 5, at 936 members. This group really seperates itself from the rest of the sample in the amount of photo sharing and shopping that appear on these member's accounts. This is another important market segment that has a lot going on in and around twitter so maybe Nutrient H2O needs to start sharing some photos of fashionable people using their product or vouching for their brand, etc. You can see below that cluster 5 is dominating when it comes to shopping and photo sharing posts.
-```{r}
+```{r,echo = F}
 fviz_cluster(clust2 , data = X, choose.vars= c(4,15), geom="point")
 ```
 
 ### Conclusion
 These are just a few of the interesting market segments I saw in the clusters, but you could formulate advertising plans for more or less of the clusters here. It's up to the advertising firm which of these clusters of the NutrientH2O audience they want to utilize.
-```{r}
+```{r,echo = F}
 fviz_pca_var(PCAs,axes = c(2,3), col.var="contrib",
              gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
              repel = TRUE, title = "Variables Contribution in second two PCAs " )
