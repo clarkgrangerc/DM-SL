@@ -263,33 +263,16 @@ shows that it separates wines based on its color quite successfully.
 Only 24+68 = 92 wines out of 6,497 wines have been misclassified by this
 method. The error rate is 1.416 percent.
 
-<table style="width:36%;">
-<caption>Wine Color on Vertical axis vs Cluster group on Horizontal axis for kmeans Clustering</caption>
-<colgroup>
-<col style="width: 16%" />
-<col style="width: 9%" />
-<col style="width: 9%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: center;"> </th>
-<th style="text-align: center;">1</th>
-<th style="text-align: center;">2</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: center;"><strong>red</strong></td>
-<td style="text-align: center;">24</td>
-<td style="text-align: center;">1575</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;"><strong>white</strong></td>
-<td style="text-align: center;">4830</td>
-<td style="text-align: center;">68</td>
-</tr>
-</tbody>
-</table>
+Quitting from lines 322-327 (gb\_prediction.Rmd) Error in
+table(wine*c**o**l**o**r*, *c**l**u**s**t*1cluster) : object ‘clust1’
+not found Calls: <Anonymous> … withCallingHandlers -\> withVisible -\>
+eval -\> eval -\> pander -\> table In addition: Warning messages: 1:
+package ‘Metrics’ was built under R version 3.6.3 2: package ‘gamlr’ was
+built under R version 3.6.3 3: package ‘margins’ was built under R
+version 3.6.3 4: package ‘caret’ was built under R version 3.6.3 5:
+package ‘knitr’ was built under R version 3.6.2 6: package
+‘randomForest’ was built under R version 3.6.3 7: package ‘gbm’ was
+built under R version 3.6.3
 
 We also plot clusters along with wine colors on a graph with two major
 differentiating chemical properties. White wines have more total sulfur
@@ -680,3 +663,2648 @@ quality of wine is not particularly linked to these 11 chemical
 properties and hence failure of clustering and PCA to distinguish it.
 
 <img src="gb_prediction_files/figure-markdown_github/unnamed-chunk-22-1.png" style="display: block; margin: auto;" />
+
+Market Segmentation
+-------------------
+
+### Initial Perception
+
+``` r
+set.seed(1)
+social_marketing= read.csv('social_marketing.csv', header=TRUE)
+```
+
+The top three most shared things in our data by mean: chatter, photo
+sharing, health/nutrition. The chatter makes since given that this is
+twitter. The other two makes sense given these are people following a
+health/nutrition company.
+
+``` r
+#center and scale
+X = social_marketing[,-1]
+X = scale(X, center=TRUE, scale=TRUE)
+#extract the centers and scales from the rescaled data for later use
+mu = attr(X, "scaled:center")
+sigma = attr(X, "scaled:scale")
+```
+
+Now that I have the data scaled for clustering, I’d like to figure what
+value of K to use so I’m going to get an elbow plot to get a ballpark
+for what k to use.
+
+### Elbow Plot
+
+``` r
+k_grid = seq(2, 20, by=1)
+SSE_grid = foreach(k = k_grid, .combine='c') %do% {
+  cluster_k = kmeans(X, k, nstart=50)
+  cluster_k$tot.withinss
+}
+  plot(k_grid, SSE_grid)
+```
+
+<img src="gb_prediction_files/figure-markdown_github/unnamed-chunk-25-1.png" style="display: block; margin: auto;" />
+
+Based on this elbow plot, k=12 is probably reasonable. This is prety
+arbitrary. I tried to run a gap statistic to see what kind of k that
+indicated was correct, but the code took too long to run. I let it run
+for over 24 hours and it didn’t finish. So, we are going to proceed with
+k=12.
+
+### Clustering
+
+``` r
+  clust1 = kmeans(X, 12, nstart=25)
+  
+  clust2 = kmeanspp(X, k=12, nstart=25)
+  
+  clust1$tot.withinss
+```
+
+    ## [1] 176097.5
+
+``` r
+  clust2$tot.withinss
+```
+
+    ## [1] 176097.9
+
+``` r
+  clust1$betweenss
+```
+
+    ## [1] 107618.5
+
+``` r
+  clust2$betweenss
+```
+
+    ## [1] 107618.1
+
+The K++ clustering had a total sum of squares between that was 658 more
+and a total sum of squares within that was 658 less, so cluster 2, the
+Kmeans++, seems to do a better job here. This is because generally we
+want more “distance” between clusters and less “distance” within
+clusters. So, lets move forward with cluster 2
+
+### Cluster Summaries
+
+#### Cluster 1
+
+``` r
+pander(clust2$center[1,]*sigma + mu) #into beauty/fashion/photosharing  
+```
+
+<table>
+<caption>Table continues below</caption>
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 21%" />
+<col style="width: 11%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">chatter</th>
+<th style="text-align: center;">current_events</th>
+<th style="text-align: center;">travel</th>
+<th style="text-align: center;">photo_sharing</th>
+<th style="text-align: center;">uncategorized</th>
+<th style="text-align: center;">tv_film</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">4.14</td>
+<td style="text-align: center;">1.758</td>
+<td style="text-align: center;">1.461</td>
+<td style="text-align: center;">6.126</td>
+<td style="text-align: center;">1.275</td>
+<td style="text-align: center;">0.8448</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<caption>Table continues below</caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 14%" />
+<col style="width: 10%" />
+<col style="width: 11%" />
+<col style="width: 23%" />
+<col style="width: 10%" />
+<col style="width: 10%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">sports_fandom</th>
+<th style="text-align: center;">politics</th>
+<th style="text-align: center;">food</th>
+<th style="text-align: center;">family</th>
+<th style="text-align: center;">home_and_garden</th>
+<th style="text-align: center;">music</th>
+<th style="text-align: center;">news</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">1.115</td>
+<td style="text-align: center;">1.386</td>
+<td style="text-align: center;">1.038</td>
+<td style="text-align: center;">0.9024</td>
+<td style="text-align: center;">0.6164</td>
+<td style="text-align: center;">1.251</td>
+<td style="text-align: center;">1.027</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<caption>Table continues below</caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 14%" />
+<col style="width: 24%" />
+<col style="width: 18%" />
+<col style="width: 22%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">online_gaming</th>
+<th style="text-align: center;">shopping</th>
+<th style="text-align: center;">health_nutrition</th>
+<th style="text-align: center;">college_uni</th>
+<th style="text-align: center;">sports_playing</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">1.169</td>
+<td style="text-align: center;">1.754</td>
+<td style="text-align: center;">2.275</td>
+<td style="text-align: center;">1.532</td>
+<td style="text-align: center;">0.8248</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<caption>Table continues below</caption>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 12%" />
+<col style="width: 16%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 12%" />
+<col style="width: 17%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">cooking</th>
+<th style="text-align: center;">eco</th>
+<th style="text-align: center;">computers</th>
+<th style="text-align: center;">business</th>
+<th style="text-align: center;">outdoors</th>
+<th style="text-align: center;">crafts</th>
+<th style="text-align: center;">automotive</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">11.85</td>
+<td style="text-align: center;">0.5122</td>
+<td style="text-align: center;">0.7317</td>
+<td style="text-align: center;">0.5787</td>
+<td style="text-align: center;">0.8071</td>
+<td style="text-align: center;">0.5831</td>
+<td style="text-align: center;">0.8448</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<caption>Table continues below</caption>
+<colgroup>
+<col style="width: 11%" />
+<col style="width: 14%" />
+<col style="width: 11%" />
+<col style="width: 15%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 24%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">art</th>
+<th style="text-align: center;">religion</th>
+<th style="text-align: center;">beauty</th>
+<th style="text-align: center;">parenting</th>
+<th style="text-align: center;">dating</th>
+<th style="text-align: center;">school</th>
+<th style="text-align: center;">personal_fitness</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">0.7517</td>
+<td style="text-align: center;">0.8514</td>
+<td style="text-align: center;">4.288</td>
+<td style="text-align: center;">0.816</td>
+<td style="text-align: center;">0.6275</td>
+<td style="text-align: center;">0.929</td>
+<td style="text-align: center;">1.361</td>
+</tr>
+</tbody>
+</table>
+
+<table style="width:67%;">
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 23%" />
+<col style="width: 16%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">fashion</th>
+<th style="text-align: center;">small_business</th>
+<th style="text-align: center;">spam</th>
+<th style="text-align: center;">adult</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">6.058</td>
+<td style="text-align: center;">0.4457</td>
+<td style="text-align: center;">4.337e-17</td>
+<td style="text-align: center;">0.2195</td>
+</tr>
+</tbody>
+</table>
+
+#### Cluster 2
+
+``` r
+pander(clust2$center[2,]*sigma + mu) #really into news/politics, travelling and computers #photo sharing and chatter    
+```
+
+<table>
+<caption>Table continues below</caption>
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 21%" />
+<col style="width: 11%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">chatter</th>
+<th style="text-align: center;">current_events</th>
+<th style="text-align: center;">travel</th>
+<th style="text-align: center;">photo_sharing</th>
+<th style="text-align: center;">uncategorized</th>
+<th style="text-align: center;">tv_film</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">3.075</td>
+<td style="text-align: center;">1.267</td>
+<td style="text-align: center;">1.068</td>
+<td style="text-align: center;">1.555</td>
+<td style="text-align: center;">0.6338</td>
+<td style="text-align: center;">0.7079</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<caption>Table continues below</caption>
+<colgroup>
+<col style="width: 19%" />
+<col style="width: 13%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 22%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">sports_fandom</th>
+<th style="text-align: center;">politics</th>
+<th style="text-align: center;">food</th>
+<th style="text-align: center;">family</th>
+<th style="text-align: center;">home_and_garden</th>
+<th style="text-align: center;">music</th>
+<th style="text-align: center;">news</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">0.9058</td>
+<td style="text-align: center;">0.8825</td>
+<td style="text-align: center;">0.7506</td>
+<td style="text-align: center;">0.5101</td>
+<td style="text-align: center;">0.3671</td>
+<td style="text-align: center;">0.4466</td>
+<td style="text-align: center;">0.5524</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<caption>Table continues below</caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 14%" />
+<col style="width: 24%" />
+<col style="width: 18%" />
+<col style="width: 22%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">online_gaming</th>
+<th style="text-align: center;">shopping</th>
+<th style="text-align: center;">health_nutrition</th>
+<th style="text-align: center;">college_uni</th>
+<th style="text-align: center;">sports_playing</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">0.5795</td>
+<td style="text-align: center;">0.68</td>
+<td style="text-align: center;">1.157</td>
+<td style="text-align: center;">0.816</td>
+<td style="text-align: center;">0.3844</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<caption>Table continues below</caption>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 12%" />
+<col style="width: 16%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 12%" />
+<col style="width: 17%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">cooking</th>
+<th style="text-align: center;">eco</th>
+<th style="text-align: center;">computers</th>
+<th style="text-align: center;">business</th>
+<th style="text-align: center;">outdoors</th>
+<th style="text-align: center;">crafts</th>
+<th style="text-align: center;">automotive</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">0.9017</td>
+<td style="text-align: center;">0.2952</td>
+<td style="text-align: center;">0.3376</td>
+<td style="text-align: center;">0.2531</td>
+<td style="text-align: center;">0.3719</td>
+<td style="text-align: center;">0.2732</td>
+<td style="text-align: center;">0.4004</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<caption>Table continues below</caption>
+<colgroup>
+<col style="width: 11%" />
+<col style="width: 14%" />
+<col style="width: 11%" />
+<col style="width: 15%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 24%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">art</th>
+<th style="text-align: center;">religion</th>
+<th style="text-align: center;">beauty</th>
+<th style="text-align: center;">parenting</th>
+<th style="text-align: center;">dating</th>
+<th style="text-align: center;">school</th>
+<th style="text-align: center;">personal_fitness</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">0.3288</td>
+<td style="text-align: center;">0.5258</td>
+<td style="text-align: center;">0.3433</td>
+<td style="text-align: center;">0.4212</td>
+<td style="text-align: center;">0.326</td>
+<td style="text-align: center;">0.3734</td>
+<td style="text-align: center;">0.6523</td>
+</tr>
+</tbody>
+</table>
+
+<table style="width:68%;">
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 23%" />
+<col style="width: 18%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">fashion</th>
+<th style="text-align: center;">small_business</th>
+<th style="text-align: center;">spam</th>
+<th style="text-align: center;">adult</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">0.4589</td>
+<td style="text-align: center;">0.1976</td>
+<td style="text-align: center;">-2.628e-16</td>
+<td style="text-align: center;">0.1062</td>
+</tr>
+</tbody>
+</table>
+
+#### Cluster 3
+
+``` r
+pander( clust2$center[3,]*sigma + mu) #really into news/politics, travelling and computers #photo sharing and chatter
+```
+
+<table>
+<caption>Table continues below</caption>
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 21%" />
+<col style="width: 11%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">chatter</th>
+<th style="text-align: center;">current_events</th>
+<th style="text-align: center;">travel</th>
+<th style="text-align: center;">photo_sharing</th>
+<th style="text-align: center;">uncategorized</th>
+<th style="text-align: center;">tv_film</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">4.067</td>
+<td style="text-align: center;">1.663</td>
+<td style="text-align: center;">9.126</td>
+<td style="text-align: center;">2.37</td>
+<td style="text-align: center;">0.7185</td>
+<td style="text-align: center;">0.9707</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<caption>Table continues below</caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 13%" />
+<col style="width: 10%" />
+<col style="width: 11%" />
+<col style="width: 22%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">sports_fandom</th>
+<th style="text-align: center;">politics</th>
+<th style="text-align: center;">food</th>
+<th style="text-align: center;">family</th>
+<th style="text-align: center;">home_and_garden</th>
+<th style="text-align: center;">music</th>
+<th style="text-align: center;">news</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">1.147</td>
+<td style="text-align: center;">11.34</td>
+<td style="text-align: center;">1.701</td>
+<td style="text-align: center;">0.7713</td>
+<td style="text-align: center;">0.563</td>
+<td style="text-align: center;">0.6393</td>
+<td style="text-align: center;">3.628</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<caption>Table continues below</caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 14%" />
+<col style="width: 24%" />
+<col style="width: 18%" />
+<col style="width: 22%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">online_gaming</th>
+<th style="text-align: center;">shopping</th>
+<th style="text-align: center;">health_nutrition</th>
+<th style="text-align: center;">college_uni</th>
+<th style="text-align: center;">sports_playing</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">0.7566</td>
+<td style="text-align: center;">1.249</td>
+<td style="text-align: center;">1.815</td>
+<td style="text-align: center;">1.425</td>
+<td style="text-align: center;">0.6804</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<caption>Table continues below</caption>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 12%" />
+<col style="width: 16%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 12%" />
+<col style="width: 17%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">cooking</th>
+<th style="text-align: center;">eco</th>
+<th style="text-align: center;">computers</th>
+<th style="text-align: center;">business</th>
+<th style="text-align: center;">outdoors</th>
+<th style="text-align: center;">crafts</th>
+<th style="text-align: center;">automotive</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">1.364</td>
+<td style="text-align: center;">0.6276</td>
+<td style="text-align: center;">4.109</td>
+<td style="text-align: center;">0.8123</td>
+<td style="text-align: center;">0.739</td>
+<td style="text-align: center;">0.6716</td>
+<td style="text-align: center;">0.654</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<caption>Table continues below</caption>
+<colgroup>
+<col style="width: 11%" />
+<col style="width: 14%" />
+<col style="width: 11%" />
+<col style="width: 15%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 24%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">art</th>
+<th style="text-align: center;">religion</th>
+<th style="text-align: center;">beauty</th>
+<th style="text-align: center;">parenting</th>
+<th style="text-align: center;">dating</th>
+<th style="text-align: center;">school</th>
+<th style="text-align: center;">personal_fitness</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">0.4721</td>
+<td style="text-align: center;">1.334</td>
+<td style="text-align: center;">0.4545</td>
+<td style="text-align: center;">0.9501</td>
+<td style="text-align: center;">1.135</td>
+<td style="text-align: center;">0.6276</td>
+<td style="text-align: center;">1.103</td>
+</tr>
+</tbody>
+</table>
+
+<table style="width:68%;">
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 23%" />
+<col style="width: 15%" />
+<col style="width: 15%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">fashion</th>
+<th style="text-align: center;">small_business</th>
+<th style="text-align: center;">spam</th>
+<th style="text-align: center;">adult</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">0.6657</td>
+<td style="text-align: center;">0.5777</td>
+<td style="text-align: center;">4.77e-17</td>
+<td style="text-align: center;">0.08504</td>
+</tr>
+</tbody>
+</table>
+
+#### Cluster 4
+
+``` r
+  pander(clust2$center[4,]*sigma + mu) #news, politics, and cars  
+```
+
+<table>
+<caption>Table continues below</caption>
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 21%" />
+<col style="width: 11%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">chatter</th>
+<th style="text-align: center;">current_events</th>
+<th style="text-align: center;">travel</th>
+<th style="text-align: center;">photo_sharing</th>
+<th style="text-align: center;">uncategorized</th>
+<th style="text-align: center;">tv_film</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">4.12</td>
+<td style="text-align: center;">1.607</td>
+<td style="text-align: center;">1.161</td>
+<td style="text-align: center;">2.103</td>
+<td style="text-align: center;">0.7242</td>
+<td style="text-align: center;">1.058</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<caption>Table continues below</caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 13%" />
+<col style="width: 10%" />
+<col style="width: 11%" />
+<col style="width: 22%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">sports_fandom</th>
+<th style="text-align: center;">politics</th>
+<th style="text-align: center;">food</th>
+<th style="text-align: center;">family</th>
+<th style="text-align: center;">home_and_garden</th>
+<th style="text-align: center;">music</th>
+<th style="text-align: center;">news</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">3.079</td>
+<td style="text-align: center;">5.53</td>
+<td style="text-align: center;">1.129</td>
+<td style="text-align: center;">1.125</td>
+<td style="text-align: center;">0.6235</td>
+<td style="text-align: center;">0.5947</td>
+<td style="text-align: center;">6.866</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<caption>Table continues below</caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 14%" />
+<col style="width: 24%" />
+<col style="width: 18%" />
+<col style="width: 22%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">online_gaming</th>
+<th style="text-align: center;">shopping</th>
+<th style="text-align: center;">health_nutrition</th>
+<th style="text-align: center;">college_uni</th>
+<th style="text-align: center;">sports_playing</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">0.8753</td>
+<td style="text-align: center;">1.055</td>
+<td style="text-align: center;">1.472</td>
+<td style="text-align: center;">0.9904</td>
+<td style="text-align: center;">0.5492</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<caption>Table continues below</caption>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 12%" />
+<col style="width: 16%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 12%" />
+<col style="width: 17%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">cooking</th>
+<th style="text-align: center;">eco</th>
+<th style="text-align: center;">computers</th>
+<th style="text-align: center;">business</th>
+<th style="text-align: center;">outdoors</th>
+<th style="text-align: center;">crafts</th>
+<th style="text-align: center;">automotive</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">1.211</td>
+<td style="text-align: center;">0.4293</td>
+<td style="text-align: center;">0.4245</td>
+<td style="text-align: center;">0.3453</td>
+<td style="text-align: center;">1.134</td>
+<td style="text-align: center;">0.3837</td>
+<td style="text-align: center;">4.403</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<caption>Table continues below</caption>
+<colgroup>
+<col style="width: 9%" />
+<col style="width: 14%" />
+<col style="width: 11%" />
+<col style="width: 15%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">art</th>
+<th style="text-align: center;">religion</th>
+<th style="text-align: center;">beauty</th>
+<th style="text-align: center;">parenting</th>
+<th style="text-align: center;">dating</th>
+<th style="text-align: center;">school</th>
+<th style="text-align: center;">personal_fitness</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">0.47</td>
+<td style="text-align: center;">0.753</td>
+<td style="text-align: center;">0.4748</td>
+<td style="text-align: center;">0.9856</td>
+<td style="text-align: center;">0.5516</td>
+<td style="text-align: center;">0.7698</td>
+<td style="text-align: center;">0.9137</td>
+</tr>
+</tbody>
+</table>
+
+<table style="width:71%;">
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 23%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">fashion</th>
+<th style="text-align: center;">small_business</th>
+<th style="text-align: center;">spam</th>
+<th style="text-align: center;">adult</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">0.5803</td>
+<td style="text-align: center;">0.2326</td>
+<td style="text-align: center;">5.898e-17</td>
+<td style="text-align: center;">0.07194</td>
+</tr>
+</tbody>
+</table>
+
+#### Cluster 5
+
+``` r
+pander(clust2$center[5,]*sigma + mu) #mostly chatter, but shopping and photo sharing; maybe ads 
+```
+
+<table>
+<caption>Table continues below</caption>
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 21%" />
+<col style="width: 11%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">chatter</th>
+<th style="text-align: center;">current_events</th>
+<th style="text-align: center;">travel</th>
+<th style="text-align: center;">photo_sharing</th>
+<th style="text-align: center;">uncategorized</th>
+<th style="text-align: center;">tv_film</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">9.764</td>
+<td style="text-align: center;">1.987</td>
+<td style="text-align: center;">1.098</td>
+<td style="text-align: center;">6.004</td>
+<td style="text-align: center;">0.8056</td>
+<td style="text-align: center;">0.8419</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<caption>Table continues below</caption>
+<colgroup>
+<col style="width: 19%" />
+<col style="width: 13%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 22%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">sports_fandom</th>
+<th style="text-align: center;">politics</th>
+<th style="text-align: center;">food</th>
+<th style="text-align: center;">family</th>
+<th style="text-align: center;">home_and_garden</th>
+<th style="text-align: center;">music</th>
+<th style="text-align: center;">news</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">1.167</td>
+<td style="text-align: center;">1.376</td>
+<td style="text-align: center;">0.8387</td>
+<td style="text-align: center;">0.8248</td>
+<td style="text-align: center;">0.5566</td>
+<td style="text-align: center;">0.8376</td>
+<td style="text-align: center;">0.6421</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<caption>Table continues below</caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 14%" />
+<col style="width: 24%" />
+<col style="width: 18%" />
+<col style="width: 22%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">online_gaming</th>
+<th style="text-align: center;">shopping</th>
+<th style="text-align: center;">health_nutrition</th>
+<th style="text-align: center;">college_uni</th>
+<th style="text-align: center;">sports_playing</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">0.7489</td>
+<td style="text-align: center;">4.158</td>
+<td style="text-align: center;">1.619</td>
+<td style="text-align: center;">1.231</td>
+<td style="text-align: center;">0.5524</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<caption>Table continues below</caption>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 12%" />
+<col style="width: 16%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 12%" />
+<col style="width: 17%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">cooking</th>
+<th style="text-align: center;">eco</th>
+<th style="text-align: center;">computers</th>
+<th style="text-align: center;">business</th>
+<th style="text-align: center;">outdoors</th>
+<th style="text-align: center;">crafts</th>
+<th style="text-align: center;">automotive</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">1.24</td>
+<td style="text-align: center;">0.7415</td>
+<td style="text-align: center;">0.5962</td>
+<td style="text-align: center;">0.6474</td>
+<td style="text-align: center;">0.4583</td>
+<td style="text-align: center;">0.5214</td>
+<td style="text-align: center;">0.9658</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<caption>Table continues below</caption>
+<colgroup>
+<col style="width: 11%" />
+<col style="width: 14%" />
+<col style="width: 11%" />
+<col style="width: 15%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 24%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">art</th>
+<th style="text-align: center;">religion</th>
+<th style="text-align: center;">beauty</th>
+<th style="text-align: center;">parenting</th>
+<th style="text-align: center;">dating</th>
+<th style="text-align: center;">school</th>
+<th style="text-align: center;">personal_fitness</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">0.3729</td>
+<td style="text-align: center;">0.5609</td>
+<td style="text-align: center;">0.3942</td>
+<td style="text-align: center;">0.5908</td>
+<td style="text-align: center;">0.4391</td>
+<td style="text-align: center;">0.7137</td>
+<td style="text-align: center;">1.075</td>
+</tr>
+</tbody>
+</table>
+
+<table style="width:67%;">
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 23%" />
+<col style="width: 16%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">fashion</th>
+<th style="text-align: center;">small_business</th>
+<th style="text-align: center;">spam</th>
+<th style="text-align: center;">adult</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">0.7201</td>
+<td style="text-align: center;">0.4103</td>
+<td style="text-align: center;">9.541e-18</td>
+<td style="text-align: center;">0.1197</td>
+</tr>
+</tbody>
+</table>
+
+#### Cluster 6
+
+``` r
+pander(clust2$center[6,]*sigma + mu) #outdoors, fitness, photo sharing and food/cooking maybe athletes
+```
+
+<table>
+<caption>Table continues below</caption>
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 21%" />
+<col style="width: 11%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">chatter</th>
+<th style="text-align: center;">current_events</th>
+<th style="text-align: center;">travel</th>
+<th style="text-align: center;">photo_sharing</th>
+<th style="text-align: center;">uncategorized</th>
+<th style="text-align: center;">tv_film</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">3.753</td>
+<td style="text-align: center;">1.49</td>
+<td style="text-align: center;">1.217</td>
+<td style="text-align: center;">2.347</td>
+<td style="text-align: center;">0.9358</td>
+<td style="text-align: center;">0.8251</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<caption>Table continues below</caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 13%" />
+<col style="width: 8%" />
+<col style="width: 11%" />
+<col style="width: 22%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">sports_fandom</th>
+<th style="text-align: center;">politics</th>
+<th style="text-align: center;">food</th>
+<th style="text-align: center;">family</th>
+<th style="text-align: center;">home_and_garden</th>
+<th style="text-align: center;">music</th>
+<th style="text-align: center;">news</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">1.178</td>
+<td style="text-align: center;">1.167</td>
+<td style="text-align: center;">2.23</td>
+<td style="text-align: center;">0.7486</td>
+<td style="text-align: center;">0.612</td>
+<td style="text-align: center;">0.6639</td>
+<td style="text-align: center;">1.057</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<caption>Table continues below</caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 14%" />
+<col style="width: 24%" />
+<col style="width: 18%" />
+<col style="width: 22%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">online_gaming</th>
+<th style="text-align: center;">shopping</th>
+<th style="text-align: center;">health_nutrition</th>
+<th style="text-align: center;">college_uni</th>
+<th style="text-align: center;">sports_playing</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">0.8948</td>
+<td style="text-align: center;">1.261</td>
+<td style="text-align: center;">12.72</td>
+<td style="text-align: center;">0.9235</td>
+<td style="text-align: center;">0.597</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<caption>Table continues below</caption>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 12%" />
+<col style="width: 16%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 12%" />
+<col style="width: 17%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">cooking</th>
+<th style="text-align: center;">eco</th>
+<th style="text-align: center;">computers</th>
+<th style="text-align: center;">business</th>
+<th style="text-align: center;">outdoors</th>
+<th style="text-align: center;">crafts</th>
+<th style="text-align: center;">automotive</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">3.428</td>
+<td style="text-align: center;">0.9481</td>
+<td style="text-align: center;">0.5492</td>
+<td style="text-align: center;">0.444</td>
+<td style="text-align: center;">2.899</td>
+<td style="text-align: center;">0.5806</td>
+<td style="text-align: center;">0.5683</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<caption>Table continues below</caption>
+<colgroup>
+<col style="width: 11%" />
+<col style="width: 14%" />
+<col style="width: 11%" />
+<col style="width: 15%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 24%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">art</th>
+<th style="text-align: center;">religion</th>
+<th style="text-align: center;">beauty</th>
+<th style="text-align: center;">parenting</th>
+<th style="text-align: center;">dating</th>
+<th style="text-align: center;">school</th>
+<th style="text-align: center;">personal_fitness</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">0.5929</td>
+<td style="text-align: center;">0.791</td>
+<td style="text-align: center;">0.4194</td>
+<td style="text-align: center;">0.776</td>
+<td style="text-align: center;">0.7923</td>
+<td style="text-align: center;">0.5096</td>
+<td style="text-align: center;">6.702</td>
+</tr>
+</tbody>
+</table>
+
+<table style="width:68%;">
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 23%" />
+<col style="width: 18%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">fashion</th>
+<th style="text-align: center;">small_business</th>
+<th style="text-align: center;">spam</th>
+<th style="text-align: center;">adult</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">0.7486</td>
+<td style="text-align: center;">0.2377</td>
+<td style="text-align: center;">-3.556e-17</td>
+<td style="text-align: center;">0.1694</td>
+</tr>
+</tbody>
+</table>
+
+#### Cluster 7
+
+``` r
+pander(clust2$center[7,]*sigma + mu) #chatter, sports playing, and photo sharing  
+```
+
+<table>
+<caption>Table continues below</caption>
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 21%" />
+<col style="width: 11%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">chatter</th>
+<th style="text-align: center;">current_events</th>
+<th style="text-align: center;">travel</th>
+<th style="text-align: center;">photo_sharing</th>
+<th style="text-align: center;">uncategorized</th>
+<th style="text-align: center;">tv_film</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">4.032</td>
+<td style="text-align: center;">1.416</td>
+<td style="text-align: center;">1.504</td>
+<td style="text-align: center;">2.657</td>
+<td style="text-align: center;">0.7625</td>
+<td style="text-align: center;">1.252</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<caption>Table continues below</caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 13%" />
+<col style="width: 10%" />
+<col style="width: 11%" />
+<col style="width: 22%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">sports_fandom</th>
+<th style="text-align: center;">politics</th>
+<th style="text-align: center;">food</th>
+<th style="text-align: center;">family</th>
+<th style="text-align: center;">home_and_garden</th>
+<th style="text-align: center;">music</th>
+<th style="text-align: center;">news</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">1.302</td>
+<td style="text-align: center;">1.261</td>
+<td style="text-align: center;">1.223</td>
+<td style="text-align: center;">1.1</td>
+<td style="text-align: center;">0.563</td>
+<td style="text-align: center;">0.6246</td>
+<td style="text-align: center;">0.8152</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<caption>Table continues below</caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 14%" />
+<col style="width: 24%" />
+<col style="width: 18%" />
+<col style="width: 22%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">online_gaming</th>
+<th style="text-align: center;">shopping</th>
+<th style="text-align: center;">health_nutrition</th>
+<th style="text-align: center;">college_uni</th>
+<th style="text-align: center;">sports_playing</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">10.98</td>
+<td style="text-align: center;">1.141</td>
+<td style="text-align: center;">1.771</td>
+<td style="text-align: center;">11.23</td>
+<td style="text-align: center;">2.768</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<caption>Table continues below</caption>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 12%" />
+<col style="width: 16%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 12%" />
+<col style="width: 17%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">cooking</th>
+<th style="text-align: center;">eco</th>
+<th style="text-align: center;">computers</th>
+<th style="text-align: center;">business</th>
+<th style="text-align: center;">outdoors</th>
+<th style="text-align: center;">crafts</th>
+<th style="text-align: center;">automotive</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">1.575</td>
+<td style="text-align: center;">0.4633</td>
+<td style="text-align: center;">0.5513</td>
+<td style="text-align: center;">0.3578</td>
+<td style="text-align: center;">0.6246</td>
+<td style="text-align: center;">0.5367</td>
+<td style="text-align: center;">0.912</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<caption>Table continues below</caption>
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 14%" />
+<col style="width: 11%" />
+<col style="width: 15%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 24%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">art</th>
+<th style="text-align: center;">religion</th>
+<th style="text-align: center;">beauty</th>
+<th style="text-align: center;">parenting</th>
+<th style="text-align: center;">dating</th>
+<th style="text-align: center;">school</th>
+<th style="text-align: center;">personal_fitness</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">1.182</td>
+<td style="text-align: center;">0.7361</td>
+<td style="text-align: center;">0.3959</td>
+<td style="text-align: center;">0.7243</td>
+<td style="text-align: center;">0.6569</td>
+<td style="text-align: center;">0.4897</td>
+<td style="text-align: center;">1.041</td>
+</tr>
+</tbody>
+</table>
+
+<table style="width:64%;">
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 23%" />
+<col style="width: 15%" />
+<col style="width: 11%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">fashion</th>
+<th style="text-align: center;">small_business</th>
+<th style="text-align: center;">spam</th>
+<th style="text-align: center;">adult</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">0.8475</td>
+<td style="text-align: center;">0.4018</td>
+<td style="text-align: center;">4.77e-17</td>
+<td style="text-align: center;">0.173</td>
+</tr>
+</tbody>
+</table>
+
+#### Cluster 8
+
+``` r
+pander(clust2$center[8,]*sigma + mu) #Sports fans that are religious and parents 
+```
+
+<table>
+<caption>Table continues below</caption>
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 21%" />
+<col style="width: 11%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">chatter</th>
+<th style="text-align: center;">current_events</th>
+<th style="text-align: center;">travel</th>
+<th style="text-align: center;">photo_sharing</th>
+<th style="text-align: center;">uncategorized</th>
+<th style="text-align: center;">tv_film</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">3.842</td>
+<td style="text-align: center;">1.649</td>
+<td style="text-align: center;">1.348</td>
+<td style="text-align: center;">2.454</td>
+<td style="text-align: center;">0.6973</td>
+<td style="text-align: center;">0.9158</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<caption>Table continues below</caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 13%" />
+<col style="width: 10%" />
+<col style="width: 11%" />
+<col style="width: 22%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">sports_fandom</th>
+<th style="text-align: center;">politics</th>
+<th style="text-align: center;">food</th>
+<th style="text-align: center;">family</th>
+<th style="text-align: center;">home_and_garden</th>
+<th style="text-align: center;">music</th>
+<th style="text-align: center;">news</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">6.19</td>
+<td style="text-align: center;">1.114</td>
+<td style="text-align: center;">4.769</td>
+<td style="text-align: center;">2.627</td>
+<td style="text-align: center;">0.6459</td>
+<td style="text-align: center;">0.7129</td>
+<td style="text-align: center;">0.9813</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<caption>Table continues below</caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 14%" />
+<col style="width: 24%" />
+<col style="width: 18%" />
+<col style="width: 22%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">online_gaming</th>
+<th style="text-align: center;">shopping</th>
+<th style="text-align: center;">health_nutrition</th>
+<th style="text-align: center;">college_uni</th>
+<th style="text-align: center;">sports_playing</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">0.9984</td>
+<td style="text-align: center;">1.354</td>
+<td style="text-align: center;">1.919</td>
+<td style="text-align: center;">1.178</td>
+<td style="text-align: center;">0.7363</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<caption>Table continues below</caption>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 12%" />
+<col style="width: 16%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 12%" />
+<col style="width: 17%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">cooking</th>
+<th style="text-align: center;">eco</th>
+<th style="text-align: center;">computers</th>
+<th style="text-align: center;">business</th>
+<th style="text-align: center;">outdoors</th>
+<th style="text-align: center;">crafts</th>
+<th style="text-align: center;">automotive</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">1.691</td>
+<td style="text-align: center;">0.6427</td>
+<td style="text-align: center;">0.7457</td>
+<td style="text-align: center;">0.4961</td>
+<td style="text-align: center;">0.6771</td>
+<td style="text-align: center;">1.078</td>
+<td style="text-align: center;">0.9938</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<caption>Table continues below</caption>
+<colgroup>
+<col style="width: 11%" />
+<col style="width: 14%" />
+<col style="width: 11%" />
+<col style="width: 15%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 24%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">art</th>
+<th style="text-align: center;">religion</th>
+<th style="text-align: center;">beauty</th>
+<th style="text-align: center;">parenting</th>
+<th style="text-align: center;">dating</th>
+<th style="text-align: center;">school</th>
+<th style="text-align: center;">personal_fitness</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">0.6817</td>
+<td style="text-align: center;">5.552</td>
+<td style="text-align: center;">1.134</td>
+<td style="text-align: center;">4.262</td>
+<td style="text-align: center;">0.5133</td>
+<td style="text-align: center;">2.76</td>
+<td style="text-align: center;">1.225</td>
+</tr>
+</tbody>
+</table>
+
+<table style="width:68%;">
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 23%" />
+<col style="width: 18%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">fashion</th>
+<th style="text-align: center;">small_business</th>
+<th style="text-align: center;">spam</th>
+<th style="text-align: center;">adult</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">1.005</td>
+<td style="text-align: center;">0.3885</td>
+<td style="text-align: center;">-1.648e-17</td>
+<td style="text-align: center;">0.2246</td>
+</tr>
+</tbody>
+</table>
+
+#### Cluster 9
+
+``` r
+pander(clust2$center[9,]*sigma + mu) #adult
+```
+
+<table>
+<caption>Table continues below</caption>
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 21%" />
+<col style="width: 11%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">chatter</th>
+<th style="text-align: center;">current_events</th>
+<th style="text-align: center;">travel</th>
+<th style="text-align: center;">photo_sharing</th>
+<th style="text-align: center;">uncategorized</th>
+<th style="text-align: center;">tv_film</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">4.323</td>
+<td style="text-align: center;">1.487</td>
+<td style="text-align: center;">1.574</td>
+<td style="text-align: center;">2.138</td>
+<td style="text-align: center;">1.051</td>
+<td style="text-align: center;">0.7077</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<caption>Table continues below</caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 13%" />
+<col style="width: 10%" />
+<col style="width: 11%" />
+<col style="width: 22%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">sports_fandom</th>
+<th style="text-align: center;">politics</th>
+<th style="text-align: center;">food</th>
+<th style="text-align: center;">family</th>
+<th style="text-align: center;">home_and_garden</th>
+<th style="text-align: center;">music</th>
+<th style="text-align: center;">news</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">1.262</td>
+<td style="text-align: center;">1.133</td>
+<td style="text-align: center;">1.272</td>
+<td style="text-align: center;">0.9538</td>
+<td style="text-align: center;">0.5487</td>
+<td style="text-align: center;">0.6564</td>
+<td style="text-align: center;">0.8667</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<caption>Table continues below</caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 14%" />
+<col style="width: 24%" />
+<col style="width: 18%" />
+<col style="width: 22%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">online_gaming</th>
+<th style="text-align: center;">shopping</th>
+<th style="text-align: center;">health_nutrition</th>
+<th style="text-align: center;">college_uni</th>
+<th style="text-align: center;">sports_playing</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">1.195</td>
+<td style="text-align: center;">1.041</td>
+<td style="text-align: center;">1.728</td>
+<td style="text-align: center;">1.179</td>
+<td style="text-align: center;">0.4974</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<caption>Table continues below</caption>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 12%" />
+<col style="width: 16%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 12%" />
+<col style="width: 17%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">cooking</th>
+<th style="text-align: center;">eco</th>
+<th style="text-align: center;">computers</th>
+<th style="text-align: center;">business</th>
+<th style="text-align: center;">outdoors</th>
+<th style="text-align: center;">crafts</th>
+<th style="text-align: center;">automotive</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">1.395</td>
+<td style="text-align: center;">0.6308</td>
+<td style="text-align: center;">0.7333</td>
+<td style="text-align: center;">0.3385</td>
+<td style="text-align: center;">1.087</td>
+<td style="text-align: center;">0.5333</td>
+<td style="text-align: center;">0.9692</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<caption>Table continues below</caption>
+<colgroup>
+<col style="width: 11%" />
+<col style="width: 14%" />
+<col style="width: 11%" />
+<col style="width: 15%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 24%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">art</th>
+<th style="text-align: center;">religion</th>
+<th style="text-align: center;">beauty</th>
+<th style="text-align: center;">parenting</th>
+<th style="text-align: center;">dating</th>
+<th style="text-align: center;">school</th>
+<th style="text-align: center;">personal_fitness</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">0.5692</td>
+<td style="text-align: center;">0.7744</td>
+<td style="text-align: center;">0.6205</td>
+<td style="text-align: center;">1.031</td>
+<td style="text-align: center;">0.5538</td>
+<td style="text-align: center;">0.8205</td>
+<td style="text-align: center;">1.282</td>
+</tr>
+</tbody>
+</table>
+
+<table style="width:67%;">
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 23%" />
+<col style="width: 18%" />
+<col style="width: 11%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">fashion</th>
+<th style="text-align: center;">small_business</th>
+<th style="text-align: center;">spam</th>
+<th style="text-align: center;">adult</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">0.7179</td>
+<td style="text-align: center;">0.5949</td>
+<td style="text-align: center;">-9.541e-18</td>
+<td style="text-align: center;">9.051</td>
+</tr>
+</tbody>
+</table>
+
+#### Cluster 10
+
+``` r
+pander(clust2$center[10,]*sigma + mu) #adult twitters that also have health/nutrition chatter, photo sharing, and a little politics/travel/sports fandom/current events.
+```
+
+<table>
+<caption>Table continues below</caption>
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 21%" />
+<col style="width: 11%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">chatter</th>
+<th style="text-align: center;">current_events</th>
+<th style="text-align: center;">travel</th>
+<th style="text-align: center;">photo_sharing</th>
+<th style="text-align: center;">uncategorized</th>
+<th style="text-align: center;">tv_film</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">4.653</td>
+<td style="text-align: center;">1.878</td>
+<td style="text-align: center;">2.245</td>
+<td style="text-align: center;">2.449</td>
+<td style="text-align: center;">0.9184</td>
+<td style="text-align: center;">0.8776</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<caption>Table continues below</caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 13%" />
+<col style="width: 10%" />
+<col style="width: 11%" />
+<col style="width: 22%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">sports_fandom</th>
+<th style="text-align: center;">politics</th>
+<th style="text-align: center;">food</th>
+<th style="text-align: center;">family</th>
+<th style="text-align: center;">home_and_garden</th>
+<th style="text-align: center;">music</th>
+<th style="text-align: center;">news</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">1.898</td>
+<td style="text-align: center;">2.245</td>
+<td style="text-align: center;">1.469</td>
+<td style="text-align: center;">0.7959</td>
+<td style="text-align: center;">0.6939</td>
+<td style="text-align: center;">0.6939</td>
+<td style="text-align: center;">1.204</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<caption>Table continues below</caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 14%" />
+<col style="width: 24%" />
+<col style="width: 18%" />
+<col style="width: 22%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">online_gaming</th>
+<th style="text-align: center;">shopping</th>
+<th style="text-align: center;">health_nutrition</th>
+<th style="text-align: center;">college_uni</th>
+<th style="text-align: center;">sports_playing</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">1.449</td>
+<td style="text-align: center;">0.9592</td>
+<td style="text-align: center;">2.796</td>
+<td style="text-align: center;">1.918</td>
+<td style="text-align: center;">0.5306</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<caption>Table continues below</caption>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 12%" />
+<col style="width: 16%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 12%" />
+<col style="width: 17%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">cooking</th>
+<th style="text-align: center;">eco</th>
+<th style="text-align: center;">computers</th>
+<th style="text-align: center;">business</th>
+<th style="text-align: center;">outdoors</th>
+<th style="text-align: center;">crafts</th>
+<th style="text-align: center;">automotive</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">1.796</td>
+<td style="text-align: center;">0.8571</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">0.1837</td>
+<td style="text-align: center;">1.143</td>
+<td style="text-align: center;">0.6939</td>
+<td style="text-align: center;">1</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<caption>Table continues below</caption>
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 14%" />
+<col style="width: 11%" />
+<col style="width: 15%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 24%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">art</th>
+<th style="text-align: center;">religion</th>
+<th style="text-align: center;">beauty</th>
+<th style="text-align: center;">parenting</th>
+<th style="text-align: center;">dating</th>
+<th style="text-align: center;">school</th>
+<th style="text-align: center;">personal_fitness</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">1.265</td>
+<td style="text-align: center;">1.327</td>
+<td style="text-align: center;">0.5714</td>
+<td style="text-align: center;">1.204</td>
+<td style="text-align: center;">0.6939</td>
+<td style="text-align: center;">0.8776</td>
+<td style="text-align: center;">1.755</td>
+</tr>
+</tbody>
+</table>
+
+<table style="width:60%;">
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 23%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">fashion</th>
+<th style="text-align: center;">small_business</th>
+<th style="text-align: center;">spam</th>
+<th style="text-align: center;">adult</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">0.9592</td>
+<td style="text-align: center;">0.5306</td>
+<td style="text-align: center;">1.041</td>
+<td style="text-align: center;">7.204</td>
+</tr>
+</tbody>
+</table>
+
+#### Cluster 11
+
+``` r
+pander(clust2$center[11,]*sigma + mu) #high in dating and chatter; maybe the "gossip people" 
+```
+
+<table>
+<caption>Table continues below</caption>
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 21%" />
+<col style="width: 11%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">chatter</th>
+<th style="text-align: center;">current_events</th>
+<th style="text-align: center;">travel</th>
+<th style="text-align: center;">photo_sharing</th>
+<th style="text-align: center;">uncategorized</th>
+<th style="text-align: center;">tv_film</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">7.943</td>
+<td style="text-align: center;">1.615</td>
+<td style="text-align: center;">1.469</td>
+<td style="text-align: center;">2.641</td>
+<td style="text-align: center;">1.526</td>
+<td style="text-align: center;">0.9427</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<caption>Table continues below</caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 13%" />
+<col style="width: 10%" />
+<col style="width: 11%" />
+<col style="width: 22%" />
+<col style="width: 10%" />
+<col style="width: 11%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">sports_fandom</th>
+<th style="text-align: center;">politics</th>
+<th style="text-align: center;">food</th>
+<th style="text-align: center;">family</th>
+<th style="text-align: center;">home_and_garden</th>
+<th style="text-align: center;">music</th>
+<th style="text-align: center;">news</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">1.344</td>
+<td style="text-align: center;">1.328</td>
+<td style="text-align: center;">1.167</td>
+<td style="text-align: center;">0.7604</td>
+<td style="text-align: center;">0.9479</td>
+<td style="text-align: center;">0.651</td>
+<td style="text-align: center;">0.9271</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<caption>Table continues below</caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 14%" />
+<col style="width: 24%" />
+<col style="width: 18%" />
+<col style="width: 22%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">online_gaming</th>
+<th style="text-align: center;">shopping</th>
+<th style="text-align: center;">health_nutrition</th>
+<th style="text-align: center;">college_uni</th>
+<th style="text-align: center;">sports_playing</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">1.042</td>
+<td style="text-align: center;">1.229</td>
+<td style="text-align: center;">2.141</td>
+<td style="text-align: center;">1.427</td>
+<td style="text-align: center;">0.9479</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<caption>Table continues below</caption>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 12%" />
+<col style="width: 16%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 12%" />
+<col style="width: 17%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">cooking</th>
+<th style="text-align: center;">eco</th>
+<th style="text-align: center;">computers</th>
+<th style="text-align: center;">business</th>
+<th style="text-align: center;">outdoors</th>
+<th style="text-align: center;">crafts</th>
+<th style="text-align: center;">automotive</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">1.531</td>
+<td style="text-align: center;">0.6146</td>
+<td style="text-align: center;">0.6719</td>
+<td style="text-align: center;">0.7292</td>
+<td style="text-align: center;">0.8594</td>
+<td style="text-align: center;">0.849</td>
+<td style="text-align: center;">0.5729</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<caption>Table continues below</caption>
+<colgroup>
+<col style="width: 11%" />
+<col style="width: 14%" />
+<col style="width: 11%" />
+<col style="width: 15%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 24%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">art</th>
+<th style="text-align: center;">religion</th>
+<th style="text-align: center;">beauty</th>
+<th style="text-align: center;">parenting</th>
+<th style="text-align: center;">dating</th>
+<th style="text-align: center;">school</th>
+<th style="text-align: center;">personal_fitness</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">0.6875</td>
+<td style="text-align: center;">1.193</td>
+<td style="text-align: center;">1.062</td>
+<td style="text-align: center;">1.078</td>
+<td style="text-align: center;">9.349</td>
+<td style="text-align: center;">2.281</td>
+<td style="text-align: center;">1.323</td>
+</tr>
+</tbody>
+</table>
+
+<table style="width:68%;">
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 23%" />
+<col style="width: 18%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">fashion</th>
+<th style="text-align: center;">small_business</th>
+<th style="text-align: center;">spam</th>
+<th style="text-align: center;">adult</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">2.51</td>
+<td style="text-align: center;">0.5573</td>
+<td style="text-align: center;">-9.541e-18</td>
+<td style="text-align: center;">0.2448</td>
+</tr>
+</tbody>
+</table>
+
+#### Cluster 12
+
+``` r
+pander(clust2$center[12,]*sigma + mu) #into TV/Film/Art/music also likely in college
+```
+
+<table>
+<caption>Table continues below</caption>
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 21%" />
+<col style="width: 11%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">chatter</th>
+<th style="text-align: center;">current_events</th>
+<th style="text-align: center;">travel</th>
+<th style="text-align: center;">photo_sharing</th>
+<th style="text-align: center;">uncategorized</th>
+<th style="text-align: center;">tv_film</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">3.94</td>
+<td style="text-align: center;">1.943</td>
+<td style="text-align: center;">2.089</td>
+<td style="text-align: center;">2.471</td>
+<td style="text-align: center;">1.437</td>
+<td style="text-align: center;">5.61</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<caption>Table continues below</caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 14%" />
+<col style="width: 10%" />
+<col style="width: 11%" />
+<col style="width: 23%" />
+<col style="width: 10%" />
+<col style="width: 10%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">sports_fandom</th>
+<th style="text-align: center;">politics</th>
+<th style="text-align: center;">food</th>
+<th style="text-align: center;">family</th>
+<th style="text-align: center;">home_and_garden</th>
+<th style="text-align: center;">music</th>
+<th style="text-align: center;">news</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">1.337</td>
+<td style="text-align: center;">1.536</td>
+<td style="text-align: center;">1.665</td>
+<td style="text-align: center;">0.7345</td>
+<td style="text-align: center;">0.7618</td>
+<td style="text-align: center;">1.675</td>
+<td style="text-align: center;">1.221</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<caption>Table continues below</caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 14%" />
+<col style="width: 24%" />
+<col style="width: 18%" />
+<col style="width: 22%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">online_gaming</th>
+<th style="text-align: center;">shopping</th>
+<th style="text-align: center;">health_nutrition</th>
+<th style="text-align: center;">college_uni</th>
+<th style="text-align: center;">sports_playing</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">0.7146</td>
+<td style="text-align: center;">1.417</td>
+<td style="text-align: center;">1.861</td>
+<td style="text-align: center;">2.516</td>
+<td style="text-align: center;">0.7593</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<caption>Table continues below</caption>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 12%" />
+<col style="width: 16%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 12%" />
+<col style="width: 17%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">cooking</th>
+<th style="text-align: center;">eco</th>
+<th style="text-align: center;">computers</th>
+<th style="text-align: center;">business</th>
+<th style="text-align: center;">outdoors</th>
+<th style="text-align: center;">crafts</th>
+<th style="text-align: center;">automotive</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">1.536</td>
+<td style="text-align: center;">0.5782</td>
+<td style="text-align: center;">0.4615</td>
+<td style="text-align: center;">0.6501</td>
+<td style="text-align: center;">0.6576</td>
+<td style="text-align: center;">1.132</td>
+<td style="text-align: center;">0.5211</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<caption>Table continues below</caption>
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 14%" />
+<col style="width: 11%" />
+<col style="width: 15%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 24%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">art</th>
+<th style="text-align: center;">religion</th>
+<th style="text-align: center;">beauty</th>
+<th style="text-align: center;">parenting</th>
+<th style="text-align: center;">dating</th>
+<th style="text-align: center;">school</th>
+<th style="text-align: center;">personal_fitness</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">5.067</td>
+<td style="text-align: center;">1.112</td>
+<td style="text-align: center;">0.7122</td>
+<td style="text-align: center;">0.6228</td>
+<td style="text-align: center;">0.4566</td>
+<td style="text-align: center;">0.7196</td>
+<td style="text-align: center;">1.077</td>
+</tr>
+</tbody>
+</table>
+
+<table style="width:65%;">
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 23%" />
+<col style="width: 16%" />
+<col style="width: 11%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">fashion</th>
+<th style="text-align: center;">small_business</th>
+<th style="text-align: center;">spam</th>
+<th style="text-align: center;">adult</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">0.9156</td>
+<td style="text-align: center;">0.8288</td>
+<td style="text-align: center;">6.158e-17</td>
+<td style="text-align: center;">0.196</td>
+</tr>
+</tbody>
+</table>
+
+#### Cluster sizes
+
+``` r
+  pander(clust2$size)
+```
+
+*451*, *3184*, *341*, *417*, *936*, *732*, *341*, *641*, *195*, *49*,
+*192* and *403* These are giving us the values for the center of the
+different clusters which will help us see patterns of tweeting in
+different market segments. I also called the cluster sizes so we can see
+how many people fell into each market segment/cluster
+
+There are definitely some distinct groups that can be seen in these
+clusters.I will come back to these at the end of the report. Now, I’d
+like to look at what a PCA approach would look like for this.
+
+### PCAs
+
+``` r
+  PCAs = prcomp(X, scale=TRUE)
+  
+  # variance plot
+  plot(PCAs)
+```
+
+<img src="gb_prediction_files/figure-markdown_github/unnamed-chunk-40-1.png" style="display: block; margin: auto;" />
+
+``` r
+  summary(PCAs)
+```
+
+    ## Importance of components:
+    ##                           PC1     PC2     PC3     PC4     PC5     PC6     PC7
+    ## Standard deviation     2.1186 1.69824 1.59388 1.53457 1.48027 1.36885 1.28577
+    ## Proportion of Variance 0.1247 0.08011 0.07057 0.06541 0.06087 0.05205 0.04592
+    ## Cumulative Proportion  0.1247 0.20479 0.27536 0.34077 0.40164 0.45369 0.49961
+    ##                            PC8     PC9    PC10    PC11    PC12    PC13    PC14
+    ## Standard deviation     1.19277 1.15127 1.06930 1.00566 0.96785 0.96131 0.94405
+    ## Proportion of Variance 0.03952 0.03682 0.03176 0.02809 0.02602 0.02567 0.02476
+    ## Cumulative Proportion  0.53913 0.57595 0.60771 0.63580 0.66182 0.68749 0.71225
+    ##                           PC15    PC16   PC17    PC18    PC19    PC20    PC21
+    ## Standard deviation     0.93297 0.91698 0.9020 0.85869 0.83466 0.80544 0.75311
+    ## Proportion of Variance 0.02418 0.02336 0.0226 0.02048 0.01935 0.01802 0.01575
+    ## Cumulative Proportion  0.73643 0.75979 0.7824 0.80287 0.82222 0.84024 0.85599
+    ##                           PC22    PC23    PC24    PC25    PC26    PC27    PC28
+    ## Standard deviation     0.69632 0.68558 0.65317 0.64881 0.63756 0.63626 0.61513
+    ## Proportion of Variance 0.01347 0.01306 0.01185 0.01169 0.01129 0.01125 0.01051
+    ## Cumulative Proportion  0.86946 0.88252 0.89437 0.90606 0.91735 0.92860 0.93911
+    ##                           PC29    PC30    PC31   PC32    PC33    PC34    PC35
+    ## Standard deviation     0.60167 0.59424 0.58683 0.5498 0.48442 0.47576 0.43757
+    ## Proportion of Variance 0.01006 0.00981 0.00957 0.0084 0.00652 0.00629 0.00532
+    ## Cumulative Proportion  0.94917 0.95898 0.96854 0.9769 0.98346 0.98974 0.99506
+    ##                           PC36
+    ## Standard deviation     0.42165
+    ## Proportion of Variance 0.00494
+    ## Cumulative Proportion  1.00000
+
+Examining the summary, we can see that to conserve 75% of the variance,
+you’d have to go with 16 PCAs, which makes it seem like most of the
+features are relatively uncorrelated and shouldn’t be compressed. I
+would rather go with clustering here, which won’t be as destructive to
+the variance.
+
+Number of people in each cluster: cluster 1: 451 cluster 2: 3184 cluster
+3: 341 cluster 4: 417 cluster 5: 936 cluster 6: 732 cluster 7: 341
+cluster 8: 641 cluster 9: 195 cluster 10: 49 cluster 11: 192 cluster 12:
+403
+
+Using the K++ clustering as our main descriptive tool here, we can see
+some distinct groups of followers for NutrientH2O:
+
+### Cluster 6
+
+Cluster 6 is probably athletes given that their top shared things were
+personal fitness, outdoors, cooking, photo sharing, and food. Athletes
+are useful to health and fitness brand like NutrientH2O, since they need
+healthy and fit people to endorse their products. This cluster also
+included 732 people, the third biggest cluster, so this is an important
+group.
+
+### Clusters 9 and 10
+
+Clusters 9 and 10 shared more adult content than any other category of
+content, so NutrientH2O should be aware of this cluster. They may want
+to block some of these accounts from interacting with them. From a
+marketing perspective, NutrientH2O probably doesn’t want to be
+associated with adult content accounts. These are also the smallest and
+third smallest cluster in terms of twitter accounts, so this isn’t a
+very big chunk of NutrientH2O’s followers.
+
+### Cluster 12
+
+Cluster 12 was sharing a lot about TV/film/art and college, which could
+be useful information for NutrientH2O. Knowing that they have followers
+into the arts, they could try to do some targeted advertising related to
+movies, popular tv shoes, colleges, etc. This cluster is 403 people
+which is a sizable amount.
+
+### Cluster 8
+
+Cluster 8 was sharing a lot about sports fandom, parenting, food and
+religion. This could be another interesting market segment to try to
+appeal to through targetted marketing somehow since they are the fourth
+biggest market segment. NutrientH2O could try to advertise through the
+sports they are fans of, or through their children/ religious
+institution. You can see below that cluster 8 is dominating when it
+comes to sharing a lot about both religion and sports fandom.
+
+``` r
+  fviz_cluster(clust2 , data = X, choose.vars= c(7,27), geom="point")
+```
+
+<img src="gb_prediction_files/figure-markdown_github/unnamed-chunk-41-1.png" style="display: block; margin: auto;" />
+
+### Cluster 3 and 4
+
+Clusters 3 and 4 are very high in politics, news, and cluster 3 is high
+in automotive, computer and travelling twitter posts. This market
+segment seems like they are probably older, given their posts about news
+and politics. In the plot below, you see that many of the members with
+high news and politics shares are in clusters 3 and 4.
+
+``` r
+fviz_cluster(clust2 , data = X, choose.vars= c(8,13), geom="point")
+```
+
+<img src="gb_prediction_files/figure-markdown_github/unnamed-chunk-42-1.png" style="display: block; margin: auto;" />
+
+### Cluster 2
+
+Our biggest cluster was cluster 2. Cluster 2 has 3184 members, whearas
+the next biggest cluster only has 936. Basiaclly, cluster 2 is massive.
+Cluster 2 is tricky because the cluster center is below average on every
+category of tweet. This suggests to me that cluster 2 may be capturing
+the inactive/relatively inactive group of followers that NutrientH2O
+has. The categories they are most active in are chatter, photo sharing,
+current events, health and nutrition, travel, and sports fandom, in that
+order. The fact that cluster 2 represent a fairly inactive group on
+twitter can best be seen from our PCA analysis. We see all the variation
+vectors pointing left because the first PCA coincides with inactiveness
+on twitter.
+
+``` r
+fviz_pca_var(PCAs, col.var="contrib",
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+             repel = TRUE, title = "Variables Contribution in first two PCAs " )
+```
+
+<img src="gb_prediction_files/figure-markdown_github/unnamed-chunk-43-1.png" style="display: block; margin: auto;" />
+
+### Cluster 5
+
+This was our second biggest cluster, cluster 5, at 936 members. This
+group really seperates itself from the rest of the sample in the amount
+of photo sharing and shopping that appear on these member’s accounts.
+This is another important market segment that has a lot going on in and
+around twitter so maybe Nutrient H2O needs to start sharing some photos
+of fashionable people using their product or vouching for their brand,
+etc. You can see below that cluster 5 is dominating when it comes to
+shopping and photo sharing posts.
+
+``` r
+fviz_cluster(clust2 , data = X, choose.vars= c(4,15), geom="point")
+```
+
+<img src="gb_prediction_files/figure-markdown_github/unnamed-chunk-44-1.png" style="display: block; margin: auto;" />
+
+### Conclusion
+
+These are just a few of the interesting market segments I saw in the
+clusters, but you could formulate advertising plans for more or less of
+the clusters here. It’s up to the advertising firm which of these
+clusters of the NutrientH2O audience they want to utilize.
+
+``` r
+fviz_pca_var(PCAs,axes = c(2,3), col.var="contrib",
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+             repel = TRUE, title = "Variables Contribution in second two PCAs " )
+```
+
+<img src="gb_prediction_files/figure-markdown_github/unnamed-chunk-45-1.png" style="display: block; margin: auto;" />
+Looking at PCA 2 and PCA 3(we took out the PCA1 because this largely
+represent how inactive people are), you can see the related topics, and
+how the vectors are pointing in similar directions when they are
+clustered together. This provides a nice grouping of intersts for
+NutrientH2O to utilize in their advertising focus. In conclusion, one
+market segment to focus on is interested in
+religion/sportsfandom/parenting/food/school/family. This market segment
+seems to be probably parents. A second market segment to focus on is
+intersted in news/computers/travel/politics. This market segment seems
+like it might be the generation of working, young millenials. A third
+market segment to focus on is interested in photo
+sharing/shopping/fashion/cooking/nutrition/health/chatter/beauty. This
+group seems more likely to be high schoolers and people more into how
+they look.
