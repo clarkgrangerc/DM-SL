@@ -263,16 +263,33 @@ shows that it separates wines based on its color quite successfully.
 Only 24+68 = 92 wines out of 6,497 wines have been misclassified by this
 method. The error rate is 1.416 percent.
 
-Quitting from lines 322-327 (gb\_prediction.Rmd) Error in
-table(wine*c**o**l**o**r*, *c**l**u**s**t*1cluster) : object ‘clust1’
-not found Calls: <Anonymous> … withCallingHandlers -\> withVisible -\>
-eval -\> eval -\> pander -\> table In addition: Warning messages: 1:
-package ‘Metrics’ was built under R version 3.6.3 2: package ‘gamlr’ was
-built under R version 3.6.3 3: package ‘margins’ was built under R
-version 3.6.3 4: package ‘caret’ was built under R version 3.6.3 5:
-package ‘knitr’ was built under R version 3.6.2 6: package
-‘randomForest’ was built under R version 3.6.3 7: package ‘gbm’ was
-built under R version 3.6.3
+<table style="width:36%;">
+<caption>Wine Color on Vertical axis vs Cluster group on Horizontal axis for kmeans Clustering</caption>
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;"> </th>
+<th style="text-align: center;">1</th>
+<th style="text-align: center;">2</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><strong>red</strong></td>
+<td style="text-align: center;">24</td>
+<td style="text-align: center;">1575</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><strong>white</strong></td>
+<td style="text-align: center;">4830</td>
+<td style="text-align: center;">68</td>
+</tr>
+</tbody>
+</table>
 
 We also plot clusters along with wine colors on a graph with two major
 differentiating chemical properties. White wines have more total sulfur
@@ -779,7 +796,7 @@ personal fitness, outdoors, cooking, photo sharing, and food. Athletes
 are useful to health and fitness brand like NutrientH2O, since they need
 healthy and fit people to endorse their products. This cluster also
 included 732 people, the third biggest cluster, so this is an important
-group.
+group. In the plot below you can see the cluster 6 in green color.
 
 <img src="gb_prediction_files/figure-markdown_github/unnamed-chunk-28-1.png" style="display: block; margin: auto;" />
 
@@ -799,7 +816,8 @@ Cluster 12 was sharing a lot about TV/film/art and college, which could
 be useful information for NutrientH2O. Knowing that they have followers
 into the arts, they could try to do some targeted advertising related to
 movies, popular tv shoes, colleges, etc. This cluster is 403 people
-which is a sizable amount.
+which is a sizable amount.In the plot below you can see the cluster 12
+in pink color.
 
 <img src="gb_prediction_files/figure-markdown_github/unnamed-chunk-29-1.png" style="display: block; margin: auto;" />
 
@@ -811,7 +829,8 @@ appeal to through targetted marketing somehow since they are the fourth
 biggest market segment. NutrientH2O could try to advertise through the
 sports they are fans of, or through their children/ religious
 institution. You can see below that cluster 8 is dominating when it
-comes to sharing a lot about both religion and sports fandom.
+comes to sharing a lot about both religion and sports fandom.In the plot
+below you can see the cluster 8 in blue color.
 
 <img src="gb_prediction_files/figure-markdown_github/unnamed-chunk-30-1.png" style="display: block; margin: auto;" />
 
@@ -821,7 +840,8 @@ Clusters 3 and 4 are very high in politics, news, and cluster 3 is high
 in automotive, computer and travelling twitter posts. This market
 segment seems like they are probably older, given their posts about news
 and politics. In the plot below, you see that many of the members with
-high news and politics shares are in clusters 3 and 4.
+high news and politics shares are in clusters 3 and 4.In the plot below
+you can see cluster 3 & 4 in light green and pale yellow.
 
 <img src="gb_prediction_files/figure-markdown_github/unnamed-chunk-31-1.png" style="display: block; margin: auto;" />
 
@@ -838,6 +858,7 @@ order. The fact that cluster 2 represent a fairly inactive group on
 twitter can best be seen from our PCA analysis. We see all the variation
 vectors pointing left because the first PCA coincides with inactiveness
 on twitter.
+
 <img src="gb_prediction_files/figure-markdown_github/unnamed-chunk-32-1.png" style="display: block; margin: auto;" />
 
 ### Cluster 5
@@ -849,7 +870,8 @@ This is another important market segment that has a lot going on in and
 around twitter so maybe Nutrient H2O needs to start sharing some photos
 of fashionable people using their product or vouching for their brand,
 etc. You can see below that cluster 5 is dominating when it comes to
-shopping and photo sharing posts.
+shopping and photo sharing posts.In the plot below you can see the
+cluster 5 in green color
 
 <img src="gb_prediction_files/figure-markdown_github/unnamed-chunk-33-1.png" style="display: block; margin: auto;" />
 
@@ -859,6 +881,7 @@ These are just a few of the interesting market segments I saw in the
 clusters, but you could formulate advertising plans for more or less of
 the clusters here. It’s up to the advertising firm which of these
 clusters of the NutrientH2O audience they want to utilize.
+
 <img src="gb_prediction_files/figure-markdown_github/unnamed-chunk-34-1.png" style="display: block; margin: auto;" />
 
 Looking at PCA 2 and PCA 3(we took out the PCA1 because this largely
