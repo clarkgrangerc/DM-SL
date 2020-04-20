@@ -53,7 +53,7 @@ In this question we are provided with a dataset of more than six thousand differ
 
 We start with classfication of wines based on its color. We have two colors; red and white. We plot boxplots of wine color against their chemical properties to see which properties are different across these two colors. We see that amount of chlorides, total sulfur dioxide and volatile acidity are major variables that have different distribution for red and white wines.
 
-```{r, eval= F, echo = F}
+```{r, echo = F, cache= TRUE}
 wine2= melt(wine[,-c(12,14)], id.vars = "color")
 ggplot(data = wine2, aes(x=factor(color), y=value)) + geom_boxplot()+ facet_wrap(~variable, scales = "free") +ggtitle("Component Analysis of Wines on color basis") 
 ```
@@ -87,7 +87,7 @@ pander(table(wine$color, clust2$cluster), caption = "Wine Color on Vertical axis
 
 However when using hiearchial clustering, we do not see see clustering based on color of wines. By cutting tree at 2 we get almost all wines sorted into one cluster. Even with cutting tress at 5 or 10 levels, we dont see any balance in the distribution of wines into different clusters. It looks to be a very uneven hiearchial clustering. We try all distance measuring approaches but they all give similar results.
 
-```{r, echo = F, cache= TRUE}
+```{r, echo = F}
 x_dist = dist(X, method = 'euclidean')
 h1 = hclust(x_dist, method ='average')
 c1 = cutree(h1, 2)
@@ -99,7 +99,7 @@ pander(table(wine$color, c1), caption = "Wine Color on Vertical axis vs Cluster 
 We now use PCA and transform our data accordingly. We get 11 PCAs which are plotted in scree plot below. If we look at first PCA, we see that the main contributers of variation are total sulfur dioxide,chlorides and volatile acidity which are also the main variables that differentiate red from white wines. Thus first PCA is capturing variations between red and white wines. Overall, first 6 PCAs explain 85% of total variation in our dataset of wines.     
 
 
-```{r, echo = F, cache= TRUE}
+```{r, echo = F, cache= TRUE, warning = FALSE}
 Y = wine[, -c(12,13,14)]
 wine_pc = prcomp(Y, scale.=TRUE)
 
@@ -133,7 +133,7 @@ fviz_pca_ind(wine_pc, geom.ind = "point", pointshape = 21,
 
 Now, we use our principal components to run kmeans clustering again to see if we get any better performance than simple kmeans clustering on original scaled data. With clustering on PCAs we see a further reduction in our classification error. Now we only have 37 wines misclassified which equals to an error rate of 0.5%. We can also run a logit model on PCAs but since the question asks us to use only unsupervised learning, we stuck with kmeans clustering.   
 
-```{r, echo = F, cache= TRUE}
+```{r, echo = F, cache= TRUE, warning = FALSE}
 PCA = scale(scores, center = TRUE, scale = TRUE)
 clustpc = kmeans(PCA, centers = 2, nstart = 50)
 pander(table(wine$color, clustpc$cluster), caption = "Wine Color on Vertical axis vs Cluster group on Horizontal axis for kmeans Clustering on PCA")
@@ -153,7 +153,7 @@ hist(wine$quality, xlab = "Wine Quality", main = "Histogram of Wine Qualities")
 We run the same kmeans clustering but with centers = 7 as now we need to sort wines into 7 clusters/ groups. The confusion matrix shows that there is no pattern of sorting based on quality of wine. For 6 quality wines, the alogrithm places it evenly in almost all clusters. This shows that kmeans is not picking up the differences in wine quality succesfully.
 
 
-```{r, echo = F, cache= TRUE}
+```{r, echo = F, cache= TRUE, warning = FALSE}
 clust_ql= kmeans(X, centers=7, nstart=30)
 pander(table(wine$quality, clust_ql$cluster), caption = "Wine Quality on Vertical axis vs Cluster group on Horizontal axis for kmeans clustering on original scaled data")
 ```
@@ -161,7 +161,7 @@ pander(table(wine$quality, clust_ql$cluster), caption = "Wine Quality on Vertica
 We then run kmeans clustering on principal components and sort data into 7 clusters. The consfusion matrix does not look much different than simple kmeans clustering. So even with PCA we are not able to sort wines based on their quality.
 
 
-```{r, echo = F, cache= TRUE}
+```{r, echo = F, cache= TRUE, warning = FALSE}
 clustquality = kmeans(PCA, centers= 7, nstart = 70)
 pander(table(wine$quality, clustquality$cluster), caption = "Wine Quality on Vertical axis vs Cluster group on Horizontal axis for kmeans Clustering on PCA" )
 ```
