@@ -3042,6 +3042,7 @@ clusters, but you could formulate advertising plans for more or less of
 the clusters here. It’s up to the advertising firm which of these
 clusters of the NutrientH2O audience they want to utilize.
 <img src="gb_prediction_files/figure-markdown_github/unnamed-chunk-45-1.png" style="display: block; margin: auto;" />
+
 Looking at PCA 2 and PCA 3(we took out the PCA1 because this largely
 represent how inactive people are), you can see the related topics, and
 how the vectors are pointing in similar directions when they are

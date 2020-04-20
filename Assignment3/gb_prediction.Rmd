@@ -614,9 +614,12 @@ fviz_cluster(clust2 , data = X, choose.vars= c(4,15), geom="point")
 
 ### Conclusion
 These are just a few of the interesting market segments I saw in the clusters, but you could formulate advertising plans for more or less of the clusters here. It's up to the advertising firm which of these clusters of the NutrientH2O audience they want to utilize.
-```{r,echo = F}
+```{r,echo = F, fig.height = 1, fig.width = 2}
 fviz_pca_var(PCAs,axes = c(2,3), col.var="contrib",
              gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
              repel = TRUE, title = "Variables Contribution in second two PCAs " )
+
 ```
+
+
 Looking at PCA 2 and PCA 3(we took out the PCA1 because this largely represent how inactive people are), you can see the related topics, and how the vectors are pointing in similar directions when they are clustered together. This provides a nice grouping of intersts for NutrientH2O to utilize in their advertising focus. In conclusion, one market segment to focus on is interested in religion/sportsfandom/parenting/food/school/family. This market segment seems to be probably parents. A second market segment to focus on is intersted in news/computers/travel/politics. This market segment seems like it might be the generation of working, young millenials. A third market segment to focus on is interested in photo sharing/shopping/fashion/cooking/nutrition/health/chatter/beauty. This group seems more likely to be high schoolers and people more into how they look.
