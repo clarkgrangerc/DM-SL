@@ -410,7 +410,7 @@ We run the same kmeans clustering but with centers = 7 as now we need to sort wi
 
 
 ```{r, echo = F, cache= TRUE, warning = FALSE}
-clust_ql= kmeans(X, centers=7, nstart=30)
+clust_ql= kmeans(Z, centers=7, nstart=30)
 pander(table(wine$quality, clust_ql$cluster), caption = "Wine Quality on Vertical axis vs Cluster group on Horizontal axis for kmeans clustering on original scaled data")
 ```
 
