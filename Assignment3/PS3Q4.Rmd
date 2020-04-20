@@ -39,7 +39,7 @@ sigma = attr(X, "scaled:scale")
 Now that I have the data scaled for clustering, I'd like to figure what value of K to use so I'm going to get an elbow plot to get a ballpark for what k to use.
 
 ### Elbow Plot
-```{r}
+```{r warning=FALSE}
 k_grid = seq(2, 20, by=1)
 SSE_grid = foreach(k = k_grid, .combine='c') %do% {
   cluster_k = kmeans(X, k, nstart=50)
