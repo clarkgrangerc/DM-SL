@@ -16,6 +16,7 @@ library(mosaic)
 library(cluster)
 library(simEd)
 library(pander)
+library(factoextra)
 ```
 
 ## Market Segmentation
@@ -23,9 +24,8 @@ library(pander)
 ```{r}
 set.seed(1)
 social_marketing= read.csv('/Users/kelly_carlson/Documents/GitHub/DM-SL/Assignment3/social_marketing.csv', header=TRUE)
-summary(social_marketing)
 ```
-The top three most shared things by mean: chatter, photo sharing, health/nutrition. The chatter makes since given that this is twitter. The other two makes sense given these are people following a health/nutrition company.
+The top three most shared things in our data by mean: chatter, photo sharing, health/nutrition. The chatter makes since given that this is twitter. The other two makes sense given these are people following a health/nutrition company.
 
 ```{r}
 #center and scale
@@ -150,71 +150,52 @@ cluster 12: 403
 Using the K++ clustering as our main descriptive tool here, we can see some distinct groups of followers for NutrientH2O:
 
 ### Cluster 6
-```{r}
-  clust2$center[6,]*sigma + mu #centers
-```
-  
-  Cluster 6 is probably athletes given that their top shared things were personal fitness, outdoors, cooking, photo sharing, and food. Athletes are useful to health and fitness brand like NutrientH2O, since they need healthy and fit people to endorse their products. This cluster also included 732 people, the third biggest cluster, so this is an important group.
+Cluster 6 is probably athletes given that their top shared things were personal fitness, outdoors, cooking, photo sharing, and food. Athletes are useful to health and fitness brand like NutrientH2O, since they need healthy and fit people to endorse their products. This cluster also included 732 people, the third biggest cluster, so this is an important group.
 
 ### Clusters 9 and 10
-```{r}
-  clust2$center[9,]*sigma + mu
-clust2$center[10,]*sigma + mu
-```
-  
-  
-  Clusters 9 and 10 shared more adult content than any other category of content, so NutrientH2O should be aware of this cluster. They may want to block some of these accounts from interacting with them. From a marketing perspective, NutrientH2O probably doesn't want to be associated with adult content accounts. These are also the smallest and third smallest cluster in terms of twitter accounts, so this isn't a very big chunk of NutrientH2O's followers.
+Clusters 9 and 10 shared more adult content than any other category of content, so NutrientH2O should be aware of this cluster. They may want to block some of these accounts from interacting with them. From a marketing perspective, NutrientH2O probably doesn't want to be associated with adult content accounts. These are also the smallest and third smallest cluster in terms of twitter accounts, so this isn't a very big chunk of NutrientH2O's followers.
 
 ### Cluster 12
-```{r}
-  clust2$center[12,]*sigma + mu
-```
-  
-  
-  Cluster 12 was sharing a lot about TV/film/art and college, which could be useful information for NutrientH2O. Knowing that they have followers into the arts, they could try to do some targeted advertising related to movies, popular tv shoes, colleges, etc. This cluster is 403 people which is a sizable amount.
+Cluster 12 was sharing a lot about TV/film/art and college, which could be useful information for NutrientH2O. Knowing that they have followers into the arts, they could try to do some targeted advertising related to movies, popular tv shoes, colleges, etc. This cluster is 403 people which is a sizable amount.
 
 ### Cluster 8
-```{r}
-  clust2$center[8,]*sigma + mu
-```
-  
-  
 Cluster 8 was sharing a lot about sports fandom, parenting, food and religion. This could be another interesting market segment to try to appeal to through targetted marketing somehow since they are the fourth biggest market segment. NutrientH2O could try to advertise through the sports they are fans of, or through their children/ religious institution. You can see below that cluster 8 is dominating when it comes to sharing a lot about both religion and sports fandom.
 
 
 ```{r}
-  qplot(sports_fandom, religion ,data=social_marketing,color=factor(clust2$cluster))
+  fviz_cluster(clust2 , data = X, choose.vars= c(7,27), geom="point")
 ```
 
 
 ### Cluster 3 and 4 
-```{r}
-clust2$center[3,]*sigma + mu
-clust2$center[4,]*sigma + mu
-```
+
 Clusters 3 and 4 are very high in politics, news, and  cluster 3 is high in automotive, computer and travelling twitter posts. This market segment seems like they are probably older, given their posts about news and politics. In the plot below, you see that many of the members with high news and politics shares are in clusters 3 and 4.
 
 ```{r}
-qplot(news, politics ,data=social_marketing,color=factor(clust2$cluster))
+fviz_cluster(clust2 , data = X, choose.vars= c(8,13), geom="point")
 ```
 
 
 ### Cluster 2
+Our biggest cluster was cluster 2. Cluster 2 has 3184 members, whearas the next biggest cluster only has 936. Basiaclly, cluster 2 is massive. Cluster 2 is tricky because the cluster center is below average on every category of tweet. This suggests to me that cluster 2 may be capturing the inactive/relatively inactive group of followers that NutrientH2O has. The categories they are most active in are chatter, photo sharing, current events, health and nutrition, travel, and sports fandom, in that order. The fact that cluster 2 represent a fairly inactive group on twitter can best be seen from our PCA analysis. We see all the variation vectors pointing left because the first PCA coincides with inactiveness on twitter.
 ```{r}
-clust2$center[2,]*sigma + mu
+fviz_pca_var(PCAs, col.var="contrib",
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+             repel = TRUE, title = "Variables Contribution in first two PCAs " )
 ```
-
-
-Our biggest cluster was cluster 2. Cluster 2 has 3184 members, whearas the next biggest cluster only has 936. Basiaclly, cluster 2 is massive. Cluster 2 is tricky because the cluster center is below average on every category of tweet. This suggests to me that cluster 2 may be capturing the inactive/relatively inactive group of followers that NutrientH2O has. The categories they are most active in are chatter, photo sharing, current events, health and nutrition, travel, and sports fandom, in that order.
 
 ### Cluster 5
-```{r}
-clust2$center[5,]*sigma + mu 
-```
+
 This was our second biggest cluster, cluster 5, at 936 members. This group really seperates itself from the rest of the sample in the amount of photo sharing and shopping that appear on these member's accounts. This is another important market segment that has a lot going on in and around twitter so maybe Nutrient H2O needs to start sharing some photos of fashionable people using their product or vouching for their brand, etc. You can see below that cluster 5 is dominating when it comes to shopping and photo sharing posts.
 ```{r}
-qplot(shopping, photo_sharing ,data=social_marketing,color=factor(clust2$cluster))
+fviz_cluster(clust2 , data = X, choose.vars= c(4,15), geom="point")
 ```
 
 ### Conclusion
 These are just a few of the interesting market segments I saw in the clusters, but you could formulate advertising plans for more or less of the clusters here. It's up to the advertising firm which of these clusters of the NutrientH2O audience they want to utilize.
+```{r}
+fviz_pca_var(PCAs,axes = c(2,3), col.var="contrib",
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+             repel = TRUE, title = "Variables Contribution in second two PCAs " )
+```
+Looking at PCA 2 and PCA 3(we took out the PCA1 because this largely represent how inactive people are), you can see the related topics, and how the vectors are pointing in similar directions when they are clustered together. This provides a nice grouping of intersts for NutrientH2O to utilize in their advertising focus. In conclusion, one market segment to focus on is interested in religion/sportsfandom/parenting/food/school/family. This market segment seems to be probably parents. A second market segment to focus on is intersted in news/computers/travel/politics. This market segment seems like it might be the generation of working, young millenials. A third market segment to focus on is interested in photo sharing/shopping/fashion/cooking/nutrition/health/chatter/beauty. This group seems more likely to be high schoolers and people more into how they look.
