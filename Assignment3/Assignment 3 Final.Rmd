@@ -328,6 +328,7 @@ pander(table(wine$color, cluster1$cluster), caption="Wine Color on Vertical axis
 
 We also plot clusters along with wine colors on a graph with two major differentiating chemical properties. White wines have more total sulfur dioxide content whereas red wines have more chlordies. 
 
+
 ```{r pressure, echo = F}
 qplot(total.sulfur.dioxide,chlorides, data=wine, color=factor(cluster1$cluster))+ggtitle("Cluster Plot with Wine Color and Differentiating features")+ scale_color_manual(breaks = c("1", "2"), values=c("maroon", "grey"))
 
