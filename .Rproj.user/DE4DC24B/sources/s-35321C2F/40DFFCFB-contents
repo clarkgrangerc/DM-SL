@@ -1,0 +1,495 @@
+library(tidyverse)
+library(ipumsr)
+library(dplyr)
+library(stringr)
+library(funprog)
+library(data.table)
+
+
+###setwd("C:/Users/zargh/Desktop/Casual_inference/Research Project/Data/IPUMS microdata")
+getwd()
+####rm(list = ls(all.names = TRUE))
+###Loading the data from IPUMS 
+rm(emp1)
+
+ddi <- read_ipums_ddi("usa_00019.xml")
+data <- read_ipums_micro(ddi)
+
+#### Filtering out data for which MSA is not mentioned
+data1= filter(data, MET2013 > 0)
+
+### Calculating % of People who have Bachelor's degree
+EDUC = data1 %>%
+    group_by(YEAR, MET2013)%>%
+    summarize(EDUC1 = length(which(EDUC >= 10))/length(EDUC)) 
+
+### Calculating % of male in MSA
+Male = data1%>%
+  group_by(YEAR, MET2013)%>%
+  summarize(Male = length(which(SEX ==1))/length(SEX))  
+
+### Calculating % of nonwhite in MSA
+
+Nonwhite = data1%>%
+  group_by(YEAR, MET2013)%>%
+  summarize(nonwhite = length(which(RACWHT ==1))/length(RACWHT))
+
+### Calculating % of Children (age <16)
+
+Child = data1%>%
+  group_by(YEAR, MET2013)%>%
+  summarize(child = length(which(AGE <16))/length(AGE))
+
+Cd = data1%>%
+  group_by(YEAR, MET2013)%>%
+  summarize(child = sum(NCHILD)/sum(FAMSIZE))
+
+### Foreign Born %
+
+Foreign_born = data1%>%
+  group_by(YEAR, MET2013)%>%
+  summarize(Foreign_born = length(which(BPL >120))/length(BPL))
+
+### Looking at Low skilled employment
+
+emp= filter(data1, EMPSTAT> 0, EMPSTAT < 3, EDUC <=9)
+length(which(emp$EDUC <=9))
+
+low_skill = emp %>%
+  group_by(YEAR, MET2013) %>%
+  summarize(lowskill_emp = length(which(EMPSTAT==1))/length(EMPSTAT))
+
+
+
+
+### Tech Employment %
+
+emp1 = filter(data, MET2013>0 & EMPSTAT ==1)
+
+####Tech industry codes######
+indcode = c(2070, 2090, 2170,2180,2190,2270,2290,3095,3180,3291,3365,3370,3380,3390,3490,3580,3590,3690,4170,6270,6490,
+            6672,6690,6695,6970,7290,7380,7390,7460,7570,7780,8790)
+
+### Tech employment#######
+techemp = emp1 %>%
+    group_by(YEAR, MET2013) %>%
+    summarize(techemp = length(which(IND %in% indcode))/length(IND))
+
+techemp1 = dcast(techemp, MET2013 ~ YEAR, value.var = 'techemp')
+
+
+techIV = mutate(techemp1, IV_2013 = techemp1$`2012`*1.05528217)
+techIV = mutate(techIV, IV_2014 = techIV$`IV_2013`*0.9951432)
+techIV = mutate(techIV, IV_2015 = techIV$`IV_2014`*1.033184979)
+techIV = mutate(techIV, IV_2016 = techIV$`IV_2015`*1.006198988)
+techIV = mutate(techIV, IV_2017 = techIV$`IV_2016`*1.017196884)
+techIV = mutate(techIV, IV_2018 = techIV$`IV_2017`*1.071318452)
+
+techIV = techIV[, -c(3:8)]
+
+tech_IV = mutate(techemp1, IV_2013= techemp1$`2012`*1.05528217, IV_201)
+
+##### 2nd IV variable 
+
+techIV2 = mutate(techemp1, IV_2013 = techemp1$`2012`*1.053004595)
+techIV2 = mutate(techIV2, IV_2014 = techIV2$`IV_2013`*0.9926480696)
+techIV2 = mutate(techIV2, IV_2015 = techIV2$`IV_2014`*1.032578915)
+techIV2 = mutate(techIV2, IV_2016 = techIV2$`IV_2015`*1.00778302)
+techIV2 = mutate(techIV2, IV_2017 = techIV2$`IV_2016`*1.016576709)
+techIV2 = mutate(techIV2, IV_2018 = techIV2$`IV_2017`*1.059090296)
+
+techIV2 = techIV2[, -c(3:8)]
+
+techIV2 = techIV2 %>%
+  rename('2013' = 'IV_2013', '2014' = 'IV_2014', '2015' = 'IV_2015', '2016' = 'IV_2016', '2017' = 'IV_2017', '2018' = 'IV_2018')
+techIV2 = melt(techIV2, id= 'MET2013')
+
+techIV2 = techIV2 %>%
+  rename('YEAR' = 'variable', 'techIV2' = 'value')
+
+
+#### Manufacturing employment codes ######
+mancode = c(1070,1080,1090,1170,1180,1190,1270,1280,1290,1370,1390,1470,1480,1490,1570,1590,1670,1691,1770,1790,1870,1880,1890,1990,2280,2370,2380,2470,2480,2490,2570,
+            2590,2670,2680,2690,2770,2780,2790,2870,2880,2890,2970,2980,2990,3070,3080,3170,3470,3570,3670,3680,3770,3780,3790,3875,3895,3960,3970,3980,3990)
+
+manuemp = emp1 %>%
+  group_by(YEAR, MET2013) %>%
+  summarize(manu_emp = length(which(IND %in% mancode))/length(IND))
+
+            
+###### Low skill wage rate ################
+
+emp1 = mutate(emp1, Hr_wage_lowskill = ifelse(WKSWORK2== 6,INCWAGE/(UHRSWORK*51), ifelse(WKSWORK2 == 5,INCWAGE/(UHRSWORK*49),ifelse(WKSWORK2 == 4,INCWAGE/(UHRSWORK*44), ifelse(WKSWORK2== 3,INCWAGE/(UHRSWORK*33),ifelse(WKSWORK2 == 2,INCWAGE/(UHRSWORK*20), ifelse(WKSWORK2== 1,INCWAGE/(UHRSWORK*8), 0)))))))
+emp1 = filter(emp1, INCWAGE != 0)
+lowskill_wage = emp1 %>%
+  group_by(YEAR, MET2013) %>%
+  summarize(lowskill_wage = mean(INCWAGE[EDUC<8], na.rm = FALSE))
+
+lowskill_wage_rate = emp1 %>%
+  group_by(YEAR, MET2013) %>%
+  summarize(lowskill_hrlywage = mean(Hr_wage_lowskill[EDUC<8], na.rm = FALSE))
+
+lowskill= emp1 %>%
+  group_by(YEAR, MET2013) %>%
+  summarize(lowskil_medwage = median(Hr_wage_lowskill[EDUC<8], na.rm = FALSE))
+
+dad = filter(emp1, YEAR == 2017	& MET2013 == 17820)
+
+F_data = F_data[,-19]
+
+F_data =Reduce(function(x,y) merge(x = x, y = y, by = c("YEAR","MET2013")), 
+               list(F_data, lowskill_wage_rate, lowskill, highskill_wage_rate ))
+
+F_data =Reduce(function(x,y) merge(x = x, y = y, by = c("YEAR","MET2013")), 
+               list(F_data, highmedian_wage_rate))
+
+############################################################
+###############High skill wage rate#########################
+############################################################
+#### people employed and having atleast bachelors degree with more than 40K salary###
+
+highskill_wage = emp1 %>%
+  group_by(YEAR, MET2013) %>%
+  summarize(highskill_wage = mean(INCWAGE[EDUC>=10], na.rm = FALSE))
+
+highskill_wage_rate = emp1 %>%
+  group_by(YEAR, MET2013) %>%
+  summarize(highskill_hrlywage = mean(Hr_wage_lowskill[EDUC>=10], na.rm = FALSE))
+
+highmedian_wage_rate = emp1 %>%
+  group_by(YEAR, MET2013) %>%
+  summarize(highmed_wage = median(Hr_wage_lowskill[EDUC>=10], na.rm = FALSE))
+
+
+length(which(emp1$INCWAGE == 9999998))
+
+#### Merging all the variables into one dataframe
+F_data=Reduce(function(x,y) merge(x = x, y = y, by = c("YEAR","MET2013")), 
+              list(EDUC, Foreign_born, low_skill, lowskill_wage, Nonwhite, Male, Child, techemp, manuemp))
+
+
+### Calculating the national tech employment share
+Nationalindustry = filter(data, EMPSTAT ==1)%>%
+  group_by(YEAR)%>%
+  summarize(tech_national_share= length(which(IND%in%indcode))/length(EMPSTAT))
+
+Nationalindustry2 = filter(data, EMPSTAT ==1 & MET2013 > 0)%>%
+  group_by(YEAR)%>%
+  summarize(tech_national_share= length(which(IND%in%indcode))/length(EMPSTAT))
+
+
+### getting employment data for year 2011
+
+ddi1 <- read_ipums_ddi("usa_00015.xml")
+data_low <- read_ipums_micro(ddi1)
+
+data_low1= filter(data_low, EMPSTAT ==1)
+
+techemploy = data_low1%>%
+  group_by(MET2013,YEAR) %>%
+  summarize(techemp = length(which(IND %in% indcode))/length(EMPSTAT))
+
+techemploy= dcast(techemploy, MET2013 ~ YEAR, value.var = 'techemp')
+
+techtotal = merge(techemp1, techemploy)
+techtotal = techtotal[, c(1,9,10,2,3,5,6,7,8)]
+techtotal = mutate(techtotal, inc = ((techtotal$`2018` /techtotal$`2012`)-1))
+
+Tect = techtotal
+Tect$`2011`[is.na(Tect$`2011`)] = Tect$`2012`*(1-Tect$inc)
+techIV = mutate(Tect, '12' = Tect$`2011`*1.02689299,'13' = Tect$`2012`*1.05770348, '14' = Tect$`2013`*0.099514324, '15' = Tect$`2014`*1.0331849, '16' = Tect$`2015`*1.0061989, 
+                '17' = Tect$`2016`*1.01719688, '18' = Tect$`2017`*1.0713184)
+
+techIV= techIV[,c(1,11:17)]
+
+
+
+###renaming column names
+techIV = techIV %>%
+  rename('2013' = 'IV_2013', '2014' = 'IV_2014', '2015' = 'IV_2015', '2016' = 'IV_2016', '2017' = 'IV_2017', '2018' = 'IV_2018')
+techIV = melt(techIV, id= 'MET2013')
+techIV = techIV[, c(2,1,3)]
+techIV = techIV %>%
+  rename('YEAR' = 'variable', 'techIV' = 'value')
+
+###combining all datasets. 
+F_data =Reduce(function(x,y) merge(x = x, y = y, by = c("YEAR","MET2013")), 
+                      list(F_data, techIV2))
+
+
+
+rm(Year2012, Year2013, Year2014, Year2015, Year2016, Year2017, Year2018)
+####################################################
+### CAlculating family poverty levels#################
+#####################################################
+
+datapov = filter(data1, data1$FTOTINC != 9999999)
+
+data13$id = paste(data13$YEAR,data13$CBSERIAL) 
+
+data13 = distinct(data13, CBSERIAL, .keep_all= TRUE)
+
+data12 = ddply(data13,~id,function(x){x[which.max(x$FTOTINC),]})
+
+###
+data14 = data13 %>%
+  group_by(YEAR, STATEFIP, MET2013, CBSERIAL,)%>%
+  summarise(FTOTINC = max(FTOTINC))
+
+
+
+data13 = mutate(data13, FTOTINC = ifelse(FAMSIZE == 1 & FTOTINC == 9999999, INCTOT, FTOTINC))
+data12 = filter(data12, FTOTINC != 9999999)
+length(which(data12$INCTOT == 9999999 & data12$AGE>10 & data12$FTOTINC ==0))
+data12 = mutate(data12, FTOTINC = ifelse(FTOTINC ==0 & INCTOT>0 & INCTOT<999999, INCTOT, FTOTINC))
+
+####poverty functions of States, hawaii and ALaska
+povertyfn_US = function(x, y) {ifelse(y == 2012, 11170 + ((x-1)*3960), ifelse(y == 2013, 11490 + ((x-1)*4020), ifelse( y == 2014, 11670 + ((x-1)*4060), ifelse(y == 2015, 11770 + ((x-1)*4160), ifelse(y ==2016, 11880 + ((x-1)*4140), ifelse(y ==2017,
+                                                                                                                                                                                                                                                       12060 + ((x-1)*4180), ifelse(y == 2018, 12140 + ((x-1)*4320), 0)))))))}
+povertyfn_Alaska = function(x, y) {ifelse(y == 2012, 13970 + ((x-1)*4950), ifelse(y == 2013, 14350 + ((x-1)*5030), 
+                          ifelse( y == 2014, 14580 + ((x-1)*5080), ifelse(y == 2015, 14720 + ((x-1)*5200), ifelse(y ==2016, 14857 + ((x-1)*5205), ifelse(y ==2017,
+                                                                                                                                                                                                                                           15060 + ((x-1)*5230), ifelse(y == 2018, 15180 + ((x-1)*5400), 0)))))))}
+
+povertyfn_hawaii = function(x, y) {ifelse(y == 2012, 12860 + ((x-1)*4550), ifelse(y == 2013, 13230 + ((x-1)*4620), 
+                                                                                  ifelse( y == 2014, 13420 + ((x-1)*4670), ifelse(y == 2015, 13550 + ((x-1)*4780), ifelse(y ==2016, 13563 + ((x-1)*4784), ifelse(y ==2017,
+                                                                                                                                                                                                                 13860 + ((x-1)*4810), ifelse(y == 2018, 13960 + ((x-1)*4810), 0)))))))}
+
+#### Creating poverty line for each household
+poor = mutate(poor, Poor_line = ifelse(STATEFIP !=c(2,15), povertyfn(FAMSIZE, YEAR), 0))
+ 
+poor= mutate(poor, Poor_line = ifelse(STATEFIP == 2, povertyfn_Alaska(FAMSIZE, YEAR), Poor_line))
+
+poor= mutate(poor, Poor_line = ifelse(STATEFIP == 15, povertyfn_hawaii(FAMSIZE, YEAR), Poor_line))
+
+### Creating poverty family share.
+
+poverty1 = poor%>%
+  group_by(YEAR,MET2013)%>%
+  summarize(share_poorfamily = length(which(FTOTINC<=Poor_line))/length(FTOTINC))
+
+F_data =Reduce(function(x,y) merge(x = x, y = y, by = c("YEAR","MET2013")), 
+               list(F_data, Inequality))
+
+F_data = mutate(F_data, highskill_wage_adj = F_data$highskill_hrlywage*F_data$rpp)
+
+#########################################################
+#### Adjusting the mean wage with regional price index###
+#########################################################
+rpp = read.csv("RPP.csv")
+
+rpp1= melt(rpp, id ='MET2013', measure=c('X2012', 'X2013', 'X2014', 'X2015', 'X2016', 'X2017', 'X2018'))
+rpp1 = rpp1 %>%
+  rename('YEAR' = 'variable', 'rpp' = 'value')
+rpp1 = mutate(rpp1, YEAR = gsub("X", "", YEAR))
+
+F_data = Reduce(function(x,y) merge(x = x, y = y, by = c("YEAR","MET2013")), 
+                         list(F_data, rpp1))
+FF_DATA = mutate(FF_DATA, lowskill_wage_adj = FF_DATA$lowskill_hrlywage*FF_DATA$rpp)
+
+
+
+boxplot()
+
+
+
+###################################
+library(Hmisc)
+
+rm(datapov)
+
+##### YEar 2012
+Year2012 = filter(data13, YEAR == 2012)
+Year2012= Year2012[,-c(8:18)]
+Year2012= Year2012[,-c(10,11)]
+Year2012$id = paste(Year2012$YEAR,Year2012$CBSERIAL) 
+data12 = ddply(Year2012,~id,function(x){x[which.max(x$FTOTINC),]})
+
+### Year 2013
+Year2013 = filter(data13, YEAR == 2013)
+Year2013= Year2013[,-c(8:18)]
+Year2013= Year2013[,-c(10,11)]
+Year2013$id = paste(Year2013$YEAR,Year2013$CBSERIAL) 
+data13 = ddply(Year2013,~id,function(x){x[which.max(x$FTOTINC),]})
+
+### Year 2014
+Year2014 = filter(datapov, YEAR == 2014)
+Year2014= Year2014[,-c(8:18)]
+Year2014= Year2014[,-c(10,11)]
+Year2014$id = paste(Year2014$YEAR,Year2014$CBSERIAL) 
+data14 = ddply(Year2014,~id,function(x){x[which.max(x$FTOTINC),]})
+
+### Year 2015
+Year2015 = filter(datapov, YEAR == 2015)
+Year2015= Year2015[,-c(8:18)]
+Year2015= Year2015[,-c(10,11)]
+Year2015$id = paste(Year2015$YEAR,Year2015$CBSERIAL) 
+data15 = ddply(Year2015,~id,function(x){x[which.max(x$FTOTINC),]})
+
+### Year 2016
+Year2016 = filter(datapov, YEAR == 2016)
+Year2016= Year2016[,-c(8:18)]
+Year2016= Year2016[,-c(10,11)]
+Year2016$id = paste(Year2016$YEAR,Year2016$CBSERIAL) 
+data16 = ddply(Year2016,~id,function(x){x[which.max(x$FTOTINC),]})
+
+
+### Year 2017
+Year2017 = filter(datapov, YEAR == 2017)
+Year2017= Year2017[,-c(8:18)]
+Year2017= Year2017[,-c(10,11)]
+Year2017$id = paste(Year2017$YEAR,Year2017$CBSERIAL) 
+data17 = ddply(Year2017,~id,function(x){x[which.max(x$FTOTINC),]})
+
+### Year 2018
+Year2018 = filter(datapov, YEAR == 2018)
+Year2018= Year2018[,-c(8:18)]
+Year2018= Year2018[,-c(10,11)]
+Year2018$id = paste(Year2018$YEAR,Year2018$CBSERIAL) 
+data18 = ddply(Year2018,~id,function(x){x[which.max(x$FTOTINC),]})
+
+poor = rbind(data12, data13, data14, data15, data16, data17, data18)
+
+####### Total Population data
+
+pop = read.csv("Pop.csv", header = TRUE)
+pop= pop[-1,]
+
+pop = pop %>%
+  rename('MET2013' = 'X', "2012" ='X.1', "2013"  = 'X.2', "2014" = 'X.3',"2015"= 'X.4',"2016"= 'X.5',"2017"= 'X.6',"2018"= 'X.7' )
+
+pop = melt(pop, id ='MET2013', measure=c('2012', '2013', '2014', '2015', '2016', '2017', '2018'))
+pop = pop %>%
+  rename('YEAR' = 'variable', 'pop' = 'value')
+
+F_data =Reduce(function(x,y) merge(x = x, y = y, by = c("YEAR","MET2013")), 
+               list(F_data, Inequality))
+
+F_data = F_data %>%
+  rename('lowskill_hrlywage' = 'lowskill_hrlywage.y')
+
+##### writing the final data as csv file for STATA
+summary(emp1$INCWAGE)
+
+write.csv(F_data, "D:/Casual_inference/Research Project/Data/IPUMS microdata/ F2_data.csv", row.names = TRUE)
+
+
+d= filter(data1, YEAR == 2018 & MET2013 == 26140 & EDUC >=10)
+
+rm(data, data1, emp1, test, Nat, Nationalindustry,Nationalindustry2,Nbio, NICT, Nictman, Nictserv)
+
+
+###########################################################################
+########################################################################
+######## Calculating shiftshare variable for each separate industry
+bioind = c(2190)
+ICTl = c(3095,3370,3380,3390,4170,6490,6672,6680,6690,6695,7380,7390,8790)
+ictmanl = c(2070,2090,2170,2180,2270,2290,3180,3291,3365,3490,3580,3590,3690)
+ictservl = c(6270,6970,7290,7460,7570,7780)
+
+bio = emp1 %>%
+  group_by(YEAR, MET2013) %>%
+  summarize(bio = length(which(IND %in% bioind))/length(IND))
+
+ICT = emp1 %>%
+  group_by(YEAR, MET2013) %>%
+  summarize(ICT = length(which(IND %in% ICTl))/length(IND))
+
+ictman = emp1 %>%
+  group_by(YEAR, MET2013) %>%
+  summarize(ictman = length(which(IND %in% ictmanl))/length(IND))
+
+ictserv = emp1 %>%
+  group_by(YEAR, MET2013) %>%
+  summarize(ictserv = length(which(IND %in% ictservl))/length(IND))
+
+
+bio = dcast(bio, MET2013 ~ YEAR, value.var = 'bio')
+ICT = dcast(ICT, MET2013 ~ YEAR, value.var = 'ICT')
+ictman = dcast(ictman, MET2013 ~ YEAR, value.var = 'ictman')
+ictserv = dcast(ictserv, MET2013 ~ YEAR, value.var = 'ictserv')
+
+###### National growth in each industry
+
+Nbio = emp1%>%
+  group_by(YEAR)%>%
+  summarize(bionat= length(which(IND%in%bioind))/length(EMPSTAT))
+
+NICT = emp1%>%
+  group_by(YEAR)%>%
+  summarize(ICTnat= length(which(IND%in% ICTl ))/length(EMPSTAT))
+
+Nictman = emp1%>%
+  group_by(YEAR)%>%
+  summarize(ictmannat= length(which(IND%in%ictmanl))/length(EMPSTAT))
+
+Nictserv = emp1%>%
+  group_by(YEAR)%>%
+  summarize(servnat= length(which(IND%in%ictservl))/length(EMPSTAT))
+
+
+bio = mutate(bio, '13' = bio$`2012`*(1.051833))
+bio = mutate(bio, '14' = bio$`13`*(1.056684427))
+bio = mutate(bio, '15' = bio$`14`*(0.9817078))
+bio = mutate(bio, '16' = bio$`15`*(1.0147759))
+bio = mutate(bio, '17' = bio$`16`*(1.0176185))
+bio = mutate(bio, '18' = bio$`17`*(0.9920003))
+bio= bio[,-c(3:8)]
+
+ICT = mutate(ICT, '13' = ICT$`2012`*(1.078893636))
+ICT = mutate(ICT, '14' = ICT$`13`*(1.02398569))
+ICT = mutate(ICT, '15' = ICT$`14`*(1.0328171))
+ICT = mutate(ICT, '16' = ICT$`15`*(1.01416168))
+ICT = mutate(ICT, '17' = ICT$`16`*(1.01669189))
+ICT = mutate(ICT, '18' = ICT$`17`*(1.01226516))
+ICT= ICT[,-c(3:8)]
+
+ictman = mutate(ictman, '13' = ictman$`2012`*(1.073376398))
+ictman = mutate(ictman, '14' = ictman$`13`*(0.9331481806))
+ictman = mutate(ictman, '15' = ictman$`14`*(0.9911447347))
+ictman = mutate(ictman, '16' = ictman$`15`*(0.978402182))
+ictman = mutate(ictman, '17' = ictman$`16`*(1.012983186))
+ictman = mutate(ictman, '18' = ictman$`17`*(1.249022115))
+ictman= ictman[,-c(3:8)]
+
+ictserv = mutate(ictserv, '13' = ictserv$`2012`*(1.013405102))
+ictserv = mutate(ictserv, '14' = ictserv$`13`*(0.9785392015))
+ictserv = mutate(ictserv, '15' = ictserv$`14`*(1.039393465))
+ictserv = mutate(ictserv, '16' = ictserv$`15`*(1.002986788))
+ictserv = mutate(ictserv, '17' = ictserv$`16`*(1.011233133))
+ictserv = mutate(ictserv, '18' = ictserv$`17`*(1.047647568))
+ictserv= ictserv[,-c(3:8)]
+
+IV = Reduce(function(x,y) merge(x = x, y = y, by = "MET2013"), 
+                 list(IV, ictserv))
+
+IV = mutate(IV, '2012' = IV$`2012.x`+IV$`2012.y`, '2013'= IV$`13`+IV$`2013`, '2014'= IV$`14`+IV$`2014`,
+            '2015'= IV$`2015`+IV$`15`, '2016' = IV$`2016`+IV$`16`, '2017' = IV$`17`+IV$`2017`, '2018'= IV$`18`+IV$`2018`)
+
+
+IV= IV[,-c(8:15)]
+IV = IV[, c(1,8,2,3,4,5,6,7)]
+
+IV = melt(IV, id= 'MET2013')
+IV = IV %>%
+  rename('YEAR' = 'variable', 'IV' = 'value')
+#################################################################################
+#################################################################################
+#####MEasuring inequality by looking at 1st and third quantile income
+test = filter(emp1, YEAR == 2012 & MET2013 == 10420)
+
+Inequality = emp1%>%
+  group_by(YEAR,MET2013)%>%
+  summarize(inequal_percentile = quantile(Hr_wage_lowskill, 0.75)/quantile(Hr_wage_lowskill, 0.25))
+##################################################################################
+
+
+
+memory.size(max= TRUE)
+memory.limit(size = 16000 )
+
+write.csv(data2, "C:/Users/zargh/Desktop/Casual_inference/Research Project/Data/IPUMS microdata/ data1.csv", row.names = TRUE)
+
+write.csv(test, "D:/Casual_inference/Research Project/Data/IPUMS microdata/ test.csv", row.names = TRUE)
+
+
+

@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1588343705370.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "992EDE34",
+    "lastKnownWriteTime" : 1587282667,
+    "last_content_update" : 1587282667,
+    "path" : "~/GitHub/DM-SL/Assignment3/assignment3.R",
+    "project_path" : "Assignment3/assignment3.R",
+    "properties" : {
+        "cursorPosition" : "184,0",
+        "scrollLine" : "165"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 5,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
