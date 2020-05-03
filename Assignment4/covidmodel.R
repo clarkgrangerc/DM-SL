@@ -1,0 +1,54 @@
+library(ggplot2)
+library(tidyverse)
+library(dplyr)
+library(foreach)
+library(mosaic)
+library(LICORS)
+library(factoextra)
+library(reshape2)
+library(data.table)
+library(MASS)
+
+
+covid = read.csv("covid.csv")
+covid = filter(covid, !is.na(cases))
+
+ggplot(covid)+ geom_point(mapping = aes(days_since_first_infection1, cases))
+covid$cases_per_100thous = covid$cases/ ((covid$ET_Total_Population)/100000)
+
+
+ggplot(covid)+ geom_point(mapping = aes(days_since_first_infection1, cases_per_100thous))
+sum(is.na(covid$cases))
+
+summary(covid)
+
+###### Linear Regressions
+
+lm1 = lm(ln_cases ~ days_since_first_infection1, data = covid)
+summary(lm1)
+
+lm2 = lm(ln_cases ~ ., data = covid[, -c(1:4,6,80:89)])
+summary(lm2)
+
+###### PCA and Linear Regression
+
+X= covid[,-c(1:6,88,86,81)]
+X= scale(X, center = TRUE, scale = TRUE)
+
+x_pc = prcomp(X)
+scores = x_pc$x
+summary(x_pc)
+
+pcadata = data.frame(cbind(covid$ln_cases, scores))
+
+fviz_pca_var(x_pc, col.var="contrib",
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+             repel = TRUE, title = "Variables Contribution in first two PCAs " )
+
+lm3 = lm(V1 ~., data = pcadata[,-c(27:81)])
+summary(lm3)
+yhat = exp(predict(lm3))
+result = data.frame(cbind(yhat, covid$cases, covid$days_since_first_infection1))
+
+ggplot(result)+ geom_point(mapping = aes(V3, V2, color = yhat))
+

@@ -1,0 +1,26 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1588497170928.000,
+    "dirty" : true,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "A5F64BA4",
+    "lastKnownWriteTime" : 1588509556,
+    "last_content_update" : 1588509749209,
+    "path" : "~/GitHub/DM-SL/Assignment4/covidmodel.R",
+    "project_path" : "Assignment4/covidmodel.R",
+    "properties" : {
+        "cursorPosition" : "56,0",
+        "scrollLine" : "30",
+        "tempName" : "Untitled1"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

@@ -1,0 +1,33 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1588508953137.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "915EE6CB",
+    "lastKnownWriteTime" : 2292721386512,
+    "last_content_update" : 1588508953137,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "CDEE362D",
+        "caption" : "pcadata",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=pcadata&cache_key=CDEE362D",
+        "displayedObservations" : 1452,
+        "environment" : "",
+        "expression" : "pcadata",
+        "object" : "pcadata",
+        "preview" : 0,
+        "totalObservations" : 1452,
+        "variables" : 81
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 7,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}
