@@ -1,0 +1,183 @@
+---
+title: "assignment 3"
+author: "Clark, Zach, Zargham"
+date: "4/18/2020"
+output: 
+  md_document:
+        variant: markdown_github
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, fig.align="center")
+library(ggplot2)
+library(tidyverse)
+library(dplyr)
+library(foreach)
+library(mosaic)
+library(LICORS)
+library(pander)
+library(reshape2)
+library(factoextra)
+
+wine= read.csv("wine.csv")
+
+```
+
+## Question. 2: What causes what?
+
+### Part A. 
+
+Running a simple regression of crime on police will give us correlation between these two variables but it will not help us identify if one causes the other. It might be a case that crime affects police number because police numbers are apportioned by authority based on predetermined crime rates of areas. So a simple regression will be spurious and will not help us identify if higher crime leads to higher police number or vice versa.   
+
+Even if the casual effect of police is negative but the regression might pick postive correlation due to high police in high crime areas which might lead people to infer that higher police causes higher crime rate. So a regression co-efficient always does not show what causes what. It just gives us correlation between two variables. 
+
+### Part B. 
+
+The researchers from UPenn came up with a technqiue called intrumental variable in which they use an exogenous shock to police numbers in district one of Washington DC. They came up with a dummy variable of High Alert for days when a high alert was issued due to potential terrorist threat and that led to a higher than usual number of police in the streets of district one. This means that they came up with a variable that only affected the number of police numbers in district one without having any affect on crime rate.
+
+Through the increase in police number due to high alert, the researchers try to look at the casual effect of higher police on crime rate. They compare the crime rate of district one on high alert days with other adjoining districts where police number on streets remain unchanged. So district one had more police on these days as compared to other districts. 
+
+Table 2 gives us coeffcient for high alert days which can be interpreted as a reduction of average 7.3 crimes on high alert days as compared to usual or normal days. This shows that high number of police on high alert days lead to a decrease in crime numbers. 
+
+### Part C 
+
+The main purpose of including this variable is to control for any change in number of public and tourists on high alert days. This approach helps in negating the assumption that crime rate decreases on high alert days because there are fewer people/ tourists on streets and so less oppurtunity for crime. The table shows that even after controlling for metro ridership, we see only a small change in coefficient for high alert day. Thus, high alert is only affecting crime through higher number of police and not through any other means. 
+
+### Part D
+
+From the above regression, we can see that researchers are comparing crime numbers in district one with other districts on high alert days. If only district one witness an increase in police on high alert days, then the decrease in crime rate in district one should be significantly higher than other districts. The table clearly shows this as we look at  (Highalert*District one) coefficient that shows a statistically significant decrease of average 2.8 crimes on high alert days in district one as compared to other districts of Washington that do not show any significant change. The model also includes days fixed effects, day of the week dummies, district fixed effects and district offense fixed effects to isolate the casual effect of police on crime number.  
+
+## Question.3: Clustering and PCA - Wines
+
+In this question we are provided with a dataset of more than six thousand different wines with their 11 chemical properties and two outcome variables quality and color. The task at hand is to employ unsupervised learning techniques and classify these wines into groups/ clusters based on color and quality. 
+
+We start with classfication of wines based on its color. We have two colors; red and white. We plot boxplots of wine color against their chemical properties to see which properties are different across these two colors. We see that amount of chlorides, total sulfur dioxide and volatile acidity are major variables that have different distribution for red and white wines.
+
+```{r, echo = F, cache= TRUE}
+wine2= melt(wine[,-c(12,14)], id.vars = "color")
+ggplot(data = wine2, aes(x=factor(color), y=value)) + geom_boxplot()+ facet_wrap(~variable, scales = "free") +ggtitle("Component Analysis of Wines on color basis") 
+```
+
+### Clustering Kmeans and Kmeanspp
+
+We run a simple kmeans clustering technique and chose centers as 2 because we already know how many groups we have to classify our data into i.e. 2 colors. The result of kmeans clustering in the table below shows that it separates wines based on its color quite successfully. Only 24+68 = 92 wines out of 6,497 wines have been misclassified by this method. The error rate is 1.416 percent.   
+
+```{r fig.align="center", echo = F, cache= TRUE}
+X = wine[,-(12:13)]
+X = scale(X, center = TRUE, scale = TRUE)
+clust1 = kmeans(X, centers = 2, nstart = 25)
+pander(table(wine$color, clust1$cluster), caption="Wine Color on Vertical axis vs Cluster group on Horizontal axis for kmeans Clustering")
+
+```
+
+We also plot clusters along with wine colors on a graph with two major differentiating chemical properties. White wines have more total sulfur dioxide content whereas red wines have more chlordies. 
+
+```{r pressure, echo = F, cache= TRUE}
+qplot(total.sulfur.dioxide,chlorides, data=wine, color=factor(clust1$cluster))+ggtitle("Cluster Plot with Wine Color and Differentiating features")+ scale_color_manual(breaks = c("1", "2"), values=c("maroon", "grey"))
+
+
+```
+
+We also employ kmeans++ clustering and it gives us the same result as kmeans clustering which can be seen in the table below.
+
+```{r, echo = F, cache= TRUE}
+clust2 = kmeanspp(X, k=2, nstart=50)
+pander(table(wine$color, clust2$cluster), caption = "Wine Color on Vertical axis vs Cluster group on Horizontal axis for kmeans++ Clustering")
+```
+
+However when using hiearchial clustering, we do not see see clustering based on color of wines. By cutting tree at 2 we get almost all wines sorted into one cluster. Even with cutting tress at 5 or 10 levels, we dont see any balance in the distribution of wines into different clusters. It looks to be a very uneven hiearchial clustering. We try all distance measuring approaches but they all give similar results.
+
+```{r, echo = F}
+x_dist = dist(X, method = 'euclidean')
+h1 = hclust(x_dist, method ='average')
+c1 = cutree(h1, 2)
+pander(table(wine$color, c1), caption = "Wine Color on Vertical axis vs Cluster group on Horizontal axis for Hiearchial Clustering")
+```
+
+
+### PCA 
+We now use PCA and transform our data accordingly. We get 11 PCAs which are plotted in scree plot below. If we look at first PCA, we see that the main contributers of variation are total sulfur dioxide,chlorides and volatile acidity which are also the main variables that differentiate red from white wines. Thus first PCA is capturing variations between red and white wines. Overall, first 6 PCAs explain 85% of total variation in our dataset of wines.     
+
+
+```{r, echo = F, cache= TRUE, warning = FALSE}
+Y = wine[, -c(12,13,14)]
+wine_pc = prcomp(Y, scale.=TRUE)
+
+fviz_screeplot(wine_pc, addlabels = TRUE, ylim = c(0, 35), main = "% of Variation Explained by each PCAs")
+
+fviz_pca_var(wine_pc, col.var="contrib",
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+             repel = TRUE, title = "Variables Contribution in first two PCAs " )
+
+```
+
+We plot our graph for first two PCAs and color the points with color of wines. We can clearly see that PCA1 on the x-axis is differentiating white wines from red wines. So we can say that PCA1 is explaining color variation of wines. 
+
+
+```{r, echo = F, cache= TRUE}
+scores = wine_pc$x
+
+fviz_pca_ind(wine_pc, geom.ind = "point", pointshape = 21, 
+             pointsize = 2, 
+             fill.ind = wine$color,
+             col.ind = "black", 
+             palette =  c("red", "grey"), 
+             addEllipses = TRUE,
+             label = "var",
+             col.var = "black",
+             repel = TRUE,
+             legend.title = "Color") +
+  ggtitle("2D PCA-plot for Wine Colors") +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+Now, we use our principal components to run kmeans clustering again to see if we get any better performance than simple kmeans clustering on original scaled data. With clustering on PCAs we see a further reduction in our classification error. Now we only have 37 wines misclassified which equals to an error rate of 0.5%. We can also run a logit model on PCAs but since the question asks us to use only unsupervised learning, we stuck with kmeans clustering.   
+
+```{r, echo = F, cache= TRUE, warning = FALSE}
+PCA = scale(scores, center = TRUE, scale = TRUE)
+clustpc = kmeans(PCA, centers = 2, nstart = 50)
+pander(table(wine$color, clustpc$cluster), caption = "Wine Color on Vertical axis vs Cluster group on Horizontal axis for kmeans Clustering on PCA")
+```
+
+From our results we can confidently say that kmeans clustering with PCA gives us a better result in classifying wines based on its color as compared to using clustering on original scaled data. 
+
+
+### Sorting of Wine based on its Quality
+
+We now try to sort these wines based on their quality. In the data, we have wines with quality ranging from 3 to 9 on a numerical scale. Most of these wines are 5,6 and 7 quality wines.  
+
+```{r, echo = F, cache= TRUE}
+hist(wine$quality, xlab = "Wine Quality", main = "Histogram of Wine Qualities")
+```
+
+We run the same kmeans clustering but with centers = 7 as now we need to sort wines into 7 clusters/ groups. The confusion matrix shows that there is no pattern of sorting based on quality of wine. For 6 quality wines, the alogrithm places it evenly in almost all clusters. This shows that kmeans is not picking up the differences in wine quality succesfully.
+
+
+```{r, echo = F, cache= TRUE, warning = FALSE}
+clust_ql= kmeans(X, centers=7, nstart=30)
+pander(table(wine$quality, clust_ql$cluster), caption = "Wine Quality on Vertical axis vs Cluster group on Horizontal axis for kmeans clustering on original scaled data")
+```
+
+We then run kmeans clustering on principal components and sort data into 7 clusters. The consfusion matrix does not look much different than simple kmeans clustering. So even with PCA we are not able to sort wines based on their quality.
+
+
+```{r, echo = F, cache= TRUE, warning = FALSE}
+clustquality = kmeans(PCA, centers= 7, nstart = 70)
+pander(table(wine$quality, clustquality$cluster), caption = "Wine Quality on Vertical axis vs Cluster group on Horizontal axis for kmeans Clustering on PCA" )
+```
+
+We try to group wines into two groups; high quality and low quality by classifying wines with quality 6 and above as high quality and the rest as low quality wines. We run kmeans clustering again but the results are not encouraging as we see a very high error rate. 
+
+```{r, echo = F, cache= TRUE}
+wine1 = mutate(wine, QL = ifelse(quality > 5, "High", "Low"))
+pander(table(wine1$QL, clust1$cluster))
+```
+
+This clearly shows that the clustering and PCA techniques are not able to sort or identify wines based on its quality. It seems that our approach of euclidean distance measurement is not capturing the differenes in quality of wines. Looking at boxplots of quality against different chemical properties, we do not see much variations for chemical properties across different qualities of wines. Probably the quality of wine is not particularly linked to these 11 chemical properties and hence failure of clustering and PCA to distinguish it. 
+
+```{r, echo = F, cache= TRUE}
+wine3= melt(wine[,-c(13,14)], id.vars = "quality")
+ggplot(data = wine3, aes(x=factor(quality), y=value)) + geom_boxplot()+ facet_wrap(~variable, scales = "free") +ggtitle("Component Analysis of Wines for different Qualities") 
+```
+
+
