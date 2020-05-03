@@ -10,7 +10,7 @@ library(data.table)
 library(MASS)
 
 
-covid = read.csv("covid.csv")
+covid = read.csv("covid2.csv")
 covid = filter(covid, !is.na(cases))
 
 ggplot(covid)+ geom_point(mapping = aes(days_since_first_infection1, cases))
@@ -50,8 +50,9 @@ summary(lm3)
 yhat = predict(lm3)
 rmse(covid$ln_cases, yhat)
 
-
+getwd()
 result = data.frame(cbind(yhat, covid$cases, covid$days_since_first_infection1))
 
 ggplot(result)+ geom_point(mapping = aes(V3, yhat))
+write.csv(final, "C:/Users/zargh/Documents/GitHub/DM-SL/Assignment4/covid.csv", row.names = TRUE)
 
