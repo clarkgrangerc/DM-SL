@@ -31,6 +31,7 @@ inf= inf[, -c(7,8)]
 inf2 = left_join(inf, Firstdate, by = "county")
 inf2= inf2[, -c(7:10)]
 
+newyork = read.csv("04-30-2020.csv.txt")
 summary(latest_infection_data)
 
 interventions = read.csv("interventions.csv.txt")
@@ -100,4 +101,12 @@ temp= temp %>%
 final= left_join(final, temp, by = c("fips.x" = "fips"))
 
 write.csv(final, "D:/Casual_inference/Research Project/Data/IPUMS microdata/ covid.csv", row.names = TRUE)
+hosptilization = read.csv("Hospitalization_all_locs.csv.txt")
 
+ny = read.csv("04-30-2020.csv.txt")
+
+newyork = filter(data7, FIPS %in% c(36005,36047,36061,36081,36085))
+newyork2 = filter(counties_features, FIPS %in% c(36005,36047,36061,36081,36085))
+newyork3 = filter(temp,fips %in% c(36005,36047,36061,36081,36085) )
+
+write.csv(newyork2, "D:/Casual_inference/Research Project/Data/IPUMS microdata/ newyork.csv", row.names = TRUE)
