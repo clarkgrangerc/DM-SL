@@ -6,27 +6,43 @@ library(reshape2)
 library(pander)
 library(gamlr)
 library(tidyverse)
+library(foreach)
+library(doMC)  # for parallel computing
+library(FNN)
 
-# create a train/test split
-N = nrow(covid)
-N_train = floor(0.8*N)
-train_ind = sample.int(N, N_train, replace=FALSE)
+N = nrow(covidZach)
 
-X_all = covid$days_since_first_infection1
 
-# standardize the columns of covid
+X_all = model.matrix(~. - cases - deaths - county - state.x - fips.x - 1,
+                     data=covidZach)
+
+# standardize the columns of covid2
 feature_sd = apply(X_all, 2, sd)
 X_std = scale(X_all, scale=feature_sd)
 
+PCAs = prcomp(X_std, scale=TRUE)
+
+## variance plot
+plot(PCAs)
+summary(PCAs)
+
+# first few pcs
+round(PCAs$rotation[,1:3],2) 
+
+
+PCAsforKNN = PCAs$x[,1:8] #choosing how many PCAs to use for KNN took a little tuning. I changed it around a lot to try to find a lower Out-of-sample RMSE, and found that 8 PCAs yielded the best performance.
+
 # now use LOOCV across a grid of values for K
-k_grid = seq(3, 51, by=2)
+k_grid = seq(1, 15, by=1)
+
+registerDoMC(cores=4) 
 
 # loop over the individual data points for leave-one-out
 loop_rmse = foreach(i = 1:N, .combine='rbind') %dopar% {
-  X_train = X_all[-i,]
-  X_test = X_all[i,]
-  y_train = covid$cases[-i]
-  y_test = covid$cases[i]
+  X_train = PCAsforKNN[-i,]
+  X_test = PCAsforKNN[i,]
+  y_train = covidZach$cases[-i]
+  y_test = covidZach$cases[i]
   
   # fit the models: loop over k
   knn_mse_out = foreach(k = k_grid, .combine='c') %do% {
@@ -39,19 +55,17 @@ loop_rmse = foreach(i = 1:N, .combine='rbind') %dopar% {
 }
 
 
+knn_rmse = sqrt(colMeans(loop_rmse))
 
-rmse = function(y, ypred) {
-  sqrt(mean((y-ypred)^2))
-}
 
-k_grid = unique(round(exp(seq(log(N_train), log(2), length=100))))
-rmse_grid_out = foreach(k = k_grid, .combine='c') %do% {
-  knn_model = knn.reg(X_train_350, X_test_350, y_train_350, k = k)
-  rmse(y_test_350, knn_model$pred)
-}
+plot(k_grid, knn_rmse) #k=4
 
-rmse_grid_out = data.frame(K = k_grid, RMSE = rmse_grid_out)
+#The minimum RMSE is at k=4, where our RMSE is 1362
 
-# fit the model at the optimal k
-knn_model = knn.reg(X_train, X_test, y_train, k = k_best)
-rmse_best = rmse(y_test, knn_model$pred)
+
+
+
+
+
+
+
