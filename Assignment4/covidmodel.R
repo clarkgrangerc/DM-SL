@@ -7,7 +7,7 @@ library(reshape2)
 library(data.table)
 library(Metrics)
 library(MASS)
-
+library(factoextra)
 
 covid = read.csv("covid2zargham.csv")
 covid = filter(covid, !is.na(cases))
@@ -193,14 +193,6 @@ errorrate = mean(glmcovid$result, na.rm = FALSE)
 ###########################################################
 glm = covid[,-c(1:3,5)]
 
-
-lm5 = glm.nb(cases ~days_since_first_infection1 + Tests.per.100thousand+stayhome + Total_age0to17 + E_Total_Pop_RACE_White + E_Total_Pop_in_Households_Householder_Parent +
-               E_Total_Pop_Over_15_MARITAL_STATUS_Divorced + E_INDUSTRY_Accommodation_Food_Services + E_INDUSTRY_Public_Administration + ET_TRANSPORTATION_Total_Workers_Over_16 + E_Total_Households_WITH_INCOME_WITH_Cash_Public_Asst + winter_tmmx + Density.per.square.mile.of.land.area...Population + Density.per.square.mile.of.land.area...Housing.units + 
-               EM_Total_Pop_Median_Age + ET_Total_Population + workplaces_percent_change_from_baseline, data = glm , control =  glm.control(maxit = 100), link = log)
-
-summary(lm5)
-
-
 n = nrow(glm)
 n_train = round(0.8*n)  # round to nearest integer
 n_test = n - n_train
@@ -221,10 +213,172 @@ X= scale(glm[,-c(1,9)])
 Y= cbind(glm[,c(1,9)],X)
 Y = as.data.frame(Y)
 
-lm6 = glm.nb(cases ~., data = covid, control =  glm.control(maxit = 100), link = log)
+lm6 = glm.nb(cases ~. - fips.x-county-state.x, data = covid, control =  glm.control(maxit = 100), link = log)
+
+covid= covid[,-c(1:3,5)]
+n = nrow(covid)
+n_train = round(0.8*n)  # round to nearest integer
+n_test = n - n_train
+
+glmcovid = do(50)*{
+  train_cases = sample.int(n, n_train, replace=FALSE)
+  test_cases = setdiff(1:n, train_cases)
+  glm_train = covid[train_cases,]
+  glm_test = covid[test_cases,]
+  lm4 = glm.nb(cases ~., data = glm_train, control =  glm.control(maxit = 300))
+  
+  yhat= predict(lm4, glm_test, type="response")
+  error_rate = rmse(glm_test$cases, yhat)}
+errorrate = mean(glmcovid$result, na.rm = FALSE)
 
 
 
-summary(lm6)
-yhat = predict(lm6, type = "response")
-rmse(covid$cases, yhat)
+
+
+
+
+#################################################################
+############ Zero trunucated model on total cases###############
+library(VGAM)
+
+m12 <- vglm(cases ~ .-cases1, family = pospoisson(), data = covid)
+yhat = predict(m12, type = 'response')
+modelfit1= as.data.frame(cbind(yhat, covid$cases))
+
+summary(covid)
+
+ggplot(modelfit1, mapping = aes(V2, V1))+geom_point()+geom_abline(slope = 1,intercept = 0)+
+  coord_cartesian(xlim = c(0, 20000 + 10))
+
+vglmerr = do(300)*{
+  train_cases = sample.int(n, n_train, replace=FALSE)
+  test_cases = setdiff(1:n, train_cases)
+  glm_train = covid[train_cases,]
+  glm_test = covid[test_cases,]
+  lm5 = vglm(cases ~ ., family = pospoisson(), data = glm_train)
+  
+  yhat= predict(lm5, glm_test, type="response")
+  error_rate = rmse(glm_test$cases, yhat)}
+errorrate = mean(glmcovid$result, na.rm = FALSE)
+
+
+
+#######################################################################
+################ PCA #################################################
+X= covid[,-1]
+PCA = prcomp(X, scale. = TRUE)
+summary(PCA)
+
+fviz_pca_var(PCA, col.var="contrib",
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),select.var = list(contrib=12),
+             repel = TRUE, title = "Variables Contribution in first two PCAs " )
+
+
+scores = PCA$x
+scores= cbind(covid$cases, scores)
+scores = as.data.frame(scores)
+qplot(PC1,PC2, data=scores, color= V1)+scale_color_gradient(low = "grey", high= 'red')+ggtitle("Cluster Plot with Wine Color and Differentiating features")
+
+
+#######################################################################
+############## VGLM Model on PCA #####################################
+
+covidvglmPCA = do(300)*{
+  train_cases = sample.int(n, n_train, replace=FALSE)
+  test_cases = setdiff(1:n, train_cases)
+  glm_train = scores[train_cases,]
+  glm_test = scores[test_cases,]
+  lm5 = vglm(V1 ~ PC1+PC2+PC3+PC4+PC5+PC6+PC7+PC8+PC9+PC10+PC11+PC12+PC13+PC14+
+             PC15+PC16, family = pospoisson(), data = glm_train)
+  
+  yhat= predict(lm5, glm_test, type="response")
+  error_rate = rmse(glm_test$V1, yhat)}
+errorrate = mean(covidvglmPCA$result, na.rm = FALSE)
+
+########################################################################
+################### Negative Binomial on PCA ##########################
+
+
+covidglmPCA = do(300)*{
+  train_cases = sample.int(n, n_train, replace=FALSE)
+  test_cases = setdiff(1:n, train_cases)
+  glm_train = scores[train_cases,]
+  glm_test = scores[test_cases,]
+  lm5 = glm.nb(V1 ~ PC1+PC2+PC3+PC4+PC5+PC6+PC7+PC8+PC9+PC10+PC11+PC12+PC13+PC14+
+               PC15+PC16+PC17+PC18+PC19+PC20, data = glm_train, control =  glm.control(maxit = 300))
+  
+  yhat= predict(lm5, glm_test, type="response")
+  error_rate = rmse(glm_test$V1, yhat)}
+
+errorrate = mean(covidglmPCA$result, na.rm = FALSE)
+
+
+#######################################################################
+########################## Working with cases per 100K ################
+
+covid3 = covid[, -c(1:5, 35)]
+summary(covid3)
+#######################################################################
+####################### Simple Negative Binomial model ###############
+
+n = nrow(covid3)
+n_train = round(0.8*n)  # round to nearest integer
+n_test = n - n_train
+
+glmcovid = do(50)*{
+  train_cases = sample.int(n, n_train, replace=FALSE)
+  test_cases = setdiff(1:n, train_cases)
+  glm_train = covid3[train_cases,]
+  glm_test = covid3[test_cases,]
+  lm4 = glm.nb(cases1 ~., data = glm_train, control =  glm.control(maxit = 300))
+  
+  yhat= predict(lm4, glm_test, type="response")
+  error_rate = rmse(glm_test$cases1, yhat)}
+errorrate = mean(glmcovid$result, na.rm = FALSE)
+
+#######################################################################################
+######################## Zero Truncated Neg Binomial Model ############################
+
+m1 <- vglm(cases1 ~ ., family = pospoisson(), data = covid3)
+yhat = predict(m1, type = 'response')
+modelfit= as.data.frame(cbind(yhat, covid3$cases1))
+
+summary(m1)
+ggplot(modelfit, mapping = aes(V2, V1))+geom_point()+geom_abline(slope = 1,intercept = 0)+
+  coord_cartesian(xlim = c(0, 1000 + 10))
+
+covidscale = scale(covid3[,-31])
+covidscale = as.data.frame(cbind(covid3$cases1, covidscale))
+
+vglmerr = do(300)*{
+  train_cases = sample.int(n, n_train, replace=FALSE)
+  test_cases = setdiff(1:n, train_cases)
+  glm_train = covid3[train_cases,]
+  glm_test = covid3[test_cases,]
+  lm5 = vglm(cases1 ~ ., family = pospoisson(), data = glm_train)
+  
+  yhat= predict(lm5, glm_test, type="response")
+  error_rate = rmse(glm_test$cases1, yhat)}
+errorrate = mean(vglmerr$result, na.rm = FALSE)
+
+################################################################################
+############################### PCA ##########################################
+
+Y= covid3[,-31]
+
+PCA2 = prcomp(Y, scale. = TRUE)
+summary(PCA2)
+
+fviz_pca_var(PCA2, col.var="contrib",
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),select.var = list(contrib=15),
+             repel = TRUE, title = "Variables Contribution in first two PCAs " )
+
+
+scores2 = PCA2$x
+scores2= cbind(covid3$cases1, scores2)
+scores2 = as.data.frame(scores2)
+qplot(PC1,PC2, data=scores2, color= V1)+scale_color_gradient(low = "grey", high= 'red')+ggtitle("Scatterplot of Cases for Counties along first two PCs ")
+
+
+
+

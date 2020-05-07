@@ -183,7 +183,7 @@ plot_usmap(regions = "counties", data = covid2, values = 'cases_per_100thous', c
 
 ############################# Histogram
 
-ggplot(data = covid2, mapping = aes(cases_per_100thous))+geom_density()
+ggplot(data = covid3, mapping = aes(cases1))+geom_density()
 
 ##### geom_dl(aes(label = variable), method = list(dl.trans(x = x+0.5), "last.points", cex = 0.8))  
 write.csv(timeseries, "D:/Casual_inference/Research Project/Data/IPUMS microdata/ caseslineolot.csv", row.names = TRUE)
