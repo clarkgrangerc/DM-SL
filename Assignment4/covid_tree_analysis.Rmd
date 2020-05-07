@@ -3,3 +3,92 @@ title: "covid tree analysis"
 output: html_document
 ---
 
+```{r include=FALSE, cache= TRUE}
+
+library(mosaic)
+library(tidyverse)
+library(Metrics)
+library(gamlr)
+library(margins)
+library(rpart)
+library(caret)
+library(knitr)
+library(kableExtra)
+library(randomForest)
+library(gbm)
+
+data=read.csv("covid2zargham.csv")
+names=read.table("names.txt")
+cnames=names[,1] 
+colnames(data)=cnames
+#### Create the subsample for training an testing ####
+x<- data[-c(1:5,35)]
+```
+
+# Question 1. Analysis using Random Forest and Boosting Trees
+
+In this section we perform an anlysis over the county level data of Covid-19 reports. We know that the tree models are characterized to be flexible fitters that can capture non-linearity and interactions between the variables. Tree models also are useful when we have information in different magnitudes as this case, where we have variables that are values while others are proportions. Specifically, we will work with with a Random Forest model and a Boosting Tree mode. The first, model mainly fit many large trees to bootstrap-resampled versions of the training data by relevance, while the second fits several trees to reweighted versions of the training dataset and then classifies by weighted majority relevance.
+
+Our goal in this section will be make predictions over cases per 100k population. As in the previous section, our data set includes a set of socieconomic, demographic and geographical variables for many US states. The data set includes information about the Covid crisis such as tests per 100k population and policies issued to fight the pandemic. By the use of this sort of models we can get information about variable relevance, that can shed light about what variables make more likely the presence of the disease in a community and to improve the understanding of this pandemic. To run our models, we first splitted our sample in a training and test subsamples in order to confirm the model performance. After this, We created 1000 trees by random forest including a minimum of 5 features per bucket, and later we compute the out of sample RMSE. 
+
+```{r include=FALSE, cache= TRUE}
+######################################
+############ Random Forest ###########
+######################################
+n = nrow(x)
+n_train = round(0.8*n)  # round to nearest integer
+n_test = n - n_train
+train_cases = sample.int(n, n_train, replace=FALSE)
+test_cases = setdiff(1:n, train_cases)
+x_train = x[train_cases,]
+x_test = x[test_cases,]
+
+m2 = randomForest(cases100k ~ (.)^2,data= x_train, mtry = 5, ntree=1000)
+plot(m2)
+yhat_test2 = predict(m2, x_test)
+r1=rmse(x_test$cases100k,yhat_test2)
+
+graph1=varImpPlot(m2,type=2,main="") 
+
+```
+Graph XX summarizes the variable importance informanrion derived from the random forest model (RF). We can notice that as expected the population density per square mile plays an importante role as expected. It suggest that Counties more dense must expect a higher number of people infected, as happened in New York state. The RF model also suggets that the number of test performed in county matters, this goes in the direction of people that support the lower initial of reported cases in the US was due to the lack of testing. The RF model shows that the variable that measures the decrease in number of people at work places explains is relevant, which suggest two things, one that places that started the lockdown earlier could have more cases or the lockdown did stop the virus expansion, since variable importance here does not gives us the impact sign. From the variable importance chart we can also see covariates related with the population that have had more exposition the the virus, such as occupation. We can see that the proportion of people working at food services in a county explains the number of cases, which make sense since this kind of jobs are likely to have contact with many people, increasing the probability to get sick.
+`r r1`
+
+**Graph XX. Variable Importance (Random Forest)**
+```{r echo=FALSE, warning= FALSE, cache= TRUE}
+varImpPlot(m2,type=2,main="") 
+```
+
+```{r include=FALSE, cache= TRUE}
+####################################
+##### Boosting Model ##############
+###################################
+
+m3 = gbm(cases100k ~ .,data = x_train,n.trees=5000, shrinkage=.05)
+yhat_test3= predict(m3, x_test, n.trees=5000)
+r2=rmse(x_test$cases100k,yhat_test3)
+summary(m3)
+plot(m3)
+```
+
+After the RF analysis, we fit a Boosting Tree on cases per 100k. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
