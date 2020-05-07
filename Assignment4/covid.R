@@ -12,6 +12,8 @@ library(rjson)
 
 latest_infection_data= read.csv("us-counties.csv.txt")
 
+d= filter(latest_infection_data, county == 'Douglas')  
+
 latest_infection_data$enddate= as.Date("2020/4/30")
 
 infection_time = read.csv("infections_timeseries.csv.txt")
@@ -19,16 +21,16 @@ latest_infection_data$date = as.Date(latest_infection_data$date, format="%Y-%m-%
 latest_infection_data$days_since_first_infection1 = difftime(latest_infection_data$enddate ,latest_infection_data$date , units = c("days"))
 
 Firstdate = setDT(latest_infection_data)[order(date), head(.SD, 1L), by = county]
-Firstdate= Firstdate %>%
-  group_by(county) %>%
+Firstdate1= latest_infection_data %>%
+  group_by(county, state) %>%
   arrange(date) %>%
   slice(1L)
 
-Firstdate= Firstdate[,-c(5,6)]
+Firstdate= Firstdate1[,-c(5,6)]
 inf = filter(latest_infection_data, date == "2020-04-30")
 inf= inf[, -c(7,8)]
 
-inf2 = left_join(inf, Firstdate, by = "county")
+inf2 = left_join(inf, Firstdate, by = "fips")
 inf2= inf2[, -c(7:10)]
 
 newyork = read.csv("04-30-2020.csv.txt")
@@ -109,4 +111,81 @@ newyork = filter(data7, FIPS %in% c(36005,36047,36061,36081,36085))
 newyork2 = filter(counties_features, FIPS %in% c(36005,36047,36061,36081,36085))
 newyork3 = filter(temp,fips %in% c(36005,36047,36061,36081,36085) )
 
-write.csv(newyork2, "D:/Casual_inference/Research Project/Data/IPUMS microdata/ newyork.csv", row.names = TRUE)
+####################### Time series plot 
+
+timeseries = filter(infection_time, FIPS %in% c(53061,17031,6059,4013,6037,6085,25025,6075,55025,6073))
+
+
+timeseries1 = as.data.frame(t(timeseries))
+timeseries1 = timeseries1[-c(1,2),]
+timeseries1 = timeseries1[-1,]
+colnames(timeseries1) <- as.character(unlist(timeseries1[1,]))
+names(timeseries1)[-1] <- sub("- US", "", names(timeseries1)[-1], fixed = TRUE)
+timeseries1 = timeseries1[-1,]
+setDT(timeseries1, keep.rownames = TRUE)[]
+timeseries1$rn = gsub("X", "0", timeseries1$rn)
+
+timeseries1$rn= as.Date(timeseries1$rn, format="%m.%d.%y")
+timeseries1$rn= difftime(timeseries1$rn,as.Date("2020/01/22"), units = c("days"))
+timeseries1$rn = as.numeric(timeseries1$rn)
+ab = timeseries1
+
+pop = read.csv("covid.csv")
+pop = filter(pop, fips.x %in% c(53061,17031,6059,4013,6037,6085,25025,6075,55025,6073))
+pop= pop[,c(5,43)]
+
+library(directlabels)
+library(magrittr)
+library(ggrepel)
+ab[,c(2:11)] %<>% lapply(function(x) as.numeric(as.character(x)))
+
+
+ab$rn= factor(ab$rn)
+summary(timeseries1)
+
+timeseries = melt(ab, id="rn")
+timeseries$rn = as.numeric(timeseries$rn)
+
+
+ggplot(timeseries, mapping = aes(x = rn, y = value,color = factor(variable)), size = 1)+geom_line()+
+  theme(legend.position = "none")+
+  geom_text_repel(data = subset(timeseries, rn == max(rn)),aes(label= variable),nudge_x = 5, segment.color = NA)+
+  coord_cartesian(xlim = c(50, 100 + 10))
+  
+######## Per 100,000 cases graphj
+time = read.csv("graph.csv")
+names(time)[-1] <- sub("- US", "", names(time)[-1], fixed = TRUE)
+
+setDT(timeseries1, keep.rownames = TRUE)[]
+time$Combined_Key = gsub("X", "0", time$Combined_Key)
+time$Combined_Key= as.Date(time$Combined_Key , format="%m.%d.%y")
+time$Combined_Key = difftime(time$Combined_Key ,as.Date("2020/01/22"), units = c("days"))
+time$Combined_Key = as.numeric(as.character(time$Combined_Key))
+
+time1 = melt(time, id="Combined_Key")
+
+ggplot(time1, mapping = aes(x = Combined_Key, y = value))+geom_line(aes(color = variable), size = 0.8) +
+  theme(legend.position = "none")+xlim(0, 120)+geom_text_repel(data = subset(time1, Combined_Key == max(Combined_Key)),aes(label= variable),nudge_x = 30,segment.color = NA) #+
+  coord_cartesian(xlim = c(70, 100 + 10))
+
+############################ US MAp
+library(usmap)  
+covid2 = read.csv("covid.csv")
+names(covid2)[names(covid2) == "fips.x"] <- "fips"
+countypop = counties_features[, c(1,7)]
+covid2 = left_join(covid2, countypop, by= c("fips"="FIPS"))
+covid2$cases_per_100thous = covid2$cases/(covid2$POP_ESTIMATE_2018/100000) 
+
+plot_usmap(regions = "counties", data = covid2, values = 'cases_per_100thous', color = 'gray')+ 
+  scale_fill_continuous(low = "white", high= 'red', name = "Cases per 100K Pop", label = scales::comma)+
+  labs(title = 'US Counties Covid Cases') 
+
+
+############################# Histogram
+
+ggplot(data = covid3, mapping = aes(cases1))+geom_density()
+
+##### geom_dl(aes(label = variable), method = list(dl.trans(x = x+0.5), "last.points", cex = 0.8))  
+write.csv(timeseries, "D:/Casual_inference/Research Project/Data/IPUMS microdata/ caseslineolot.csv", row.names = TRUE)
+
+
