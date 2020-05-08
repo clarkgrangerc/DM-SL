@@ -1,0 +1,76 @@
+---
+title: "Forecasting Counties Most Vulnerable to Covid-19"
+author: "Zach Carlson"
+date: "5/7/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(tidyverse)
+library(mosaic)
+library(ggplot2)
+library(class)
+library(reshape2)
+library(pander)
+library(gamlr)
+library(tidyverse)
+library(foreach)
+library(doMC)  # for parallel computing
+library(FNN)
+```
+
+## KNN
+  We are going to use K-Nearest Neighbors in this part of the exploration to try to see how accurately we can predict the number of cases a county has based on all the features we have on a county. KNN will basically be estimating cases for each county by looking at average cases of a couple of counties that are very similar in their characteristics to the one we are trying to estimate.
+  
+ Running PCA is necessary on this data set because of how many rows were strongly related or correlated. This colinearity is a problem when KNN is looking for close data points, because the nearly identical columns count for distance away twice. In other words, one data can seem "far away" on two dimensions when it is really only far away on one dimension but we basically have the dimention twice in our data. To circumvent this problem, we can run PCA to summarize many column into much fewer columns for prdeiction.
+```{r echo=FALSE}
+covidzach2 = read.csv('/Users/kelly_carlson/Documents/GitHub/DM-SL/Assignment4/covidzach2.csv', header=TRUE)
+N = nrow(covidzach2)
+
+X_all = model.matrix(~. - cases - deaths - county - state.x - fips.x - Tests.per.100thousand -1,
+                     data=covidzach2)
+# standardize the columns of covid2
+feature_sd = apply(X_all, 2, sd)
+X_std = scale(X_all, scale=feature_sd)
+```
+
+```{r echo=TRUE}
+PCAs = prcomp(X_std, scale=TRUE)
+PCAsforKNN = PCAs$x[,1:9]
+```
+  Choosing how many PCAs to use for KNN took a little tuning. I changed it around a lot to try to find a lower out-of-sample RMSE, and found that 9 PCAs yielded the best performance. Like k, this seems like it is another tuning parameter for the model that must be calibrated.
+```{r echo=FALSE}
+k_grid = seq(1, 15, by=1)
+
+registerDoMC(cores=4) 
+```
+```{r echo=TRUE}
+loop_rmse = foreach(i = 1:N, .combine='rbind') %dopar% {
+  X_train = PCAsforKNN[-i,]
+  X_test = PCAsforKNN[i,]
+  y_train = covidzach2$cases[-i]
+  y_test = covidzach2$cases[i]
+  
+  # fit the models: loop over k
+  knn_mse_out = foreach(k = k_grid, .combine='c') %do% {
+    knn_fit = knn.reg(X_train, X_test, y_train, k)
+    (y_test - knn_fit$pred)^2  # return prediction
+  }
+  
+  # return results from the loop over k
+  knn_mse_out
+}
+```
+Here, I fit a KNN model for k=1 to k=15 and looked at how accurately each KNN fir predicted cases.
+```{r echo=FALSE}
+knn_rmse = sqrt(colMeans(loop_rmse))
+
+plot(k_grid, knn_rmse, xlab = "K", ylab = "RMSE",main = "How Many Nearest Neighbors?")
+```
+  
+  In this plot, you can see the RMSE(y-axis) varies in the value of K(x-axis), how many nearest neighbors our model uses to estimate the cases. As you can see, k=3 is the ideal k value, coresponding to an RMSE of 1499. 
+
+  I tried a few other strategies for creating a better model and RMSE. By excluding some random columns before running PCAs, I could get slighter better RMSE, so I tried using a lasso for selecting variables to use in my KNN. This proved unfruitful because when I included the variables from the lasso process, it yielded a higher RMSE. One thing I learned from the Lasso output was that population density was seemingly the most important variable for prediction, so I even tried multiplying the population density column by five before running KNN and this still did not yield a better RMSE.
+  
+  This kind of forecasting could be very useful for knowing which counties will need the most resources ahead of time, both for Covid 19 and other infectious diseases. For example, if we know a county will have 7000 +/- 1499 and they only have enough resources to handle 4000, then we know we need to get more resources there.
