@@ -31,11 +31,12 @@ x<- data[-c(1:5,35)]
 ```
 
 # Cross sectional Analysis of Covid-19 Spread in US Counties
+# Introduction
 Covid-19 or corona virus started its spread from China at the end of Year 2020. By February 2020, cases start to appear in the United States and spread rapidly across all the states. The growth in the number of cases has been exponential like any other case of infectious disease. Scientists and researchers around the world are actively looking at the data to understand this virus. In uncertain times like these, it is important to know the factors that affect the spread of this virus to make plausible predictions about the future. 
 
 Since the first case of covid-19 was discovered in the US in Snohomish county in the Washington State, the virus has now spread to other places and in some cities like New York and Chicago, the spread has been faster, making them new hotspots for the virus even though cities like Seattle & Los Angeles reported their first cases before these cities. A simple line graphs for some counties that saw their first case of infection around the same time shows the difference in the rate of virus spread. 
 
-```{r,echo=FALSE, warning=FALSE, fig.cap ="Trend Line Graph for Counties"}
+```{r,echo=FALSE, warning=FALSE, fig.cap ="Trend Line Graph for Counties", fig.dim=c(5,7) }
 library(ggplot2)
 library(ggrepel)
 time1= read.csv("casesperpop.csv")
@@ -136,12 +137,15 @@ vglmerr = do(300)*{
 mean(vglmerr$result, na.rm = FALSE)
 ```
 ```{r}
+
 yhat1 = predict(m12, type = 'response')
 modelfit1= as.data.frame(cbind(yhat1, covid$cases1))
-b1=ggplot(modelfit1, mapping = aes(V2, V1))+geom_point()+geom_abline(slope = 1,intercept = 0)+ labs(x="Actual", y= "Predicted", title = "Cases per 100K Pop")
-b2= ggplot(modelfit1, mapping = aes(V2, V1))+geom_point()+geom_abline(slope = 1,intercept = 0)+ labs(x="Actual", y= "Predicted", title = "Cases per 100K Pop - Low Values")+coord_cartesian(xlim = c(0, 1000 + 10))
 
-grid.arrange(b1,b2,ncol = 2)
+b1=ggplot(modelfit1, mapping = aes(V2, V1))+geom_point()+geom_abline(slope = 1,intercept = 0)+ labs(x="Actual", y= "Predicted", title = "Cases per 100K Pop")+theme(plot.title = element_text(size =10))
+
+b2= ggplot(modelfit1, mapping = aes(V2, V1))+geom_point()+geom_abline(slope = 1,intercept = 0)+ labs(x="Actual", y= "Predicted", title = "Cases per 100K Pop - Low Values")+coord_cartesian(xlim = c(0, 1000 + 10))+theme(plot.title = element_text(size =10))
+
+grid.arrange(b1,b2, widths=c(0.5, 0.5) , heights=c(0.7, 0.7),ncol = 2)
 ```
 
 We try the same model with actual number of cases rather than number of cases per hundred thousand people and include log of population in the model to control for community size. The RMSE of 300 test and train split comes out to be around 1500 and the prediction graph is more balanced as compared to the model with cases per hundred thousand population. Therefore, we prefer using total number of cases in the model for prediction purpose. 
