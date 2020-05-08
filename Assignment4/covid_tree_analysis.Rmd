@@ -178,7 +178,6 @@ p2=ggplot(modelfit2, mapping = aes(V2, V1))+geom_point()+geom_abline(slope = 1,i
 grid.arrange(p1,p2, widths=c(0.5, 0.5) , heights=c(0.7, 0.7),ncol = 2)
 ```
 
-<<<<<<< HEAD
 ## Analysis using Random Forest and Boosting Trees
 ```{r include=FALSE, cache= TRUE}
 library(mosaic)
@@ -194,7 +193,6 @@ library(dummies)
 library(plotmo)
 =======
 ## Random Forest and Boosting Trees
->>>>>>> f4e92f808fe4dc5116ad347869dd677e8a41fe0f
 
 data=read.csv("covid2zargham.csv")
 names=read.table("names.txt")
@@ -227,7 +225,7 @@ x_test = x[test_cases,]
 m2 = randomForest(cases100k ~ (.)^2,data= x_train, mtry = 5, ntree=1000,importance=T)
 plot(m2)
 yhat_test2 = predict(m2, x_test)
-rrf=rmse(x_test$cases100k,yhat_test2)
+rrf=round(rmse(x_test$cases100k,yhat_test2))
 
 varimp(m2)
 
@@ -239,18 +237,18 @@ varImpPlot(m2,type=2)
 
 m3 = gbm(cases100k ~ .,data = x_train,n.trees=5000, shrinkage=.05)
 yhat_test3= predict(m3, x_test, n.trees=5000)
-rb=rmse(x_test$cases100k,yhat_test3)
+rb=round(rmse(x_test$cases100k,yhat_test3))
 
 windows()
 tab1=summary(m3)
 
 ```
 
-In this section we perform an anlysis over the county level data of Covid-19 reports. We know that the tree models are characterized to be flexible fitters that can capture non-linearity and interactions between the variables. Tree models also are useful when we have information in different magnitudes as this case, where we have variables that are values while others are proportions. Specifically, we will work with with a Random Forest model and a Boosting Tree mode. The first, model mainly fit many large trees to bootstrap-resampled versions of the training data by relevance, while the second fits several trees to reweighted versions of the training dataset and then classifies by weighted majority relevance.
+In this section we perform an anlysis over the county level data about Covid-19 by the use of Tree models approach. Specifically, we implemented a Random Forest model and a Boosting Tree model. The first, model mainly fit many large trees to bootstrap-resampled versions of the training data by relevance, while the second fits several trees to reweighted versions of the training dataset and then classifies by weighted majority relevance. These models are characterized to be flexible fitters that can capture non-linearity and interactions between the variables.
 
-Our goal in this section will be fittin models on cases per 100k population. As in the previous section, our data set includes a set of socieconomic, demographic and geographical variables for many US states. The data set includes information about the Covid crisis such as tests per 100k population and policies issued to fight the pandemic. By the use of this sort of models we can get information about variable relevance, that can shed light about what variables make more likely the presence of the disease in a community and to improve the understanding of this pandemic. To run our models, we first splitted our sample in a training and test subsamples in order to confirm the model performance. After this, We created 1000 trees by random forest including a minimum of 5 features per bucket, and later we compute the out of sample RMSE. 
+Our goal then will be fitting models on cases per 100k population. In addition, by the use of this models we can get information about variable relevance, that can shed light about what variables make more likely the presence of the disease in a community and to improve the understanding of this pandemic. To run our models, we first splitted our sample in a training and test subsamples in order to confirm the model performance. After this, We created 1000 trees by random forest including a minimum of 5 features per bucket.
 
-Table XX summarizes the variable importance information derived from the random forest model (RF). We can notice that as expected the population density per square mile plays an importante role as expected. It suggest that Counties more dense must expect a higher number of people infected, as happened in New York state. The RF model also suggets that the number of test performed in county matters, this goes in the direction of people that support the lower initial of reported cases in the US was due to the lack of testing. The RF model shows that the variable that measures the decrease in number of people at work places is relevant, which may suggest two things, one that places that started the lockdown earlier could have more cases or the lockdown did stop the virus expansion, since variable importance here does not gives us the impact sign. From the variable importance table we can also see covariates related with the population that have had more exposition the the virus, such as occupation. We can see that the proportion of people working at food services in a county explains the number of cases, which make sense since this sort of jobs are likely to have contact with many people, increasing the probability to get sick. As mentioned, we fit a Boosting Tree(BT) that allows us to validate the results of the RF model. The BT model generate a variable importance output as well, the result in this case are close with those released by the RF and are summarized in table XX. 
+Table XX (APP TABLE) summarizes the variable importance information derived from the random forest model (RF). We can notice that as expected the population density per square mile plays an importante role as expected. It suggest that Counties more dense must expect a higher number of people infected, as happened in New York state. The RF model also suggets that the number of test performed in county matters, this goes in the direction of people that support the lower initial of reported cases in the US was due to the lack of testing. The RF model shows that the variable that measures the decrease in number of people at work places is relevant. From the variable importance table we can also see covariates related with the population that have had more exposition the the virus, such as occupation. We can see that the proportion of people working at food services in a county explains the number of cases, which make sense since this sort of jobs are likely to have contact with many people, increasing the probability to get sick. As mentioned, we fit a Boosting Tree(BT) that allows us to validate the results of the RF model. The BT model generates a variable importance output as well, the result in this case are closed with those released by the RF and are summarized in table XX(APP TABLE). 
 
 
 ```{r fig1, echo=FALSE, fig.width=7, cache=TRUE,fig.height=6,fig.cap="Partial Dependence From Random Forest Model"}
@@ -268,11 +266,11 @@ partialPlot(m2, x_train[,1:30],x.var =28, main="Median Age",xlab="")
 
 From Random Forest model and Boosting Trees we have the posibility to generate partial dependence functions. This functions show the marginal effect of one feature on the predicted outcome of our model. A partial dependence function can be represented as: 
 
-[\  \hat{g}_{x_i}(x_i)=E_{X}\left[\hat{g}(x_i,X)\right]=\int\hat{g}(x_i,X)d\mathbb{P}(X) \]
+$$\hat{g}_{x_i}(x_i)=E_{X}\left[\hat{g}(x_i,X)\right]=\int\hat{g}(x_i,X)d\mathbb{P}(X)$$
 
 Where $x_i$ are the variables for which we are computing the function and matrix X the other variables used in the model $\hat{g}$. Then, the partial function tell us for a given value of covariate $i$ what the average marginal effect on the prediction is. Then by the calculation of the partial depence functions we can look for the effect of the County level features over the number of Covid cases per 100k. Figure \ref{fig:fig1} shows the partial depence function derived of the RF for some features we found intuitive, for example we can observe the can confirm the positive relation of population density over number of cases. We also can evaluate the effect of a socioeconomic variable such as poverty level, specifically we can see that an increase of poverty level has a positive impact over number of cases. In the case of proportion of population being white has a negative effect on number of cases. This finding goes in line with the last reports of New York State that suggest that the most affected ethnicity or race are Hispanic and Black. It is also interesting to see how warmer summer temperatures have a negative effect over Covid cases. Finally, we can see how a higher median age has a positive effect and more people driving alone to work has a negative one. 
 
-Regarding to the predictive performance of the models, we got an out of sample RMSE of `r rrf` for the RF model and `r rf` for the BT. This values sugget that these models are reasonable tools for prediction even tough they do not outperform the result of the Negative Binomial model on cases per 100k. 
+Regarding to the predictive performance of the models, we got an out of sample RMSE of `r rrf` for the RF model and `r rb` for the BT. This values sugget that these models are reasonable tools for prediction even tough they do not outperform the result of the Negative Binomial model on cases per 100k. 
 
 
 
