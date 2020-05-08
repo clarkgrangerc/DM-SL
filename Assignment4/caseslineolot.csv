@@ -1,0 +1,971 @@
+"","rn","variable","value"
+"1",0,"Maricopa - Arizona - US",0
+"2",1,"Maricopa - Arizona - US",0
+"3",2,"Maricopa - Arizona - US",0
+"4",3,"Maricopa - Arizona - US",0
+"5",4,"Maricopa - Arizona - US",1
+"6",5,"Maricopa - Arizona - US",1
+"7",6,"Maricopa - Arizona - US",1
+"8",7,"Maricopa - Arizona - US",1
+"9",8,"Maricopa - Arizona - US",1
+"10",9,"Maricopa - Arizona - US",1
+"11",10,"Maricopa - Arizona - US",1
+"12",11,"Maricopa - Arizona - US",1
+"13",12,"Maricopa - Arizona - US",1
+"14",13,"Maricopa - Arizona - US",1
+"15",14,"Maricopa - Arizona - US",1
+"16",15,"Maricopa - Arizona - US",1
+"17",16,"Maricopa - Arizona - US",1
+"18",17,"Maricopa - Arizona - US",1
+"19",18,"Maricopa - Arizona - US",1
+"20",19,"Maricopa - Arizona - US",1
+"21",20,"Maricopa - Arizona - US",1
+"22",21,"Maricopa - Arizona - US",1
+"23",22,"Maricopa - Arizona - US",1
+"24",23,"Maricopa - Arizona - US",1
+"25",24,"Maricopa - Arizona - US",1
+"26",25,"Maricopa - Arizona - US",1
+"27",26,"Maricopa - Arizona - US",1
+"28",27,"Maricopa - Arizona - US",1
+"29",28,"Maricopa - Arizona - US",1
+"30",29,"Maricopa - Arizona - US",1
+"31",30,"Maricopa - Arizona - US",1
+"32",31,"Maricopa - Arizona - US",1
+"33",32,"Maricopa - Arizona - US",1
+"34",33,"Maricopa - Arizona - US",1
+"35",34,"Maricopa - Arizona - US",1
+"36",35,"Maricopa - Arizona - US",1
+"37",36,"Maricopa - Arizona - US",1
+"38",37,"Maricopa - Arizona - US",1
+"39",38,"Maricopa - Arizona - US",1
+"40",39,"Maricopa - Arizona - US",1
+"41",40,"Maricopa - Arizona - US",1
+"42",41,"Maricopa - Arizona - US",1
+"43",42,"Maricopa - Arizona - US",1
+"44",43,"Maricopa - Arizona - US",1
+"45",44,"Maricopa - Arizona - US",2
+"46",45,"Maricopa - Arizona - US",2
+"47",46,"Maricopa - Arizona - US",2
+"48",47,"Maricopa - Arizona - US",2
+"49",48,"Maricopa - Arizona - US",2
+"50",49,"Maricopa - Arizona - US",3
+"51",50,"Maricopa - Arizona - US",3
+"52",51,"Maricopa - Arizona - US",3
+"53",52,"Maricopa - Arizona - US",4
+"54",53,"Maricopa - Arizona - US",4
+"55",54,"Maricopa - Arizona - US",8
+"56",55,"Maricopa - Arizona - US",9
+"57",56,"Maricopa - Arizona - US",11
+"58",57,"Maricopa - Arizona - US",22
+"59",58,"Maricopa - Arizona - US",34
+"60",59,"Maricopa - Arizona - US",49
+"61",60,"Maricopa - Arizona - US",81
+"62",61,"Maricopa - Arizona - US",139
+"63",62,"Maricopa - Arizona - US",199
+"64",63,"Maricopa - Arizona - US",251
+"65",64,"Maricopa - Arizona - US",299
+"66",65,"Maricopa - Arizona - US",399
+"67",66,"Maricopa - Arizona - US",454
+"68",67,"Maricopa - Arizona - US",545
+"69",68,"Maricopa - Arizona - US",690
+"70",69,"Maricopa - Arizona - US",788
+"71",70,"Maricopa - Arizona - US",871
+"72",71,"Maricopa - Arizona - US",961
+"73",72,"Maricopa - Arizona - US",1049
+"74",73,"Maricopa - Arizona - US",1171
+"75",74,"Maricopa - Arizona - US",1326
+"76",75,"Maricopa - Arizona - US",1433
+"77",76,"Maricopa - Arizona - US",1495
+"78",77,"Maricopa - Arizona - US",1559
+"79",78,"Maricopa - Arizona - US",1689
+"80",79,"Maricopa - Arizona - US",1741
+"81",80,"Maricopa - Arizona - US",1891
+"82",81,"Maricopa - Arizona - US",1960
+"83",82,"Maricopa - Arizona - US",2020
+"84",83,"Maricopa - Arizona - US",2056
+"85",84,"Maricopa - Arizona - US",2146
+"86",85,"Maricopa - Arizona - US",2264
+"87",86,"Maricopa - Arizona - US",2404
+"88",87,"Maricopa - Arizona - US",2491
+"89",88,"Maricopa - Arizona - US",2589
+"90",89,"Maricopa - Arizona - US",2636
+"91",90,"Maricopa - Arizona - US",2738
+"92",91,"Maricopa - Arizona - US",2846
+"93",92,"Maricopa - Arizona - US",2970
+"94",93,"Maricopa - Arizona - US",3116
+"95",94,"Maricopa - Arizona - US",3234
+"96",95,"Maricopa - Arizona - US",3359
+"97",96,"Maricopa - Arizona - US",3457
+"98",0,"Los Angeles - California ",0
+"99",1,"Los Angeles - California ",0
+"100",2,"Los Angeles - California ",0
+"101",3,"Los Angeles - California ",0
+"102",4,"Los Angeles - California ",1
+"103",5,"Los Angeles - California ",1
+"104",6,"Los Angeles - California ",1
+"105",7,"Los Angeles - California ",1
+"106",8,"Los Angeles - California ",1
+"107",9,"Los Angeles - California ",1
+"108",10,"Los Angeles - California ",1
+"109",11,"Los Angeles - California ",1
+"110",12,"Los Angeles - California ",1
+"111",13,"Los Angeles - California ",1
+"112",14,"Los Angeles - California ",1
+"113",15,"Los Angeles - California ",1
+"114",16,"Los Angeles - California ",1
+"115",17,"Los Angeles - California ",1
+"116",18,"Los Angeles - California ",1
+"117",19,"Los Angeles - California ",1
+"118",20,"Los Angeles - California ",1
+"119",21,"Los Angeles - California ",1
+"120",22,"Los Angeles - California ",1
+"121",23,"Los Angeles - California ",1
+"122",24,"Los Angeles - California ",1
+"123",25,"Los Angeles - California ",1
+"124",26,"Los Angeles - California ",1
+"125",27,"Los Angeles - California ",1
+"126",28,"Los Angeles - California ",1
+"127",29,"Los Angeles - California ",1
+"128",30,"Los Angeles - California ",1
+"129",31,"Los Angeles - California ",1
+"130",32,"Los Angeles - California ",1
+"131",33,"Los Angeles - California ",1
+"132",34,"Los Angeles - California ",1
+"133",35,"Los Angeles - California ",1
+"134",36,"Los Angeles - California ",1
+"135",37,"Los Angeles - California ",1
+"136",38,"Los Angeles - California ",1
+"137",39,"Los Angeles - California ",1
+"138",40,"Los Angeles - California ",1
+"139",41,"Los Angeles - California ",1
+"140",42,"Los Angeles - California ",7
+"141",43,"Los Angeles - California ",11
+"142",44,"Los Angeles - California ",13
+"143",45,"Los Angeles - California ",14
+"144",46,"Los Angeles - California ",14
+"145",47,"Los Angeles - California ",14
+"146",48,"Los Angeles - California ",20
+"147",49,"Los Angeles - California ",27
+"148",50,"Los Angeles - California ",32
+"149",51,"Los Angeles - California ",40
+"150",52,"Los Angeles - California ",53
+"151",53,"Los Angeles - California ",53
+"152",54,"Los Angeles - California ",94
+"153",55,"Los Angeles - California ",144
+"154",56,"Los Angeles - California ",190
+"155",57,"Los Angeles - California ",231
+"156",58,"Los Angeles - California ",292
+"157",59,"Los Angeles - California ",292
+"158",60,"Los Angeles - California ",407
+"159",61,"Los Angeles - California ",536
+"160",62,"Los Angeles - California ",662
+"161",63,"Los Angeles - California ",812
+"162",64,"Los Angeles - California ",1229
+"163",65,"Los Angeles - California ",1465
+"164",66,"Los Angeles - California ",1465
+"165",67,"Los Angeles - California ",1829
+"166",68,"Los Angeles - California ",2474
+"167",69,"Los Angeles - California ",3019
+"168",70,"Los Angeles - California ",3518
+"169",71,"Los Angeles - California ",4045
+"170",72,"Los Angeles - California ",4566
+"171",73,"Los Angeles - California ",4605
+"172",74,"Los Angeles - California ",5955
+"173",75,"Los Angeles - California ",6377
+"174",76,"Los Angeles - California ",6936
+"175",77,"Los Angeles - California ",7559
+"176",78,"Los Angeles - California ",7955
+"177",79,"Los Angeles - California ",8443
+"178",80,"Los Angeles - California ",8453
+"179",81,"Los Angeles - California ",8894
+"180",82,"Los Angeles - California ",9433
+"181",83,"Los Angeles - California ",10047
+"182",84,"Los Angeles - California ",10517
+"183",85,"Los Angeles - California ",10854
+"184",86,"Los Angeles - California ",11400
+"185",87,"Los Angeles - California ",12021
+"186",88,"Los Angeles - California ",12341
+"187",89,"Los Angeles - California ",13823
+"188",90,"Los Angeles - California ",15153
+"189",91,"Los Angeles - California ",16447
+"190",92,"Los Angeles - California ",17537
+"191",93,"Los Angeles - California ",18545
+"192",94,"Los Angeles - California ",19133
+"193",95,"Los Angeles - California ",19567
+"194",96,"Los Angeles - California ",20423
+"195",0,"Orange - California ",0
+"196",1,"Orange - California ",0
+"197",2,"Orange - California ",0
+"198",3,"Orange - California ",0
+"199",4,"Orange - California ",1
+"200",5,"Orange - California ",1
+"201",6,"Orange - California ",1
+"202",7,"Orange - California ",1
+"203",8,"Orange - California ",1
+"204",9,"Orange - California ",1
+"205",10,"Orange - California ",1
+"206",11,"Orange - California ",1
+"207",12,"Orange - California ",1
+"208",13,"Orange - California ",1
+"209",14,"Orange - California ",1
+"210",15,"Orange - California ",1
+"211",16,"Orange - California ",1
+"212",17,"Orange - California ",1
+"213",18,"Orange - California ",1
+"214",19,"Orange - California ",1
+"215",20,"Orange - California ",1
+"216",21,"Orange - California ",1
+"217",22,"Orange - California ",1
+"218",23,"Orange - California ",1
+"219",24,"Orange - California ",1
+"220",25,"Orange - California ",1
+"221",26,"Orange - California ",1
+"222",27,"Orange - California ",1
+"223",28,"Orange - California ",1
+"224",29,"Orange - California ",1
+"225",30,"Orange - California ",1
+"226",31,"Orange - California ",1
+"227",32,"Orange - California ",1
+"228",33,"Orange - California ",1
+"229",34,"Orange - California ",1
+"230",35,"Orange - California ",1
+"231",36,"Orange - California ",1
+"232",37,"Orange - California ",1
+"233",38,"Orange - California ",1
+"234",39,"Orange - California ",1
+"235",40,"Orange - California ",1
+"236",41,"Orange - California ",1
+"237",42,"Orange - California ",3
+"238",43,"Orange - California ",3
+"239",44,"Orange - California ",3
+"240",45,"Orange - California ",3
+"241",46,"Orange - California ",3
+"242",47,"Orange - California ",4
+"243",48,"Orange - California ",5
+"244",49,"Orange - California ",5
+"245",50,"Orange - California ",6
+"246",51,"Orange - California ",9
+"247",52,"Orange - California ",14
+"248",53,"Orange - California ",14
+"249",54,"Orange - California ",17
+"250",55,"Orange - California ",22
+"251",56,"Orange - California ",29
+"252",57,"Orange - California ",53
+"253",58,"Orange - California ",65
+"254",59,"Orange - California ",78
+"255",60,"Orange - California ",95
+"256",61,"Orange - California ",125
+"257",62,"Orange - California ",152
+"258",63,"Orange - California ",187
+"259",64,"Orange - California ",256
+"260",65,"Orange - California ",321
+"261",66,"Orange - California ",403
+"262",67,"Orange - California ",431
+"263",68,"Orange - California ",464
+"264",69,"Orange - California ",502
+"265",70,"Orange - California ",606
+"266",71,"Orange - California ",656
+"267",72,"Orange - California ",711
+"268",73,"Orange - California ",786
+"269",74,"Orange - California ",834
+"270",75,"Orange - California ",882
+"271",76,"Orange - California ",931
+"272",77,"Orange - California ",1016
+"273",78,"Orange - California ",1079
+"274",79,"Orange - California ",1138
+"275",80,"Orange - California ",1221
+"276",81,"Orange - California ",1277
+"277",82,"Orange - California ",1283
+"278",83,"Orange - California ",1299
+"279",84,"Orange - California ",1376
+"280",85,"Orange - California ",1425
+"281",86,"Orange - California ",1501
+"282",87,"Orange - California ",1556
+"283",88,"Orange - California ",1636
+"284",89,"Orange - California ",1676
+"285",90,"Orange - California ",1691
+"286",91,"Orange - California ",1753
+"287",92,"Orange - California ",1827
+"288",93,"Orange - California ",1845
+"289",94,"Orange - California ",1969
+"290",95,"Orange - California ",2074
+"291",96,"Orange - California ",2126
+"292",0,"San Diego - California ",0
+"293",1,"San Diego - California ",0
+"294",2,"San Diego - California ",0
+"295",3,"San Diego - California ",0
+"296",4,"San Diego - California ",0
+"297",5,"San Diego - California ",0
+"298",6,"San Diego - California ",0
+"299",7,"San Diego - California ",0
+"300",8,"San Diego - California ",0
+"301",9,"San Diego - California ",0
+"302",10,"San Diego - California ",0
+"303",11,"San Diego - California ",0
+"304",12,"San Diego - California ",0
+"305",13,"San Diego - California ",0
+"306",14,"San Diego - California ",0
+"307",15,"San Diego - California ",0
+"308",16,"San Diego - California ",0
+"309",17,"San Diego - California ",0
+"310",18,"San Diego - California ",0
+"311",19,"San Diego - California ",0
+"312",20,"San Diego - California ",1
+"313",21,"San Diego - California ",1
+"314",22,"San Diego - California ",2
+"315",23,"San Diego - California ",2
+"316",24,"San Diego - California ",2
+"317",25,"San Diego - California ",2
+"318",26,"San Diego - California ",2
+"319",27,"San Diego - California ",2
+"320",28,"San Diego - California ",2
+"321",29,"San Diego - California ",2
+"322",30,"San Diego - California ",2
+"323",31,"San Diego - California ",2
+"324",32,"San Diego - California ",2
+"325",33,"San Diego - California ",2
+"326",34,"San Diego - California ",2
+"327",35,"San Diego - California ",2
+"328",36,"San Diego - California ",2
+"329",37,"San Diego - California ",2
+"330",38,"San Diego - California ",2
+"331",39,"San Diego - California ",2
+"332",40,"San Diego - California ",2
+"333",41,"San Diego - California ",2
+"334",42,"San Diego - California ",2
+"335",43,"San Diego - California ",3
+"336",44,"San Diego - California ",3
+"337",45,"San Diego - California ",3
+"338",46,"San Diego - California ",3
+"339",47,"San Diego - California ",3
+"340",48,"San Diego - California ",3
+"341",49,"San Diego - California ",3
+"342",50,"San Diego - California ",5
+"343",51,"San Diego - California ",8
+"344",52,"San Diego - California ",10
+"345",53,"San Diego - California ",16
+"346",54,"San Diego - California ",55
+"347",55,"San Diego - California ",55
+"348",56,"San Diego - California ",60
+"349",57,"San Diego - California ",80
+"350",58,"San Diego - California ",127
+"351",59,"San Diego - California ",127
+"352",60,"San Diego - California ",155
+"353",61,"San Diego - California ",201
+"354",62,"San Diego - California ",226
+"355",63,"San Diego - California ",238
+"356",64,"San Diego - California ",293
+"357",65,"San Diego - California ",341
+"358",66,"San Diego - California ",413
+"359",67,"San Diego - California ",484
+"360",68,"San Diego - California ",515
+"361",69,"San Diego - California ",603
+"362",70,"San Diego - California ",733
+"363",71,"San Diego - California ",849
+"364",72,"San Diego - California ",966
+"365",73,"San Diego - California ",1112
+"366",74,"San Diego - California ",1209
+"367",75,"San Diego - California ",1326
+"368",76,"San Diego - California ",1404
+"369",77,"San Diego - California ",1454
+"370",78,"San Diego - California ",1530
+"371",79,"San Diego - California ",1628
+"372",80,"San Diego - California ",1693
+"373",81,"San Diego - California ",1761
+"374",82,"San Diego - California ",1804
+"375",83,"San Diego - California ",1847
+"376",84,"San Diego - California ",1930
+"377",85,"San Diego - California ",2012
+"378",86,"San Diego - California ",2087
+"379",87,"San Diego - California ",2158
+"380",88,"San Diego - California ",2213
+"381",89,"San Diego - California ",2268
+"382",90,"San Diego - California ",2325
+"383",91,"San Diego - California ",2491
+"384",92,"San Diego - California ",2643
+"385",93,"San Diego - California ",2826
+"386",94,"San Diego - California ",2943
+"387",95,"San Diego - California ",2943
+"388",96,"San Diego - California ",3043
+"389",0,"San Francisco - California ",0
+"390",1,"San Francisco - California ",0
+"391",2,"San Francisco - California ",0
+"392",3,"San Francisco - California ",0
+"393",4,"San Francisco - California ",0
+"394",5,"San Francisco - California ",0
+"395",6,"San Francisco - California ",0
+"396",7,"San Francisco - California ",0
+"397",8,"San Francisco - California ",0
+"398",9,"San Francisco - California ",0
+"399",10,"San Francisco - California ",0
+"400",11,"San Francisco - California ",0
+"401",12,"San Francisco - California ",0
+"402",13,"San Francisco - California ",0
+"403",14,"San Francisco - California ",0
+"404",15,"San Francisco - California ",0
+"405",16,"San Francisco - California ",0
+"406",17,"San Francisco - California ",0
+"407",18,"San Francisco - California ",0
+"408",19,"San Francisco - California ",0
+"409",20,"San Francisco - California ",0
+"410",21,"San Francisco - California ",0
+"411",22,"San Francisco - California ",0
+"412",23,"San Francisco - California ",0
+"413",24,"San Francisco - California ",0
+"414",25,"San Francisco - California ",0
+"415",26,"San Francisco - California ",0
+"416",27,"San Francisco - California ",0
+"417",28,"San Francisco - California ",0
+"418",29,"San Francisco - California ",0
+"419",30,"San Francisco - California ",0
+"420",31,"San Francisco - California ",0
+"421",32,"San Francisco - California ",0
+"422",33,"San Francisco - California ",0
+"423",34,"San Francisco - California ",0
+"424",35,"San Francisco - California ",0
+"425",36,"San Francisco - California ",0
+"426",37,"San Francisco - California ",0
+"427",38,"San Francisco - California ",0
+"428",39,"San Francisco - California ",0
+"429",40,"San Francisco - California ",0
+"430",41,"San Francisco - California ",0
+"431",42,"San Francisco - California ",0
+"432",43,"San Francisco - California ",2
+"433",44,"San Francisco - California ",2
+"434",45,"San Francisco - California ",9
+"435",46,"San Francisco - California ",9
+"436",47,"San Francisco - California ",9
+"437",48,"San Francisco - California ",14
+"438",49,"San Francisco - California ",14
+"439",50,"San Francisco - California ",18
+"440",51,"San Francisco - California ",23
+"441",52,"San Francisco - California ",28
+"442",53,"San Francisco - California ",28
+"443",54,"San Francisco - California ",40
+"444",55,"San Francisco - California ",43
+"445",56,"San Francisco - California ",51
+"446",57,"San Francisco - California ",70
+"447",58,"San Francisco - California ",76
+"448",59,"San Francisco - California ",84
+"449",60,"San Francisco - California ",108
+"450",61,"San Francisco - California ",131
+"451",62,"San Francisco - California ",152
+"452",63,"San Francisco - California ",178
+"453",64,"San Francisco - California ",223
+"454",65,"San Francisco - California ",279
+"455",66,"San Francisco - California ",308
+"456",67,"San Francisco - California ",340
+"457",68,"San Francisco - California ",374
+"458",69,"San Francisco - California ",397
+"459",70,"San Francisco - California ",434
+"460",71,"San Francisco - California ",450
+"461",72,"San Francisco - California ",497
+"462",73,"San Francisco - California ",529
+"463",74,"San Francisco - California ",568
+"464",75,"San Francisco - California ",583
+"465",76,"San Francisco - California ",622
+"466",77,"San Francisco - California ",676
+"467",78,"San Francisco - California ",724
+"468",79,"San Francisco - California ",797
+"469",80,"San Francisco - California ",857
+"470",81,"San Francisco - California ",872
+"471",82,"San Francisco - California ",957
+"472",83,"San Francisco - California ",987
+"473",84,"San Francisco - California ",1013
+"474",85,"San Francisco - California ",1019
+"475",86,"San Francisco - California ",1058
+"476",87,"San Francisco - California ",1137
+"477",88,"San Francisco - California ",1157
+"478",89,"San Francisco - California ",1216
+"479",90,"San Francisco - California ",1231
+"480",91,"San Francisco - California ",1233
+"481",92,"San Francisco - California ",1302
+"482",93,"San Francisco - California ",1340
+"483",94,"San Francisco - California ",1354
+"484",95,"San Francisco - California ",1408
+"485",96,"San Francisco - California ",1424
+"486",0,"Santa Clara - California ",0
+"487",1,"Santa Clara - California ",0
+"488",2,"Santa Clara - California ",0
+"489",3,"Santa Clara - California ",0
+"490",4,"Santa Clara - California ",0
+"491",5,"Santa Clara - California ",0
+"492",6,"Santa Clara - California ",0
+"493",7,"Santa Clara - California ",0
+"494",8,"Santa Clara - California ",0
+"495",9,"Santa Clara - California ",1
+"496",10,"Santa Clara - California ",1
+"497",11,"Santa Clara - California ",1
+"498",12,"Santa Clara - California ",2
+"499",13,"Santa Clara - California ",2
+"500",14,"Santa Clara - California ",2
+"501",15,"Santa Clara - California ",2
+"502",16,"Santa Clara - California ",2
+"503",17,"Santa Clara - California ",2
+"504",18,"Santa Clara - California ",2
+"505",19,"Santa Clara - California ",2
+"506",20,"Santa Clara - California ",2
+"507",21,"Santa Clara - California ",2
+"508",22,"Santa Clara - California ",2
+"509",23,"Santa Clara - California ",2
+"510",24,"Santa Clara - California ",2
+"511",25,"Santa Clara - California ",2
+"512",26,"Santa Clara - California ",2
+"513",27,"Santa Clara - California ",2
+"514",28,"Santa Clara - California ",2
+"515",29,"Santa Clara - California ",2
+"516",30,"Santa Clara - California ",2
+"517",31,"Santa Clara - California ",2
+"518",32,"Santa Clara - California ",2
+"519",33,"Santa Clara - California ",2
+"520",34,"Santa Clara - California ",2
+"521",35,"Santa Clara - California ",2
+"522",36,"Santa Clara - California ",2
+"523",37,"Santa Clara - California ",2
+"524",38,"Santa Clara - California ",3
+"525",39,"Santa Clara - California ",3
+"526",40,"Santa Clara - California ",9
+"527",41,"Santa Clara - California ",11
+"528",42,"Santa Clara - California ",11
+"529",43,"Santa Clara - California ",20
+"530",44,"Santa Clara - California ",20
+"531",45,"Santa Clara - California ",32
+"532",46,"Santa Clara - California ",38
+"533",47,"Santa Clara - California ",38
+"534",48,"Santa Clara - California ",43
+"535",49,"Santa Clara - California ",48
+"536",50,"Santa Clara - California ",52
+"537",51,"Santa Clara - California ",79
+"538",52,"Santa Clara - California ",95
+"539",53,"Santa Clara - California ",91
+"540",54,"Santa Clara - California ",138
+"541",55,"Santa Clara - California ",155
+"542",56,"Santa Clara - California ",175
+"543",57,"Santa Clara - California ",189
+"544",58,"Santa Clara - California ",196
+"545",59,"Santa Clara - California ",263
+"546",60,"Santa Clara - California ",263
+"547",61,"Santa Clara - California ",302
+"548",62,"Santa Clara - California ",375
+"549",63,"Santa Clara - California ",459
+"550",64,"Santa Clara - California ",542
+"551",65,"Santa Clara - California ",574
+"552",66,"Santa Clara - California ",591
+"553",67,"Santa Clara - California ",646
+"554",68,"Santa Clara - California ",848
+"555",69,"Santa Clara - California ",890
+"556",70,"Santa Clara - California ",956
+"557",71,"Santa Clara - California ",1019
+"558",72,"Santa Clara - California ",1019
+"559",73,"Santa Clara - California ",1148
+"560",74,"Santa Clara - California ",1207
+"561",75,"Santa Clara - California ",1207
+"562",76,"Santa Clara - California ",1285
+"563",77,"Santa Clara - California ",1380
+"564",78,"Santa Clara - California ",1380
+"565",79,"Santa Clara - California ",1442
+"566",80,"Santa Clara - California ",1484
+"567",81,"Santa Clara - California ",1566
+"568",82,"Santa Clara - California ",1666
+"569",83,"Santa Clara - California ",1666
+"570",84,"Santa Clara - California ",1793
+"571",85,"Santa Clara - California ",1833
+"572",86,"Santa Clara - California ",1870
+"573",87,"Santa Clara - California ",1870
+"574",88,"Santa Clara - California ",1870
+"575",89,"Santa Clara - California ",1922
+"576",90,"Santa Clara - California ",1922
+"577",91,"Santa Clara - California ",1962
+"578",92,"Santa Clara - California ",1987
+"579",93,"Santa Clara - California ",2018
+"580",94,"Santa Clara - California ",2040
+"581",95,"Santa Clara - California ",2084
+"582",96,"Santa Clara - California ",2105
+"583",0,"Cook - Illinois ",0
+"584",1,"Cook - Illinois ",0
+"585",2,"Cook - Illinois ",1
+"586",3,"Cook - Illinois ",1
+"587",4,"Cook - Illinois ",1
+"588",5,"Cook - Illinois ",1
+"589",6,"Cook - Illinois ",1
+"590",7,"Cook - Illinois ",1
+"591",8,"Cook - Illinois ",1
+"592",9,"Cook - Illinois ",2
+"593",10,"Cook - Illinois ",2
+"594",11,"Cook - Illinois ",2
+"595",12,"Cook - Illinois ",2
+"596",13,"Cook - Illinois ",2
+"597",14,"Cook - Illinois ",2
+"598",15,"Cook - Illinois ",2
+"599",16,"Cook - Illinois ",2
+"600",17,"Cook - Illinois ",2
+"601",18,"Cook - Illinois ",2
+"602",19,"Cook - Illinois ",2
+"603",20,"Cook - Illinois ",2
+"604",21,"Cook - Illinois ",2
+"605",22,"Cook - Illinois ",2
+"606",23,"Cook - Illinois ",2
+"607",24,"Cook - Illinois ",2
+"608",25,"Cook - Illinois ",2
+"609",26,"Cook - Illinois ",2
+"610",27,"Cook - Illinois ",2
+"611",28,"Cook - Illinois ",2
+"612",29,"Cook - Illinois ",2
+"613",30,"Cook - Illinois ",2
+"614",31,"Cook - Illinois ",2
+"615",32,"Cook - Illinois ",2
+"616",33,"Cook - Illinois ",2
+"617",34,"Cook - Illinois ",2
+"618",35,"Cook - Illinois ",2
+"619",36,"Cook - Illinois ",2
+"620",37,"Cook - Illinois ",2
+"621",38,"Cook - Illinois ",2
+"622",39,"Cook - Illinois ",3
+"623",40,"Cook - Illinois ",4
+"624",41,"Cook - Illinois ",4
+"625",42,"Cook - Illinois ",4
+"626",43,"Cook - Illinois ",5
+"627",44,"Cook - Illinois ",5
+"628",45,"Cook - Illinois ",6
+"629",46,"Cook - Illinois ",7
+"630",47,"Cook - Illinois ",7
+"631",48,"Cook - Illinois ",11
+"632",49,"Cook - Illinois ",22
+"633",50,"Cook - Illinois ",27
+"634",51,"Cook - Illinois ",40
+"635",52,"Cook - Illinois ",50
+"636",53,"Cook - Illinois ",50
+"637",54,"Cook - Illinois ",62
+"638",55,"Cook - Illinois ",107
+"639",56,"Cook - Illinois ",178
+"640",57,"Cook - Illinois ",278
+"641",58,"Cook - Illinois ",278
+"642",59,"Cook - Illinois ",548
+"643",60,"Cook - Illinois ",805
+"644",61,"Cook - Illinois ",922
+"645",62,"Cook - Illinois ",1194
+"646",63,"Cook - Illinois ",1418
+"647",64,"Cook - Illinois ",1418
+"648",65,"Cook - Illinois ",2239
+"649",66,"Cook - Illinois ",2613
+"650",67,"Cook - Illinois ",3445
+"651",68,"Cook - Illinois ",3727
+"652",69,"Cook - Illinois ",4496
+"653",70,"Cook - Illinois ",5152
+"654",71,"Cook - Illinois ",5575
+"655",72,"Cook - Illinois ",6111
+"656",73,"Cook - Illinois ",7439
+"657",74,"Cook - Illinois ",8034
+"658",75,"Cook - Illinois ",8728
+"659",76,"Cook - Illinois ",9509
+"660",77,"Cook - Illinois ",10520
+"661",78,"Cook - Illinois ",11415
+"662",79,"Cook - Illinois ",12472
+"663",80,"Cook - Illinois ",13417
+"664",81,"Cook - Illinois ",14585
+"665",82,"Cook - Illinois ",15474
+"666",83,"Cook - Illinois ",16323
+"667",84,"Cook - Illinois ",17306
+"668",85,"Cook - Illinois ",18087
+"669",86,"Cook - Illinois ",19391
+"670",87,"Cook - Illinois ",20395
+"671",88,"Cook - Illinois ",21272
+"672",89,"Cook - Illinois ",22101
+"673",90,"Cook - Illinois ",23181
+"674",91,"Cook - Illinois ",24546
+"675",92,"Cook - Illinois ",25811
+"676",93,"Cook - Illinois ",27616
+"677",94,"Cook - Illinois ",29058
+"678",95,"Cook - Illinois ",30574
+"679",96,"Cook - Illinois ",31953
+"680",0,"Suffolk - Massachusetts ",0
+"681",1,"Suffolk - Massachusetts ",0
+"682",2,"Suffolk - Massachusetts ",0
+"683",3,"Suffolk - Massachusetts ",0
+"684",4,"Suffolk - Massachusetts ",0
+"685",5,"Suffolk - Massachusetts ",0
+"686",6,"Suffolk - Massachusetts ",0
+"687",7,"Suffolk - Massachusetts ",0
+"688",8,"Suffolk - Massachusetts ",0
+"689",9,"Suffolk - Massachusetts ",0
+"690",10,"Suffolk - Massachusetts ",1
+"691",11,"Suffolk - Massachusetts ",1
+"692",12,"Suffolk - Massachusetts ",1
+"693",13,"Suffolk - Massachusetts ",1
+"694",14,"Suffolk - Massachusetts ",1
+"695",15,"Suffolk - Massachusetts ",1
+"696",16,"Suffolk - Massachusetts ",1
+"697",17,"Suffolk - Massachusetts ",1
+"698",18,"Suffolk - Massachusetts ",1
+"699",19,"Suffolk - Massachusetts ",1
+"700",20,"Suffolk - Massachusetts ",1
+"701",21,"Suffolk - Massachusetts ",1
+"702",22,"Suffolk - Massachusetts ",1
+"703",23,"Suffolk - Massachusetts ",1
+"704",24,"Suffolk - Massachusetts ",1
+"705",25,"Suffolk - Massachusetts ",1
+"706",26,"Suffolk - Massachusetts ",1
+"707",27,"Suffolk - Massachusetts ",1
+"708",28,"Suffolk - Massachusetts ",1
+"709",29,"Suffolk - Massachusetts ",1
+"710",30,"Suffolk - Massachusetts ",1
+"711",31,"Suffolk - Massachusetts ",1
+"712",32,"Suffolk - Massachusetts ",1
+"713",33,"Suffolk - Massachusetts ",1
+"714",34,"Suffolk - Massachusetts ",1
+"715",35,"Suffolk - Massachusetts ",1
+"716",36,"Suffolk - Massachusetts ",1
+"717",37,"Suffolk - Massachusetts ",1
+"718",38,"Suffolk - Massachusetts ",1
+"719",39,"Suffolk - Massachusetts ",1
+"720",40,"Suffolk - Massachusetts ",1
+"721",41,"Suffolk - Massachusetts ",1
+"722",42,"Suffolk - Massachusetts ",1
+"723",43,"Suffolk - Massachusetts ",1
+"724",44,"Suffolk - Massachusetts ",3
+"725",45,"Suffolk - Massachusetts ",3
+"726",46,"Suffolk - Massachusetts ",8
+"727",47,"Suffolk - Massachusetts ",8
+"728",48,"Suffolk - Massachusetts ",10
+"729",49,"Suffolk - Massachusetts ",20
+"730",50,"Suffolk - Massachusetts ",22
+"731",51,"Suffolk - Massachusetts ",26
+"732",52,"Suffolk - Massachusetts ",27
+"733",53,"Suffolk - Massachusetts ",27
+"734",54,"Suffolk - Massachusetts ",36
+"735",55,"Suffolk - Massachusetts ",42
+"736",56,"Suffolk - Massachusetts ",51
+"737",57,"Suffolk - Massachusetts ",72
+"738",58,"Suffolk - Massachusetts ",86
+"739",59,"Suffolk - Massachusetts ",108
+"740",60,"Suffolk - Massachusetts ",126
+"741",61,"Suffolk - Massachusetts ",154
+"742",62,"Suffolk - Massachusetts ",234
+"743",63,"Suffolk - Massachusetts ",342
+"744",64,"Suffolk - Massachusetts ",448
+"745",65,"Suffolk - Massachusetts ",631
+"746",66,"Suffolk - Massachusetts ",843
+"747",67,"Suffolk - Massachusetts ",940
+"748",68,"Suffolk - Massachusetts ",1115
+"749",69,"Suffolk - Massachusetts ",1373
+"750",70,"Suffolk - Massachusetts ",1624
+"751",71,"Suffolk - Massachusetts ",1896
+"752",72,"Suffolk - Massachusetts ",2183
+"753",73,"Suffolk - Massachusetts ",2429
+"754",74,"Suffolk - Massachusetts ",2658
+"755",75,"Suffolk - Massachusetts ",2929
+"756",76,"Suffolk - Massachusetts ",3245
+"757",77,"Suffolk - Massachusetts ",3600
+"758",78,"Suffolk - Massachusetts ",4041
+"759",79,"Suffolk - Massachusetts ",4534
+"760",80,"Suffolk - Massachusetts ",4926
+"761",81,"Suffolk - Massachusetts ",5359
+"762",82,"Suffolk - Massachusetts ",5579
+"763",83,"Suffolk - Massachusetts ",5872
+"764",84,"Suffolk - Massachusetts ",6279
+"765",85,"Suffolk - Massachusetts ",6820
+"766",86,"Suffolk - Massachusetts ",7272
+"767",87,"Suffolk - Massachusetts ",7696
+"768",88,"Suffolk - Massachusetts ",8074
+"769",89,"Suffolk - Massachusetts ",8074
+"770",90,"Suffolk - Massachusetts ",8669
+"771",91,"Suffolk - Massachusetts ",9060
+"772",92,"Suffolk - Massachusetts ",9739
+"773",93,"Suffolk - Massachusetts ",10724
+"774",94,"Suffolk - Massachusetts ",11218
+"775",95,"Suffolk - Massachusetts ",11543
+"776",96,"Suffolk - Massachusetts ",11883
+"777",0,"Snohomish - Washington ",0
+"778",1,"Snohomish - Washington ",0
+"779",2,"Snohomish - Washington ",0
+"780",3,"Snohomish - Washington ",0
+"781",4,"Snohomish - Washington ",0
+"782",5,"Snohomish - Washington ",0
+"783",6,"Snohomish - Washington ",0
+"784",7,"Snohomish - Washington ",0
+"785",8,"Snohomish - Washington ",0
+"786",9,"Snohomish - Washington ",0
+"787",10,"Snohomish - Washington ",0
+"788",11,"Snohomish - Washington ",0
+"789",12,"Snohomish - Washington ",0
+"790",13,"Snohomish - Washington ",0
+"791",14,"Snohomish - Washington ",0
+"792",15,"Snohomish - Washington ",0
+"793",16,"Snohomish - Washington ",0
+"794",17,"Snohomish - Washington ",0
+"795",18,"Snohomish - Washington ",0
+"796",19,"Snohomish - Washington ",0
+"797",20,"Snohomish - Washington ",0
+"798",21,"Snohomish - Washington ",0
+"799",22,"Snohomish - Washington ",0
+"800",23,"Snohomish - Washington ",0
+"801",24,"Snohomish - Washington ",0
+"802",25,"Snohomish - Washington ",0
+"803",26,"Snohomish - Washington ",0
+"804",27,"Snohomish - Washington ",0
+"805",28,"Snohomish - Washington ",0
+"806",29,"Snohomish - Washington ",0
+"807",30,"Snohomish - Washington ",0
+"808",31,"Snohomish - Washington ",0
+"809",32,"Snohomish - Washington ",0
+"810",33,"Snohomish - Washington ",0
+"811",34,"Snohomish - Washington ",0
+"812",35,"Snohomish - Washington ",0
+"813",36,"Snohomish - Washington ",0
+"814",37,"Snohomish - Washington ",0
+"815",38,"Snohomish - Washington ",1
+"816",39,"Snohomish - Washington ",2
+"817",40,"Snohomish - Washington ",4
+"818",41,"Snohomish - Washington ",6
+"819",42,"Snohomish - Washington ",8
+"820",43,"Snohomish - Washington ",18
+"821",44,"Snohomish - Washington ",19
+"822",45,"Snohomish - Washington ",27
+"823",46,"Snohomish - Washington ",31
+"824",47,"Snohomish - Washington ",31
+"825",48,"Snohomish - Washington ",37
+"826",49,"Snohomish - Washington ",68
+"827",50,"Snohomish - Washington ",108
+"828",51,"Snohomish - Washington ",133
+"829",52,"Snohomish - Washington ",154
+"830",53,"Snohomish - Washington ",154
+"831",54,"Snohomish - Washington ",200
+"832",55,"Snohomish - Washington ",266
+"833",56,"Snohomish - Washington ",310
+"834",57,"Snohomish - Washington ",348
+"835",58,"Snohomish - Washington ",385
+"836",59,"Snohomish - Washington ",447
+"837",60,"Snohomish - Washington ",480
+"838",61,"Snohomish - Washington ",519
+"839",62,"Snohomish - Washington ",614
+"840",63,"Snohomish - Washington ",634
+"841",64,"Snohomish - Washington ",778
+"842",65,"Snohomish - Washington ",912
+"843",66,"Snohomish - Washington ",913
+"844",67,"Snohomish - Washington ",912
+"845",68,"Snohomish - Washington ",1068
+"846",69,"Snohomish - Washington ",1229
+"847",70,"Snohomish - Washington ",1304
+"848",71,"Snohomish - Washington ",1376
+"849",72,"Snohomish - Washington ",1376
+"850",73,"Snohomish - Washington ",1503
+"851",74,"Snohomish - Washington ",1559
+"852",75,"Snohomish - Washington ",1603
+"853",76,"Snohomish - Washington ",1659
+"854",77,"Snohomish - Washington ",1695
+"855",78,"Snohomish - Washington ",1745
+"856",79,"Snohomish - Washington ",1802
+"857",80,"Snohomish - Washington ",1835
+"858",81,"Snohomish - Washington ",1867
+"859",82,"Snohomish - Washington ",1907
+"860",83,"Snohomish - Washington ",1950
+"861",84,"Snohomish - Washington ",1988
+"862",85,"Snohomish - Washington ",2032
+"863",86,"Snohomish - Washington ",2056
+"864",87,"Snohomish - Washington ",2093
+"865",88,"Snohomish - Washington ",2143
+"866",89,"Snohomish - Washington ",2163
+"867",90,"Snohomish - Washington ",2189
+"868",91,"Snohomish - Washington ",2209
+"869",92,"Snohomish - Washington ",2216
+"870",93,"Snohomish - Washington ",2243
+"871",94,"Snohomish - Washington ",2297
+"872",95,"Snohomish - Washington ",2311
+"873",96,"Snohomish - Washington ",2332
+"874",0,"Dane - Wisconsin ",0
+"875",1,"Dane - Wisconsin ",0
+"876",2,"Dane - Wisconsin ",0
+"877",3,"Dane - Wisconsin ",0
+"878",4,"Dane - Wisconsin ",0
+"879",5,"Dane - Wisconsin ",0
+"880",6,"Dane - Wisconsin ",0
+"881",7,"Dane - Wisconsin ",0
+"882",8,"Dane - Wisconsin ",0
+"883",9,"Dane - Wisconsin ",0
+"884",10,"Dane - Wisconsin ",0
+"885",11,"Dane - Wisconsin ",0
+"886",12,"Dane - Wisconsin ",0
+"887",13,"Dane - Wisconsin ",0
+"888",14,"Dane - Wisconsin ",0
+"889",15,"Dane - Wisconsin ",0
+"890",16,"Dane - Wisconsin ",0
+"891",17,"Dane - Wisconsin ",0
+"892",18,"Dane - Wisconsin ",0
+"893",19,"Dane - Wisconsin ",0
+"894",20,"Dane - Wisconsin ",0
+"895",21,"Dane - Wisconsin ",0
+"896",22,"Dane - Wisconsin ",0
+"897",23,"Dane - Wisconsin ",0
+"898",24,"Dane - Wisconsin ",0
+"899",25,"Dane - Wisconsin ",0
+"900",26,"Dane - Wisconsin ",0
+"901",27,"Dane - Wisconsin ",0
+"902",28,"Dane - Wisconsin ",0
+"903",29,"Dane - Wisconsin ",0
+"904",30,"Dane - Wisconsin ",0
+"905",31,"Dane - Wisconsin ",0
+"906",32,"Dane - Wisconsin ",0
+"907",33,"Dane - Wisconsin ",0
+"908",34,"Dane - Wisconsin ",0
+"909",35,"Dane - Wisconsin ",0
+"910",36,"Dane - Wisconsin ",0
+"911",37,"Dane - Wisconsin ",0
+"912",38,"Dane - Wisconsin ",0
+"913",39,"Dane - Wisconsin ",0
+"914",40,"Dane - Wisconsin ",0
+"915",41,"Dane - Wisconsin ",0
+"916",42,"Dane - Wisconsin ",0
+"917",43,"Dane - Wisconsin ",0
+"918",44,"Dane - Wisconsin ",0
+"919",45,"Dane - Wisconsin ",0
+"920",46,"Dane - Wisconsin ",0
+"921",47,"Dane - Wisconsin ",0
+"922",48,"Dane - Wisconsin ",2
+"923",49,"Dane - Wisconsin ",2
+"924",50,"Dane - Wisconsin ",4
+"925",51,"Dane - Wisconsin ",5
+"926",52,"Dane - Wisconsin ",6
+"927",53,"Dane - Wisconsin ",6
+"928",54,"Dane - Wisconsin ",10
+"929",55,"Dane - Wisconsin ",19
+"930",56,"Dane - Wisconsin ",23
+"931",57,"Dane - Wisconsin ",27
+"932",58,"Dane - Wisconsin ",32
+"933",59,"Dane - Wisconsin ",49
+"934",60,"Dane - Wisconsin ",61
+"935",61,"Dane - Wisconsin ",70
+"936",62,"Dane - Wisconsin ",72
+"937",63,"Dane - Wisconsin ",88
+"938",64,"Dane - Wisconsin ",134
+"939",65,"Dane - Wisconsin ",158
+"940",66,"Dane - Wisconsin ",172
+"941",67,"Dane - Wisconsin ",183
+"942",68,"Dane - Wisconsin ",192
+"943",69,"Dane - Wisconsin ",214
+"944",70,"Dane - Wisconsin ",215
+"945",71,"Dane - Wisconsin ",238
+"946",72,"Dane - Wisconsin ",252
+"947",73,"Dane - Wisconsin ",269
+"948",74,"Dane - Wisconsin ",280
+"949",75,"Dane - Wisconsin ",287
+"950",76,"Dane - Wisconsin ",289
+"951",77,"Dane - Wisconsin ",303
+"952",78,"Dane - Wisconsin ",307
+"953",79,"Dane - Wisconsin ",313
+"954",80,"Dane - Wisconsin ",327
+"955",81,"Dane - Wisconsin ",334
+"956",82,"Dane - Wisconsin ",340
+"957",83,"Dane - Wisconsin ",344
+"958",84,"Dane - Wisconsin ",351
+"959",85,"Dane - Wisconsin ",352
+"960",86,"Dane - Wisconsin ",359
+"961",87,"Dane - Wisconsin ",358
+"962",88,"Dane - Wisconsin ",361
+"963",89,"Dane - Wisconsin ",364
+"964",90,"Dane - Wisconsin ",382
+"965",91,"Dane - Wisconsin ",386
+"966",92,"Dane - Wisconsin ",387
+"967",93,"Dane - Wisconsin ",395
+"968",94,"Dane - Wisconsin ",401
+"969",95,"Dane - Wisconsin ",405
+"970",96,"Dane - Wisconsin ",412
