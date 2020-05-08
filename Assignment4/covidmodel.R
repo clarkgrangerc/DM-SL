@@ -232,6 +232,47 @@ glmcovid = do(50)*{
 errorrate = mean(glmcovid$result, na.rm = FALSE)
 
 
+####################################################################
+############## vGLM  with Total Cases ###############################
+covid3= covid[, -c(1:3, 5, 37)]
+
+m13 <- vglm(cases ~ ., family = pospoisson(), data = covid3)
+yhat2 = predict(m13, type = 'response')
+modelfit2= as.data.frame(cbind(yhat2, covid3$cases))
+
+
+ggplot(modelfit2, mapping = aes(V2, V1))+geom_point()+geom_abline(slope = 1,intercept = 0)+
+  coord_cartesian(xlim = c(0, 20000 + 10))
+
+ggplot(covid, mapping = aes(days_since_first_infection1,cases1))+geom_point()
+ 
+
+vglmerr2 = do(300)*{
+  train_cases = sample.int(n, n_train, replace=FALSE)
+  test_cases = setdiff(1:n, train_cases)
+  glm_train = covid3[train_cases,]
+  glm_test = covid3[test_cases,]
+  lm5 = vglm(cases ~ ., family = pospoisson(), data = glm_train)
+  
+  yhat= predict(lm5, glm_test, type="response")
+  error_rate = rmse(glm_test$cases, yhat)}
+mean(vglmerr2$result, na.rm = FALSE)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -253,13 +294,13 @@ ggplot(modelfit1, mapping = aes(V2, V1))+geom_point()+geom_abline(slope = 1,inte
 vglmerr = do(300)*{
   train_cases = sample.int(n, n_train, replace=FALSE)
   test_cases = setdiff(1:n, train_cases)
-  glm_train = covid[train_cases,]
-  glm_test = covid[test_cases,]
-  lm5 = vglm(cases ~ ., family = pospoisson(), data = glm_train)
+  glm_train = covid1[train_cases,]
+  glm_test = covid1[test_cases,]
+  lm5 = vglm(cases1 ~ ., family = pospoisson(), data = glm_train)
   
   yhat= predict(lm5, glm_test, type="response")
-  error_rate = rmse(glm_test$cases, yhat)}
-errorrate = mean(glmcovid$result, na.rm = FALSE)
+  error_rate = rmse(glm_test$cases1, yhat)}
+mean(vglmerr$result, na.rm = FALSE)
 
 
 

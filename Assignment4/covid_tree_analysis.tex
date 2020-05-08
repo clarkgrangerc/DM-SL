@@ -124,6 +124,9 @@
 \section{Cross sectional Analysis of Covid-19 Spread in US
 Counties}\label{cross-sectional-analysis-of-covid-19-spread-in-us-counties}}
 
+\hypertarget{introduction}{%
+\section{Introduction}\label{introduction}}
+
 Covid-19 or corona virus started its spread from China at the end of
 Year 2020. By February 2020, cases start to appear in the United States
 and spread rapidly across all the states. The growth in the number of
@@ -141,14 +144,6 @@ Seattle \& Los Angeles reported their first cases before these cities. A
 simple line graphs for some counties that saw their first case of
 infection around the same time shows the difference in the rate of virus
 spread.
-
-\begin{verbatim}
-## Warning: package 'ggplot2' was built under R version 3.6.2
-\end{verbatim}
-
-\begin{verbatim}
-## Warning: package 'ggrepel' was built under R version 3.6.2
-\end{verbatim}
 
 \begin{figure}
 \centering
@@ -176,19 +171,17 @@ spread.
 \item
   \textbf{Cases \& Deaths:} We collect the data of total number of
   covid-19 infection cases and deaths at county level as on April 30,
-  2010. The data has been obtained from NYTimes Github repository.
+  2010. The data has been obtained from NYTimes Github repository. We
+  selected 1462 counties which had non-zero number of deaths reported.
+  This was done because ACS data was only available for counties that
+  have any death reported for covid-19.We divided the total number of
+  cases by population to have cases per hundred thousand of population.
+  This gives a good comparison of cases across counties with different
+  population size. From now on we will refer to cases as cases per
+  hundred thousand of population. The density graph shows that a lot of
+  counties have lower number of cases and a very skewed distribution of
+  cases.
 \end{itemize}
-
-We selected 1462 counties which had non-zero number of deaths reported.
-This was done because ACS data was only available for counties that have
-any death reported for covid-19.
-
-We divided the total number of cases by population to have cases per
-hundred thousand of population. This gives a good comparison of cases
-across counties with different population size. From now on we will
-refer to cases as cases per hundred thousand of population. The density
-graph shows that a lot of counties have lower number of cases and a very
-skewed distribution of cases.
 
 \begin{figure}
 \centering
@@ -203,7 +196,7 @@ skewed distribution of cases.
   since 1st infection for all counties as on April 30, 2020. This
   variable measures the time period for spread of virus. A scatter plot
   of days since first infection and number of cases per 100 thousand
-  people shows that there is a general exponential trend for but some
+  people shows that there is a general exponential trend but some
   counties have been able to keep their number of cases down even though
   the got the virus before other counties.
 \end{itemize}
@@ -351,169 +344,6 @@ covid death rate in US counties. We include all the explanatory
 variables in our model to which of them are correalted with cases count.
 The summary of the model is provided in the appendix.
 
-\begin{verbatim}
-## Warning: package 'VGAM' was built under R version 3.6.3
-\end{verbatim}
-
-\begin{verbatim}
-## Loading required package: stats4
-\end{verbatim}
-
-\begin{verbatim}
-## Loading required package: splines
-\end{verbatim}
-
-\begin{verbatim}
-## 
-## Call:
-## vglm(formula = cases1 ~ ., family = pospoisson(), data = covid1)
-## 
-## Pearson residuals:
-##                    Min     1Q Median    3Q   Max
-## loglink(lambda) -27.12 -6.795 -3.276 2.381 248.3
-## 
-## Coefficients: 
-##                                                                Estimate
-## (Intercept)                                                  -3.219e+01
-## days_since_first_infection1                                   7.335e-03
-## Tests.per.100thousand                                         2.861e-04
-## stayhome                                                     -1.311e-02
-## Percent.of.adults.with.a.bachelor.s.degree.or.higher.2014.18 -4.185e+00
-## Unemployment_rate_2018                                       -3.766e+00
-## Total_age18to64                                              -4.171e+00
-## E_Total_Pop_SEX_Male                                          1.083e+01
-## E_Total_Pop_RACE_One_Race                                     1.315e+01
-## E_Total_Pop_RACE_White                                       -2.034e+00
-## E_Total_Pop_in_Households_Householder_Spouse                 -1.128e+00
-## E_Total_Pop_in_Households_Householder_Parent                  6.089e+00
-## E_Total_Pop_Over_15_MARITAL_STATUS_Divorced                  -6.925e+00
-## E_INDUSTRY_Administrative_Waste_Management                   -1.159e+01
-## E_INDUSTRY_Educational                                        1.678e+00
-## E_INDUSTRY_Healthcare_Social_Assistance                       6.860e+00
-## E_INDUSTRY_Arts_Entertainment_Recreation                     -5.160e+00
-## E_INDUSTRY_Accommodation_Food_Services                       -1.913e+01
-## E_INDUSTRY_Other_Services                                    -2.508e+01
-## E_INDUSTRY_Public_Administration                             -3.197e+00
-## ET_TRANSPORTATION_Total_Workers_Over_16                      -1.166e+00
-## E_TRANSPORTATION_Total_Workers_Over_16_Drove_Alone            1.863e+00
-## E_Total_Households_TYPE_Family                               -3.567e+00
-## E_Total_Households_WITH_INCOME_WITH_EARNINGS                  6.603e+00
-## E_Total_Pop_POVERTY_STATUS_Below_100_Percent                  1.880e+00
-## summer_tmmx                                                  -1.090e-02
-## summer_rmax                                                  -1.244e-03
-## Density.per.square.mile.of.land.area...Population             2.244e-01
-## EM_Total_Pop_Median_Age                                       2.702e+00
-## Median_Household_Income_2018                                  1.214e+00
-## workplaces_percent_change_from_baseline                      -5.393e+00
-##                                                              Std. Error
-## (Intercept)                                                   5.269e-01
-## days_since_first_infection1                                   2.793e-04
-## Tests.per.100thousand                                         1.889e-06
-## stayhome                                                      2.799e-04
-## Percent.of.adults.with.a.bachelor.s.degree.or.higher.2014.18  5.270e-02
-## Unemployment_rate_2018                                        2.551e-01
-## Total_age18to64                                               1.281e-01
-## E_Total_Pop_SEX_Male                                          2.050e-01
-## E_Total_Pop_RACE_One_Race                                     2.080e-01
-## E_Total_Pop_RACE_White                                        1.839e-02
-## E_Total_Pop_in_Households_Householder_Spouse                  4.926e-02
-## E_Total_Pop_in_Households_Householder_Parent                  6.085e-01
-## E_Total_Pop_Over_15_MARITAL_STATUS_Divorced                   2.058e-01
-## E_INDUSTRY_Administrative_Waste_Management                    5.913e-01
-## E_INDUSTRY_Educational                                        2.249e-01
-## E_INDUSTRY_Healthcare_Social_Assistance                       1.831e-01
-## E_INDUSTRY_Arts_Entertainment_Recreation                      5.069e-01
-## E_INDUSTRY_Accommodation_Food_Services                        3.385e-01
-## E_INDUSTRY_Other_Services                                     6.790e-01
-## E_INDUSTRY_Public_Administration                              2.027e-01
-## ET_TRANSPORTATION_Total_Workers_Over_16                       5.720e-02
-## E_TRANSPORTATION_Total_Workers_Over_16_Drove_Alone            6.203e-02
-## E_Total_Households_TYPE_Family                                7.406e-02
-## E_Total_Households_WITH_INCOME_WITH_EARNINGS                  8.664e-02
-## E_Total_Pop_POVERTY_STATUS_Below_100_Percent                  2.931e-02
-## summer_tmmx                                                   1.025e-03
-## summer_rmax                                                   2.945e-04
-## Density.per.square.mile.of.land.area...Population             2.834e-03
-## EM_Total_Pop_Median_Age                                       4.885e-02
-## Median_Household_Income_2018                                  2.517e-02
-## workplaces_percent_change_from_baseline                       4.572e-02
-##                                                               z value Pr(>|z|)
-## (Intercept)                                                   -61.099  < 2e-16
-## days_since_first_infection1                                    26.264  < 2e-16
-## Tests.per.100thousand                                         151.442  < 2e-16
-## stayhome                                                      -46.830  < 2e-16
-## Percent.of.adults.with.a.bachelor.s.degree.or.higher.2014.18  -79.416  < 2e-16
-## Unemployment_rate_2018                                        -14.762  < 2e-16
-## Total_age18to64                                               -32.565  < 2e-16
-## E_Total_Pop_SEX_Male                                           52.818  < 2e-16
-## E_Total_Pop_RACE_One_Race                                      63.235  < 2e-16
-## E_Total_Pop_RACE_White                                       -110.595  < 2e-16
-## E_Total_Pop_in_Households_Householder_Spouse                  -22.901  < 2e-16
-## E_Total_Pop_in_Households_Householder_Parent                   10.007  < 2e-16
-## E_Total_Pop_Over_15_MARITAL_STATUS_Divorced                   -33.647  < 2e-16
-## E_INDUSTRY_Administrative_Waste_Management                    -19.608  < 2e-16
-## E_INDUSTRY_Educational                                          7.458 8.78e-14
-## E_INDUSTRY_Healthcare_Social_Assistance                        37.461  < 2e-16
-## E_INDUSTRY_Arts_Entertainment_Recreation                      -10.178  < 2e-16
-## E_INDUSTRY_Accommodation_Food_Services                        -56.514  < 2e-16
-## E_INDUSTRY_Other_Services                                     -36.932  < 2e-16
-## E_INDUSTRY_Public_Administration                              -15.774  < 2e-16
-## ET_TRANSPORTATION_Total_Workers_Over_16                       -20.381  < 2e-16
-## E_TRANSPORTATION_Total_Workers_Over_16_Drove_Alone             30.036  < 2e-16
-## E_Total_Households_TYPE_Family                                -48.158  < 2e-16
-## E_Total_Households_WITH_INCOME_WITH_EARNINGS                   76.216  < 2e-16
-## E_Total_Pop_POVERTY_STATUS_Below_100_Percent                   64.134  < 2e-16
-## summer_tmmx                                                   -10.636  < 2e-16
-## summer_rmax                                                    -4.224 2.40e-05
-## Density.per.square.mile.of.land.area...Population              79.181  < 2e-16
-## EM_Total_Pop_Median_Age                                        55.304  < 2e-16
-## Median_Household_Income_2018                                   48.239  < 2e-16
-## workplaces_percent_change_from_baseline                      -117.952  < 2e-16
-##                                                                 
-## (Intercept)                                                  ***
-## days_since_first_infection1                                  ***
-## Tests.per.100thousand                                        ***
-## stayhome                                                     ***
-## Percent.of.adults.with.a.bachelor.s.degree.or.higher.2014.18 ***
-## Unemployment_rate_2018                                       ***
-## Total_age18to64                                              ***
-## E_Total_Pop_SEX_Male                                         ***
-## E_Total_Pop_RACE_One_Race                                    ***
-## E_Total_Pop_RACE_White                                       ***
-## E_Total_Pop_in_Households_Householder_Spouse                 ***
-## E_Total_Pop_in_Households_Householder_Parent                 ***
-## E_Total_Pop_Over_15_MARITAL_STATUS_Divorced                  ***
-## E_INDUSTRY_Administrative_Waste_Management                   ***
-## E_INDUSTRY_Educational                                       ***
-## E_INDUSTRY_Healthcare_Social_Assistance                      ***
-## E_INDUSTRY_Arts_Entertainment_Recreation                     ***
-## E_INDUSTRY_Accommodation_Food_Services                       ***
-## E_INDUSTRY_Other_Services                                    ***
-## E_INDUSTRY_Public_Administration                             ***
-## ET_TRANSPORTATION_Total_Workers_Over_16                      ***
-## E_TRANSPORTATION_Total_Workers_Over_16_Drove_Alone           ***
-## E_Total_Households_TYPE_Family                               ***
-## E_Total_Households_WITH_INCOME_WITH_EARNINGS                 ***
-## E_Total_Pop_POVERTY_STATUS_Below_100_Percent                 ***
-## summer_tmmx                                                  ***
-## summer_rmax                                                  ***
-## Density.per.square.mile.of.land.area...Population            ***
-## EM_Total_Pop_Median_Age                                      ***
-## Median_Household_Income_2018                                 ***
-## workplaces_percent_change_from_baseline                      ***
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## Name of linear predictor: loglink(lambda) 
-## 
-## Log-likelihood: -97019 on 1411 degrees of freedom
-## 
-## Number of Fisher scoring iterations: 10 
-## 
-## Warning: Hauck-Donner effect detected in the following estimate(s):
-## '(Intercept)', 'Total_age18to64', 'E_Total_Households_TYPE_Family', 'summer_tmmx'
-\end{verbatim}
-
 We can clearly see that infection start date is positively correlated
 with the log count of cases. Along with it, stay at home orders are
 linked negatively to cases growth which is also theoretically correct.
@@ -547,10 +377,12 @@ not think this model does a good job at prediction.
 \begin{Highlighting}[]
 \NormalTok{yhat1 =}\StringTok{ }\KeywordTok{predict}\NormalTok{(m12, }\DataTypeTok{type =} \StringTok{'response'}\NormalTok{)}
 \NormalTok{modelfit1=}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(}\KeywordTok{cbind}\NormalTok{(yhat1, covid}\OperatorTok{$}\NormalTok{cases1))}
-\NormalTok{b1=}\KeywordTok{ggplot}\NormalTok{(modelfit1, }\DataTypeTok{mapping =} \KeywordTok{aes}\NormalTok{(V2, V1))}\OperatorTok{+}\KeywordTok{geom_point}\NormalTok{()}\OperatorTok{+}\KeywordTok{geom_abline}\NormalTok{(}\DataTypeTok{slope =} \DecValTok{1}\NormalTok{,}\DataTypeTok{intercept =} \DecValTok{0}\NormalTok{)}\OperatorTok{+}\StringTok{ }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x=}\StringTok{"Actual"}\NormalTok{, }\DataTypeTok{y=} \StringTok{"Predicted"}\NormalTok{, }\DataTypeTok{title =} \StringTok{"Cases per 100K Pop"}\NormalTok{)}
-\NormalTok{b2=}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(modelfit1, }\DataTypeTok{mapping =} \KeywordTok{aes}\NormalTok{(V2, V1))}\OperatorTok{+}\KeywordTok{geom_point}\NormalTok{()}\OperatorTok{+}\KeywordTok{geom_abline}\NormalTok{(}\DataTypeTok{slope =} \DecValTok{1}\NormalTok{,}\DataTypeTok{intercept =} \DecValTok{0}\NormalTok{)}\OperatorTok{+}\StringTok{ }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x=}\StringTok{"Actual"}\NormalTok{, }\DataTypeTok{y=} \StringTok{"Predicted"}\NormalTok{, }\DataTypeTok{title =} \StringTok{"Cases per 100K Pop - Low Values"}\NormalTok{)}\OperatorTok{+}\KeywordTok{coord_cartesian}\NormalTok{(}\DataTypeTok{xlim =} \KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{1000} \OperatorTok{+}\StringTok{ }\DecValTok{10}\NormalTok{))}
 
-\KeywordTok{grid.arrange}\NormalTok{(b1,b2,}\DataTypeTok{ncol =} \DecValTok{2}\NormalTok{)}
+\NormalTok{b1=}\KeywordTok{ggplot}\NormalTok{(modelfit1, }\DataTypeTok{mapping =} \KeywordTok{aes}\NormalTok{(V2, V1))}\OperatorTok{+}\KeywordTok{geom_point}\NormalTok{()}\OperatorTok{+}\KeywordTok{geom_abline}\NormalTok{(}\DataTypeTok{slope =} \DecValTok{1}\NormalTok{,}\DataTypeTok{intercept =} \DecValTok{0}\NormalTok{)}\OperatorTok{+}\StringTok{ }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x=}\StringTok{"Actual"}\NormalTok{, }\DataTypeTok{y=} \StringTok{"Predicted"}\NormalTok{, }\DataTypeTok{title =} \StringTok{"Cases per 100K Pop"}\NormalTok{)}\OperatorTok{+}\KeywordTok{theme}\NormalTok{(}\DataTypeTok{plot.title =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{size =}\DecValTok{10}\NormalTok{))}
+
+\NormalTok{b2=}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(modelfit1, }\DataTypeTok{mapping =} \KeywordTok{aes}\NormalTok{(V2, V1))}\OperatorTok{+}\KeywordTok{geom_point}\NormalTok{()}\OperatorTok{+}\KeywordTok{geom_abline}\NormalTok{(}\DataTypeTok{slope =} \DecValTok{1}\NormalTok{,}\DataTypeTok{intercept =} \DecValTok{0}\NormalTok{)}\OperatorTok{+}\StringTok{ }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x=}\StringTok{"Actual"}\NormalTok{, }\DataTypeTok{y=} \StringTok{"Predicted"}\NormalTok{, }\DataTypeTok{title =} \StringTok{"Cases per 100K Pop - Low Values"}\NormalTok{)}\OperatorTok{+}\KeywordTok{coord_cartesian}\NormalTok{(}\DataTypeTok{xlim =} \KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{1000} \OperatorTok{+}\StringTok{ }\DecValTok{10}\NormalTok{))}\OperatorTok{+}\KeywordTok{theme}\NormalTok{(}\DataTypeTok{plot.title =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{size =}\DecValTok{10}\NormalTok{))}
+
+\KeywordTok{grid.arrange}\NormalTok{(b1,b2, }\DataTypeTok{widths=}\KeywordTok{c}\NormalTok{(}\FloatTok{0.5}\NormalTok{, }\FloatTok{0.5}\NormalTok{) , }\DataTypeTok{heights=}\KeywordTok{c}\NormalTok{(}\FloatTok{0.7}\NormalTok{, }\FloatTok{0.7}\NormalTok{),}\DataTypeTok{ncol =} \DecValTok{2}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -564,15 +396,11 @@ balanced as compared to the model with cases per hundred thousand
 population. Therefore, we prefer using total number of cases in the
 model for prediction purpose.
 
-\begin{verbatim}
-## [1] 1550.263
-\end{verbatim}
-
 \includegraphics{covid_tree_analysis_files/figure-latex/unnamed-chunk-11-1.pdf}
 
-\hypertarget{random-forest-and-boosting-trees}{%
-\subsection{Random Forest and Boosting
-Trees}\label{random-forest-and-boosting-trees}}
+\hypertarget{analysis-using-random-forest-and-boosting-trees}{%
+\subsection{Analysis using Random Forest and Boosting
+Trees}\label{analysis-using-random-forest-and-boosting-trees}}
 
 In this section we perform an anlysis over the county level data of
 Covid-19 reports. We know that the tree models are characterized to be
@@ -586,7 +414,7 @@ training data by relevance, while the second fits several trees to
 reweighted versions of the training dataset and then classifies by
 weighted majority relevance.
 
-Our goal in this section will be make predictions over cases per 100k
+Our goal in this section will be fittin models on cases per 100k
 population. As in the previous section, our data set includes a set of
 socieconomic, demographic and geographical variables for many US states.
 The data set includes information about the Covid crisis such as tests
@@ -599,29 +427,81 @@ training and test subsamples in order to confirm the model performance.
 After this, We created 1000 trees by random forest including a minimum
 of 5 features per bucket, and later we compute the out of sample RMSE.
 
-Graph XX summarizes the variable importance informanrion derived from
-the random forest model (RF). We can notice that as expected the
-population density per square mile plays an importante role as expected.
-It suggest that Counties more dense must expect a higher number of
-people infected, as happened in New York state. The RF model also
-suggets that the number of test performed in county matters, this goes
-in the direction of people that support the lower initial of reported
-cases in the US was due to the lack of testing. The RF model shows that
-the variable that measures the decrease in number of people at work
-places explains is relevant, which suggest two things, one that places
-that started the lockdown earlier could have more cases or the lockdown
-did stop the virus expansion, since variable importance here does not
-gives us the impact sign. From the variable importance chart we can also
-see covariates related with the population that have had more exposition
-the the virus, such as occupation. We can see that the proportion of
-people working at food services in a county explains the number of
-cases, which make sense since this kind of jobs are likely to have
-contact with many people, increasing the probability to get sick.
-239.036862
+Table XX summarizes the variable importance information derived from the
+random forest model (RF). We can notice that as expected the population
+density per square mile plays an importante role as expected. It suggest
+that Counties more dense must expect a higher number of people infected,
+as happened in New York state. The RF model also suggets that the number
+of test performed in county matters, this goes in the direction of
+people that support the lower initial of reported cases in the US was
+due to the lack of testing. The RF model shows that the variable that
+measures the decrease in number of people at work places is relevant,
+which may suggest two things, one that places that started the lockdown
+earlier could have more cases or the lockdown did stop the virus
+expansion, since variable importance here does not gives us the impact
+sign. From the variable importance table we can also see covariates
+related with the population that have had more exposition the the virus,
+such as occupation. We can see that the proportion of people working at
+food services in a county explains the number of cases, which make sense
+since this sort of jobs are likely to have contact with many people,
+increasing the probability to get sick. As mentioned, we fit a Boosting
+Tree(BT) that allows us to validate the results of the RF model. The BT
+model generate a variable importance output as well, the result in this
+case are close with those released by the RF and are summarized in table
+XX.
 
-\textbf{Graph XX. Variable Importance (Random Forest)}
-\includegraphics{covid_tree_analysis_files/figure-latex/unnamed-chunk-13-1.pdf}
+\begin{verbatim}
+## Warning in rug(quantile(xv, seq(0.1, 0.9, by = 0.1)), side = 1): some values
+## will be clipped
 
-After the RF analysis, we fit a Boosting Tree on cases per 100k.
+## Warning in rug(quantile(xv, seq(0.1, 0.9, by = 0.1)), side = 1): some values
+## will be clipped
+
+## Warning in rug(quantile(xv, seq(0.1, 0.9, by = 0.1)), side = 1): some values
+## will be clipped
+
+## Warning in rug(quantile(xv, seq(0.1, 0.9, by = 0.1)), side = 1): some values
+## will be clipped
+\end{verbatim}
+
+\begin{figure}
+\centering
+\includegraphics{covid_tree_analysis_files/figure-latex/fig1-1.pdf}
+\caption{Partial Dependence From Random Forest Model}
+\end{figure}
+
+From Random Forest model and Boosting Trees we have the posibility to
+generate partial dependence functions. This functions show the marginal
+effect of one feature on the predicted outcome of our model. A partial
+dependence function can be represented as:
+
+
+
+
+Where \(x_i\) are the variables for which we are computing the function
+and matrix X the other variables used in the model \(\hat{g}\). Then,
+the partial function tell us for a given value of covariate \(i\) what
+the average marginal effect on the prediction is. Then by the
+calculation of the partial depence functions we can look for the effect
+of the County level features over the number of Covid cases per 100k.
+Figure \ref{fig:fig1} shows the partial depence function derived of the
+RF for some features we found intuitive, for example we can observe the
+can confirm the positive relation of population density over number of
+cases. We also can evaluate the effect of a socioeconomic variable such
+as poverty level, specifically we can see that an increase of poverty
+level has a positive impact over number of cases. In the case of
+proportion of population being white has a negative effect on number of
+cases. This finding goes in line with the last reports of New York State
+that suggest that the most affected ethnicity or race are Hispanic and
+Black. It is also interesting to see how warmer summer temperatures have
+a negative effect over Covid cases. Finally, we can see how a higher
+median age has a positive effect and more people driving alone to work
+has a negative one.
+
+Regarding to the predictive performance of the models, we got an out of
+sample RMSE of 203.1140734 for the RF model and 236.0619057 for the BT.
+This values sugget that these models are reasonable tools for prediction
+even tough they do not outperform the result of the Negative Binomial
+model on cases per 100k.
 
 \end{document}
