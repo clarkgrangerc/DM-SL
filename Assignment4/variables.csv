@@ -1,0 +1,38 @@
+﻿Name,Description
+fips,Unique County Code
+county,County Name
+State,State Name
+cases,"Total No of Cases as on April 30, 2020"
+deaths,"Total No of Deaths as on April 30, 2020"
+days_first_case,Total Days since reporting of 1st case
+Tests_per_100K,Total Tests conducted per 100K of Population at State Level
+Stay_home_order,Total Days since issuance of stay at home orders
+Adults_Bachelor_degree_or_higher,% of Adults with bachelors or higher degree
+Unemployment_rate_2018,Unemployment rate
+Population_age_18to64,% of Population between age 18 & 64
+Total_Pop_SEX_Male,% of Population male
+Total_Pop_RACE_One_Race,% of Population belonging to one race only
+Total_Pop_RACE_White,% of Population belonging to white race
+Total_Pop_in_Households_Householder_Spouse,% of Population living in households with spouse
+Total_Pop_in_Households_Householder_Parent,% of Population living in households with parents
+Total_Pop_Over_15_Divorced,% of Population over 15 divorced
+Occ_Administrative_Waste_Management,% of employment in administrative & waste management
+Occ_Educational,% of employment in educational services
+Occ_Healthcare,% of employment in heath care sector
+Occ_Arts_Entertainment_Recreation,% of employment in arts and recreational sector
+Occ_Accommodation_Food_Services,% of employment in accomodation and food services
+Occ_Other_Services,% of employment in other services
+Occ_Public_Administration,% of employment in Public administration
+Total_Workers_Over_16,% of Total Population above 16 and working
+Total_Workers_Over_16_Drove_Alone,% of Total Population above 16 and working that drove alone to work
+Total_Households_TYPE_Family,% of total households categorized as Family
+Households_with_incomes,% of total households with incomes
+Total_poverty,% of Population in Poverty
+summer_tmmx,8 Year average maximum summer humidity
+summer_rmax,8 Year average maximum summer temperature
+Population_density_per_sqrm,Population density per square mile of area
+Median_Age,Median age (log)
+Median_Household_Income,Median household incone (log)
+Total_Population,Total Population of County (log)
+workplaces_percent_change_from_baseline,Total % decrease in movement to workplaces from the baseline. Based on daily average of 20-29 April 
+cases100k,Log count of total Cases

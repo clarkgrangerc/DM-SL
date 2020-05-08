@@ -1,10 +1,15 @@
 ---
-title: "covid tree analysis"
+title: "Covid-19 Spread - Cross sectional Analysis of US Counties"
+author: "Muhammad Zargham, Clark Granger, Zachery Carlson"
 output:
-  html_document: default
-  pdf_document: default
-  toc: true
-  number_sections: true
+   pdf_document: 
+    includes:
+      in_header: preamble.tex
+      before_body: abstract.tex
+      after_body: afterbody.tex
+    toc: true
+    toc_depth: 2
+    
 ---
 
 ```{r include=FALSE}
@@ -24,7 +29,8 @@ library(ggplot2)
 library(ggrepel)
 library(plotmo)
 library(VGAM)
-
+library(factoextra)
+library(pander)
 
 data=read.csv("covid2zargham.csv")
 names=read.table("names.txt")
@@ -34,19 +40,19 @@ colnames(data)=cnames
 x<- data[-c(1:5,35)]
 ```
 
-# Cross sectional Analysis of Covid-19 Spread in US Counties
+\newpage
+
 # Introduction
 Covid-19 or corona virus started its spread from China at the end of Year 2020. By February 2020, cases start to appear in the United States and spread rapidly across all the states. The growth in the number of cases has been exponential like any other case of infectious disease. Scientists and researchers around the world are actively looking at the data to understand this virus. In uncertain times like these, it is important to know the factors that affect the spread of this virus to make plausible predictions about the future. 
 
 Since the first case of covid-19 was discovered in the US in Snohomish county in the Washington State, the virus has now spread to other places and in some cities like New York and Chicago, the spread has been faster, making them new hotspots for the virus even though cities like Seattle & Los Angeles reported their first cases before these cities. A simple line graphs for some counties that saw their first case of infection around the same time shows the difference in the rate of virus spread. 
 
-```{r,echo=FALSE, warning=FALSE, fig.cap ="Trend Line Graph for Counties", fig.dim=c(6,4) }
+```{r,echo=FALSE, warning=FALSE, fig.cap ="Trend Line Graph for Counties", fig.dim=c(5,3) }
 library(ggplot2)
 library(ggrepel)
 time1= read.csv("casesperpop.csv")
 ggplot(time1, mapping = aes(x = Combined_Key, y = value, color = variable))+geom_line() +
-  theme(legend.position = "none")+xlim(0, 110)+geom_text_repel(data = subset(time1, Combined_Key == max(Combined_Key)),aes(label= variable),nudge_x =2,segment.color = NA, size=3, direction= "y",hjust= 0)+labs(
-       caption = "Counties with same infection dates",
+  theme(legend.position = "none")+xlim(0, 110)+geom_text_repel(data = subset(time1, Combined_Key == max(Combined_Key)),aes(label= variable),nudge_x =2,segment.color = NA, size=2, direction= "y",hjust= 0)+labs(
         x="Days since first Infection",
         y = "No. of Cases per 100K Pop")+
   coord_cartesian(xlim = c(50, 100 + 10))
@@ -66,8 +72,8 @@ ggplot(data = covid, mapping = aes(cases1))+geom_density()+labs(x="Cases per 100
 
 -	**Days since first Case:** We calculated the total number of days since 1st infection for all counties as on April 30, 2020. This variable measures the time period for spread of virus. A scatter plot of days since first infection and number of cases per 100 thousand people shows that there is a general exponential trend but some counties have been able to keep their number of cases down even though the got the virus before other counties.  
 
-```{r, warning=FALSE, echo=FALSE, fig.dim=c(5,3)}
-ggplot(covid, mapping = aes(days_since_first_infection1,cases1))+geom_point()+labs(title= "Scatter Plot of Time and Cases",y="Cases per 100K Pop")
+```{r, warning=FALSE, echo=FALSE, fig.dim=c(5,3), fig.cap="Scatter Plot of Time and Cases"}
+ggplot(covid, mapping = aes(days_since_first_infection1,cases1))+geom_point()+labs(y="Cases per 100K Pop", x= " Days since 1st Case")
 ```
  
 
@@ -78,7 +84,7 @@ ggplot(covid, mapping = aes(days_since_first_infection1,cases1))+geom_point()+la
 
 There were many socio-economic variables that were very highly correlated, so we dropped some variables and finalized 30 variables for this analysis. The complete list of these variables is provided in the appendix.  
 
-**Note** :Before we start with our analysis, it is important that we acknowledge that number of cases reported depends heavily on the number of tests conducted. Unfortunately, testing policy has not been uniformed across US and that can lead to a measurement error in cases. Secondly, there are reports that the given time frame for start of covid-19 is not accurate and it is presumed that covid-19 reached many major cities of the US way before the first case was reported. 
+**Note:** Before we start with our analysis, it is important that we acknowledge that number of cases reported depends heavily on the number of tests conducted. Unfortunately, testing policy has not been uniformed across US and that can lead to a measurement error in cases. Secondly, there are reports that the given time frame for start of covid-19 is not accurate and it is presumed that covid-19 reached many major cities of the US way before the first case was reported. 
 
 However, due to data limitation, we must assume that the official reporting of cases represents somewhat actual position for the start of virus infection. For testing, we tried to get data on total tests conducted on county level but only find the data at state level. So, we calculated total tests conducted per hundred thousand people for each state and then use it for each county in respective state. This is not perfect, but we are assuming that the rate of testing is uniform across counties in each state and will help in differentiating counties of different states based on testing rates.  
 
@@ -89,21 +95,22 @@ We use principal component analysis to see if we can look at the variations in t
 
 The biplot of main variables that contribute to variance is first two PCs shows that PC1 captures variation in population density, time since first case, proportion of population between 18 and 64 and change in the movement of people to their workplaces. 
 
-```{r, warning=FALSE, echo=FALSE, fig.dim=c(5,5)}
-library(factoextra)
+```{r, warning=FALSE, echo=FALSE, fig.dim=c(5,5),fig.cap="Variables Contribution in first two PCAs"}
 covid = read.csv("covid2zargham.csv")
 X= covid[,-c(1:5, 35,37)]
 PCA = prcomp(X, scale. = TRUE)
 fviz_pca_var(PCA, col.var="contrib",labelsize = 3,
              gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),select.var = list(contrib=12),
-             repel = TRUE, title = "Variables Contribution in first two PCAs " )
+             repel = TRUE)
 
 ```
-```{r, warning=FALSE, echo=FALSE, fig.dim=c(7,4)}
+
+
+```{r, warning=FALSE, echo=FALSE, fig.dim=c(5,3), fig.cap="Scatter Plot of Cases along Principal Components"}
 scores = PCA$x
 scores= cbind(covid$cases1, scores)
 scores = as.data.frame(scores)
-qplot(PC1,PC2, data=scores, color= V1)+scale_color_gradient(low = "grey", high= 'red')+ggtitle("Cluster Plot of Cases and First two Principal Components")+labs(color = "Cases per 100K Pop")
+ggplot(data=scores,mapping = aes(PC1,PC2, color= V1))+geom_point(size = 1.5, stroke = 0, shape = 16)+scale_color_gradient(low = "grey", high= 'red')+labs(color = "Cases")
 
 ```
 
@@ -120,9 +127,12 @@ summary(m12)
 ```
 
 We can clearly see that infection start date is positively correlated with the log count of cases. Along with it, stay at home orders are linked negatively to cases growth which is also theoretically correct. Another important variable is population density per square mile area which means that congested counties see higher number of cases. 
+
 Counties with higher percentage of educated people and people with race as white also observe lower cases. Higher proportion of people employed in educational and health services and lower proportion of people in arts, recreational, accommodation and public administration industries are correlated with higher cases of virus. The signs for these co-efficient are consistent with our PCA analysis.   
+
 We have a problem of small sample and it would have been better if the sample size could have been bigger. We have Hauck-Donner effect in two variables: % of population age 18 to 64 and E_Total_Households_TYPE_Family. The co-efficient magnitude cannot be considered as casual effect. However, the signs of co-efficient points towards some plausible correlation between number of cases and different variables. 
-To check the predictive power of our model, we do 300 test/ train splits of our sample and run the model. We get a RMSE of around 240 cases per hundred thousand people. Plotting the predicted values against the actual values, we see that the model on average underpredicts the number of cases for counties with high number of cases and overpredicts for counties with lower number of cases. Overall, we do not think this model does a good job at prediction. 
+
+To check the predictive power of our model, we do 300 test/ train splits of our sample and run the model. We get a RMSE of around **240** cases per hundred thousand people. Plotting the predicted values against the actual values, we see that the model on average underpredicts the number of cases for counties with high number of cases and overpredicts for counties with lower number of cases. Overall, we do not think this model does a good job at prediction. 
 
 ```{r, warning= FALSE, echo=FALSE, cache=TRUE, include=FALSE}
 n = nrow(covid1)
@@ -140,20 +150,20 @@ vglmerr = do(300)*{
   error_rate = rmse(glm_test$cases1, yhat)}
 mean(vglmerr$result, na.rm = FALSE)
 ```
-```{r, warning=FALSE, echo=FALSE}
+```{r, warning=FALSE, echo=FALSE, fig.dim= c(7,3)}
 
 yhat1 = predict(m12, type = 'response')
 modelfit1= as.data.frame(cbind(yhat1, covid$cases1))
 
-b1=ggplot(modelfit1, mapping = aes(V2, V1))+geom_point()+geom_abline(slope = 1,intercept = 0)+ labs(x="Actual", y= "Predicted", title = "Cases per 100K Pop")+theme(plot.title = element_text(size =10))
+b1= ggplot(modelfit1, mapping = aes(V2, V1))+geom_point()+geom_abline(slope = 1,intercept = 0)+ labs(x="Actual", y= "Predicted", title = "Cases per 100K Pop")+theme(plot.title = element_text(size =10))
 
 b2= ggplot(modelfit1, mapping = aes(V2, V1))+geom_point()+geom_abline(slope = 1,intercept = 0)+ labs(x="Actual", y= "Predicted", title = "Cases per 100K Pop - Low Values")+coord_cartesian(xlim = c(0, 1000 + 10))+theme(plot.title = element_text(size =10))
 
-grid.arrange(b1,b2, widths=c(0.7, 0.7) , heights=c(0.7, 0.7),ncol = 2)
+grid.arrange(b1,b2, nrow =1)
 
 ```
 
-We try the same model with actual number of cases rather than number of cases per hundred thousand people and include log of population in the model to control for community size. The RMSE of 300 test and train split comes out to be around 1500 and the prediction graph is more balanced as compared to the model with cases per hundred thousand population. Therefore, we prefer using total number of cases in the model for prediction purpose. 
+We try the same model with actual number of cases rather than number of cases per hundred thousand people and include log of population in the model to control for community size. The RMSE of 300 test and train split comes out to be around **1500** and the prediction graph is more balanced as compared to the model with cases per hundred thousand population. Therefore, we prefer using total number of cases in the model for prediction purpose. 
 ```{r, echo=FALSE, warning=FALSE, cache=TRUE, include=FALSE}
 covid3= covid[, -c(1:3, 5, 37)]
 
@@ -169,7 +179,7 @@ vglmerr2 = do(300)*{
 mean(vglmerr2$result, na.rm = FALSE)
 ```
 
-```{r, warning= FALSE, echo= FALSE }
+```{r, warning= FALSE, echo= FALSE,fig.dim= c(7,3) }
 m13 <- vglm(cases ~ ., family = pospoisson(), data = covid3)
 yhat2 = predict(m13, type = 'response')
 modelfit2= as.data.frame(cbind(yhat2, covid3$cases))
@@ -180,11 +190,15 @@ p1= ggplot(modelfit2, mapping = aes(V2, V1))+geom_point()+geom_abline(slope = 1,
 p2=ggplot(modelfit2, mapping = aes(V2, V1))+geom_point()+geom_abline(slope = 1,intercept = 0)+labs(x="Actual", y= "Predicted", title = "Total Cases- Low Values")+
   coord_cartesian(xlim = c(0, 20000 + 10))+theme(plot.title = element_text(size =10))
 
-grid.arrange(p1,p2, widths=c(0.5, 0.5) , heights=c(0.7, 0.7),ncol = 2)
+grid.arrange(p1,p2, nrow =1)
 ```
 
+## K-Nearest Neighbors
+We try k-nearest neighbors technique to predict the number of cases for counties.We use total number of cases instead of cases per 100K population. We first use PCA to scale the data and reduce the number of variables. Using 9 principle components, we select K = 3 from the K-RMSE plot. The knn model gave us an average RMSE of 1499. The RMSE for knn model is around the same level we obtained from negative binomial model. However, this model does not provide any insight into the importance of variables in determining the number of cases.  
+
+
 ## Analysis using Random Forest and Boosting Trees
-```{r include=FALSE, cache= TRUE}
+```{r,warning= FALSE, include=FALSE, cache= TRUE}
 
 ## Random Forest and Boosting Trees
 
@@ -219,16 +233,9 @@ x_test = x[test_cases,]
 m2 = randomForest(cases100k ~ (.)^2,data= x_train, mtry = 5, ntree=1000,importance=T)
 plot(m2)
 yhat_test2 = predict(m2, x_test)
-<<<<<<< HEAD
-rrf=rmse(x_test$cases100k,yhat_test2)
- 
-=======
+
 rrf=round(rmse(x_test$cases100k,yhat_test2))
 
-varimp(m2)
-
-varImpPlot(m2,type=2) 
->>>>>>> 1fd58becbbc6844716c510f02956e7f3305d1729
 
 ####################################
 ##### Boosting Model ##############
@@ -241,14 +248,13 @@ rb=round(rmse(x_test$cases100k,yhat_test3))
 
 ```
 
-In this section we perform an anlysis over the county level data about Covid-19 by the use of Tree models approach. Specifically, we implemented a Random Forest model and a Boosting Tree model. The first, model mainly fit many large trees to bootstrap-resampled versions of the training data by relevance, while the second fits several trees to reweighted versions of the training dataset and then classifies by weighted majority relevance. These models are characterized to be flexible fitters that can capture non-linearity and interactions between the variables.
 
-Our goal then will be fitting models on cases per 100k population. In addition, by the use of this models we can get information about variable relevance, that can shed light about what variables make more likely the presence of the disease in a community and to improve the understanding of this pandemic. To run our models, we first splitted our sample in a training and test subsamples in order to confirm the model performance. After this, We created 1000 trees by random forest including a minimum of 5 features per bucket.
+We fit random forest and boosting models on cases per 100k population. In addition, by the use of this models we can get information about variable relevance, that can shed light about what variables make more likely the presence of the disease in a community and to improve the understanding of this pandemic. After a train test split of our sample, we created 1000 trees by random forest including a minimum of 5 features per bucket.
 
 Table XX (APP TABLE) summarizes the variable importance information derived from the random forest model (RF). We can notice that as expected the population density per square mile plays an importante role as expected. It suggest that Counties more dense must expect a higher number of people infected, as happened in New York state. The RF model also suggets that the number of test performed in county matters, this goes in the direction of people that support the lower initial of reported cases in the US was due to the lack of testing. The RF model shows that the variable that measures the decrease in number of people at work places is relevant. From the variable importance table we can also see covariates related with the population that have had more exposition the the virus, such as occupation. We can see that the proportion of people working at food services in a county explains the number of cases, which make sense since this sort of jobs are likely to have contact with many people, increasing the probability to get sick. As mentioned, we fit a Boosting Tree(BT) that allows us to validate the results of the RF model. The BT model generates a variable importance output as well, the result in this case are closed with those released by the RF and are summarized in table XX(APP TABLE). 
 
 
-```{r fig1, echo=FALSE, fig.width=7, cache=TRUE ,fig.height=6,fig.cap="Partial Dependence From Random Forest Model"}
+```{r fig1,warning= FALSE, echo=FALSE, fig.width=7, cache=TRUE ,fig.height=6,fig.cap="Partial Dependence From Random Forest Model"}
 par(mfrow = c(3,3))
 partialPlot(m2, x_train[,1:30],x.var =27, main="Population Density",xlab="",ylab="Cases per 100k")
 partialPlot(m2, x_train[,1:30],x.var =1, main="Days Since First Case",xlab="",xlim=c(20,60))
@@ -257,7 +263,7 @@ partialPlot(m2, x_train[,1:30],x.var =9, main="Population White Race",xlab="",yl
 partialPlot(m2, x_train[,1:30],x.var =26, main="Summer Max Temperature",xlab="",xlim=c(50,90))
 partialPlot(m2, x_train[,1:30],x.var =5, main="Unemployment Rate",xlab="",xlim=c(0.03,0.12))
 partialPlot(m2, x_train[,1:30],x.var =17, main="Occupation Food and Services",xlab="",xlim=c(0.04,0.11),ylim=c(175,195),ylab="Cases per 100k")
-partialPlot(m2, x_train[,1:30],x.var =7, main="Population Male Gender",xlab="",xlim=c(0.5,.60),ylim=c(180,230))
+partialPlot(m2, x_train[,1:30],x.var =7, main="Population Male Gender",xlab="",xlim=c(0.5,.60))
 partialPlot(m2, x_train[,1:30],x.var =28, main="Median Age",xlab="")
 ```
 
@@ -269,13 +275,111 @@ Where $x_i$ are the variables for which we are computing the function and matrix
 
 Regarding to the predictive performance of the models, we got an out of sample RMSE of `r rrf` for the RF model and `r rb` for the BT. This values sugget that these models are reasonable tools for prediction even tough they do not outperform the result of the Negative Binomial model on cases per 100k. 
 
+# Conclusion
+
+By running different models on the available data, we were able to highlight some county level factors that are correlated with the spread of covid-19 virus. From our analysis, we have gathered that high population density, lower level of education, higher unemployment, higher median age, higher proportion of white race and male and more employment in educational and health sectors are correlated with higher number of cases of covid-19. These models show similar predictive power but we think it needs improvement by including more counties and including testing data for county level to make them more accurate. With the given data, we conclude that random forests technique gives us the best predictions.     
 
 
 
+\newpage
 
+# Appendix 
 
+## List of Variables
 
+\begin{table}[ht]
+\resizebox{\textwidth}{!}{%
+\centering
+\begin{tabular}{rll}
+  \hline
+ & Name & Description \\ 
+  \hline
+1 & fips & Unique County Code \\ 
+  2 & county & County Name \\ 
+  3 & State & State Name \\ 
+  4 & cases & Total No of Cases as on April 30, 2020 \\ 
+  5 & deaths & Total No of Deaths as on April 30, 2020 \\ 
+  6 & days\_first\_case & Total Days since reporting of 1st case \\ 
+  7 & Tests\_per\_100K & Total Tests conducted per 100K of Population at State Level \\ 
+  8 & Stay\_home\_order & Total Days since issuance of stay at home orders \\ 
+  9 & Adults\_Bachelor\_degree\_or\_higher & \% of Adults with bachelors or higher degree \\ 
+  10 & Unemployment\_rate\_2018 & Unemployment rate \\ 
+  11 & Population\_age\_18to64 & \% of Population between age 18 \& 64 \\ 
+  12 & Total\_Pop\_SEX\_Male & \% of Population male \\ 
+  13 & Total\_Pop\_RACE\_One\_Race & \% of Population belonging to one race only \\ 
+  14 & Total\_Pop\_RACE\_White & \% of Population belonging to white race \\ 
+  15 & Total\_Pop\_in\_Households\_Householder\_Spouse & \% of Population living in households with spouse \\ 
+  16 & Total\_Pop\_in\_Households\_Householder\_Parent & \% of Population living in households with parents \\ 
+  17 & Total\_Pop\_Over\_15\_Divorced & \% of Population over 15 divorced \\ 
+  18 & Occ\_Administrative\_Waste\_Management & \% of employment in administrative \& waste management \\ 
+  19 & Occ\_Educational & \% of employment in educational services \\ 
+  20 & Occ\_Healthcare & \% of employment in heath care sector \\ 
+  21 & Occ\_Arts\_Entertainment\_Recreation & \% of employment in arts and recreational sector \\ 
+  22 & Occ\_Accommodation\_Food\_Services & \% of employment in accomodation and food services \\ 
+  23 & Occ\_Other\_Services & \% of employment in other services \\ 
+  24 & Occ\_Public\_Administration & \% of employment in Public administration \\ 
+  25 & Total\_Workers\_Over\_16 & \% of Total Population above 16 and working \\ 
+  26 & Total\_Workers\_Over\_16\_Drove\_Alone & \% of Total Population above 16 and working that drove alone to work \\ 
+  27 & Total\_Households\_TYPE\_Family & \% of total households categorized as Family \\ 
+  28 & Households\_with\_incomes & \% of total households with incomes \\ 
+  29 & Total\_poverty & \% of Population in Poverty \\ 
+  30 & summer\_tmmx & 8 Year average maximum summer humidity \\ 
+  31 & summer\_rmax & 8 Year average maximum summer temperature \\ 
+  32 & Population\_density\_per\_sqrm & Population density per square mile of area \\ 
+  33 & Median\_Age & Median age (log) \\ 
+  34 & Median\_Household\_Income & Median household incone (log) \\ 
+  35 & Total\_Population & Total Population of County (log) \\ 
+  36 & workplaces\_percent\_change\_from\_baseline & Total \% decrease in movement to workplaces from the baseline. Based on daily average of 20-29 April  \\ 
+  37 & cases100k & Log count of total Cases \\ 
+   \hline
+\end{tabular}}
+\end{table}
+ 
+\newpage
+## Summary of Negative Binomial Model
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrrr}
+  \hline
+ & Estimate & Std. Error & z value & Pr($>$$|$z$|$) \\ 
+  \hline
+(Intercept) & -34.95 & 0.55 & -64.10 & 0.00 \\ 
+  days\_since\_first\_infection1 & 0.01 & 0.00 & 26.92 & 0.00 \\ 
+  Tests.per.100thousand & 0.00 & 0.00 & 148.86 & 0.00 \\ 
+  stayhome & -0.01 & 0.00 & -47.32 & 0.00 \\ 
+  Percent.of.adults.with.a.bachelor.s.degree.or.higher.2014.18 & -4.19 & 0.05 & -79.67 & 0.00 \\ 
+  Unemployment\_rate\_2018 & -2.80 & 0.25 & -11.00 & 0.00 \\ 
+  Total\_age18to64 & -4.56 & 0.13 & -35.58 & 0.00 \\ 
+  E\_Total\_Pop\_SEX\_Male & 12.08 & 0.21 & 58.44 & 0.00 \\ 
+  E\_Total\_Pop\_RACE\_One\_Race & 13.42 & 0.21 & 64.49 & 0.00 \\ 
+  E\_Total\_Pop\_RACE\_White & -1.94 & 0.02 & -102.95 & 0.00 \\ 
+  E\_Total\_Pop\_in\_Households\_Householder\_Spouse & -1.64 & 0.05 & -30.81 & 0.00 \\ 
+  E\_Total\_Pop\_in\_Households\_Householder\_Parent & 9.42 & 0.59 & 16.06 & 0.00 \\ 
+  E\_Total\_Pop\_Over\_15\_MARITAL\_STATUS\_Divorced & -7.38 & 0.21 & -35.98 & 0.00 \\ 
+  E\_INDUSTRY\_Administrative\_Waste\_Management & -10.70 & 0.59 & -18.13 & 0.00 \\ 
+  E\_INDUSTRY\_Educational & 2.21 & 0.22 & 9.87 & 0.00 \\ 
+  E\_INDUSTRY\_Healthcare\_Social\_Assistance & 7.48 & 0.18 & 40.92 & 0.00 \\ 
+  E\_INDUSTRY\_Arts\_Entertainment\_Recreation & -5.15 & 0.50 & -10.23 & 0.00 \\ 
+  E\_INDUSTRY\_Accommodation\_Food\_Services & -18.92 & 0.34 & -56.05 & 0.00 \\ 
+  E\_INDUSTRY\_Other\_Services & -25.74 & 0.68 & -37.89 & 0.00 \\ 
+  E\_INDUSTRY\_Public\_Administration & -2.61 & 0.20 & -12.86 & 0.00 \\ 
+  ET\_TRANSPORTATION\_Total\_Workers\_Over\_16 & -1.23 & 0.06 & -21.31 & 0.00 \\ 
+  E\_TRANSPORTATION\_Total\_Workers\_Over\_16\_Drove\_Alone & 1.97 & 0.06 & 31.39 & 0.00 \\ 
+  E\_Total\_Households\_TYPE\_Family & -3.07 & 0.07 & -41.66 & 0.00 \\ 
+  E\_Total\_Households\_WITH\_INCOME\_WITH\_EARNINGS & 7.01 & 0.09 & 79.18 & 0.00 \\ 
+  E\_Total\_Pop\_POVERTY\_STATUS\_Below\_100\_Percent & 6.39 & 0.10 & 63.86 & 0.00 \\ 
+  summer\_tmmx & -0.01 & 0.00 & -11.23 & 0.00 \\ 
+  summer\_rmax & -0.00 & 0.00 & -5.59 & 0.00 \\ 
+  Density.per.square.mile.of.land.area...Population & 0.21 & 0.00 & 76.21 & 0.00 \\ 
+  EM\_Total\_Pop\_Median\_Age & 2.73 & 0.05 & 55.78 & 0.00 \\ 
+  Median\_Household\_Income\_2018 & 1.35 & 0.03 & 51.87 & 0.00 \\ 
+  workplaces\_percent\_change\_from\_baseline & -5.41 & 0.05 & -118.65 & 0.00 \\ 
+   \hline
+\end{tabular}
+\end{table}
 
+\newpage
+## 
 
 
 

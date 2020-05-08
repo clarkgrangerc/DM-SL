@@ -36,51 +36,12 @@
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
 \hypersetup{
-  pdftitle={covid tree analysis},
+  pdftitle={Covid-19 Spread - Cross sectional Analysis of US Counties},
+  pdfauthor={Muhammad Zargham, Clark Granger, Zachery Carlson},
   hidelinks,
   pdfcreator={LaTeX via pandoc}}
 \urlstyle{same} % disable monospaced font for URLs
 \usepackage[margin=1in]{geometry}
-\usepackage{color}
-\usepackage{fancyvrb}
-\newcommand{\VerbBar}{|}
-\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
-\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
-% Add ',fontsize=\small' for more characters per line
-\usepackage{framed}
-\definecolor{shadecolor}{RGB}{248,248,248}
-\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
-\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
-\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
-\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
-\newcommand{\BuiltInTok}[1]{#1}
-\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
-\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
-\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
-\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
-\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
-\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
-\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
-\newcommand{\ExtensionTok}[1]{#1}
-\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
-\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
-\newcommand{\ImportTok}[1]{#1}
-\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
-\newcommand{\NormalTok}[1]{#1}
-\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
-\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
-\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
-\newcommand{\RegionMarkerTok}[1]{#1}
-\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
-\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
-\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
-\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
-\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
-\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
 \usepackage{graphicx,grffile}
 \makeatletter
 \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
@@ -98,6 +59,31 @@
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 \setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{dcolumn}
+\usepackage{graphicx}
+\usepackage{setspace}
+\usepackage{comment}
+\usepackage{caption}
+\usepackage{enumerate}
+\usepackage{amsmath}
+\usepackage{bbold}
+\usepackage{url}
+\usepackage{amssymb}
+\usepackage{scalefnt}
+\usepackage{multirow}
+\usepackage{autobreak}
+\usepackage{here}
+\usepackage{geometry}
+
+\usepackage{fancyhdr}
+\thispagestyle{plain}
+\pagestyle{fancy}
+%\fancyhf{}
+%\renewcommand{\headrulewidth}{0pt}
+\headheight=15pt
+\headsep=18pt
+\lhead{Covid-19}
+\rhead{Project: Data Mining}
 \usepackage{booktabs}
 \usepackage{longtable}
 \usepackage{array}
@@ -113,16 +99,23 @@
 \usepackage{makecell}
 \usepackage{xcolor}
 
-\title{covid tree analysis}
-\author{}
-\date{\vspace{-2.5em}}
+\title{Covid-19 Spread - Cross sectional Analysis of US Counties}
+\author{Muhammad Zargham, Clark Granger, Zachery Carlson}
+\date{}
 
 \begin{document}
 \maketitle
 
-\hypertarget{cross-sectional-analysis-of-covid-19-spread-in-us-counties}{%
-\section{Cross sectional Analysis of Covid-19 Spread in US
-Counties}\label{cross-sectional-analysis-of-covid-19-spread-in-us-counties}}
+\begin{abstract}
+We conduct a cross sectional analysis of Covid-19 cases as on April 30, 2019 across the US counties based on their socio-economic and geographical factors that may be important in explaining the different pace of virus spread. Along with identifying these important factors, we try to fit negative binomial, KNN and Random forest models to predict the number of covid-19 cases and to test whether incorporating these socio economic variables into our models can lead to better predictions of covid cases at county level. We find that some important socio-economic features are correlated with the number of cases and can give further insight for studying this pandemic.  
+\end{abstract}
+\newpage
+
+{
+\setcounter{tocdepth}{2}
+\tableofcontents
+}
+\newpage
 
 \hypertarget{introduction}{%
 \section{Introduction}\label{introduction}}
@@ -201,13 +194,11 @@ spread.
   the got the virus before other counties.
 \end{itemize}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{ggplot}\NormalTok{(covid, }\DataTypeTok{mapping =} \KeywordTok{aes}\NormalTok{(days_since_first_infection1,cases1))}\OperatorTok{+}\KeywordTok{geom_point}\NormalTok{()}\OperatorTok{+}\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title=} \StringTok{"Scatter Plot of Time and Cases"}\NormalTok{,}\DataTypeTok{y=}\StringTok{"Cases per 100K Pop"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
+\begin{figure}
+\centering
 \includegraphics{covid_tree_analysis_files/figure-latex/unnamed-chunk-4-1.pdf}
+\caption{Scatter Plot of Time and Cases}
+\end{figure}
 
 \begin{itemize}
 \tightlist
@@ -242,7 +233,7 @@ correlated, so we dropped some variables and finalized 30 variables for
 this analysis. The complete list of these variables is provided in the
 appendix.
 
-\textbf{Note} :Before we start with our analysis, it is important that
+\textbf{Note:} Before we start with our analysis, it is important that
 we acknowledge that number of cases reported depends heavily on the
 number of tests conducted. Unfortunately, testing policy has not been
 uniformed across US and that can lead to a measurement error in cases.
@@ -279,43 +270,17 @@ PCs shows that PC1 captures variation in population density, time since
 first case, proportion of population between 18 and 64 and change in the
 movement of people to their workplaces.
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{library}\NormalTok{(factoextra)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## Warning: package 'factoextra' was built under R version 3.6.3
-\end{verbatim}
-
-\begin{verbatim}
-## Welcome! Want to learn more? See two factoextra-related books at https://goo.gl/ve3WBa
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{covid =}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"covid2zargham.csv"}\NormalTok{)}
-\NormalTok{X=}\StringTok{ }\NormalTok{covid[,}\OperatorTok{-}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\DecValTok{5}\NormalTok{, }\DecValTok{35}\NormalTok{,}\DecValTok{37}\NormalTok{)]}
-\NormalTok{PCA =}\StringTok{ }\KeywordTok{prcomp}\NormalTok{(X, }\DataTypeTok{scale. =} \OtherTok{TRUE}\NormalTok{)}
-\KeywordTok{fviz_pca_var}\NormalTok{(PCA, }\DataTypeTok{col.var=}\StringTok{"contrib"}\NormalTok{,}
-             \DataTypeTok{gradient.cols =} \KeywordTok{c}\NormalTok{(}\StringTok{"#00AFBB"}\NormalTok{, }\StringTok{"#E7B800"}\NormalTok{, }\StringTok{"#FC4E07"}\NormalTok{),}\DataTypeTok{select.var =} \KeywordTok{list}\NormalTok{(}\DataTypeTok{contrib=}\DecValTok{12}\NormalTok{),}
-             \DataTypeTok{repel =} \OtherTok{TRUE}\NormalTok{, }\DataTypeTok{title =} \StringTok{"Variables Contribution in first two PCAs "}\NormalTok{ )}
-\end{Highlighting}
-\end{Shaded}
-
+\begin{figure}
+\centering
 \includegraphics{covid_tree_analysis_files/figure-latex/unnamed-chunk-5-1.pdf}
+\caption{Variables Contribution in first two PCAs}
+\end{figure}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{scores =}\StringTok{ }\NormalTok{PCA}\OperatorTok{$}\NormalTok{x}
-\NormalTok{scores=}\StringTok{ }\KeywordTok{cbind}\NormalTok{(covid}\OperatorTok{$}\NormalTok{cases1, scores)}
-\NormalTok{scores =}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(scores)}
-\KeywordTok{qplot}\NormalTok{(PC1,PC2, }\DataTypeTok{data=}\NormalTok{scores, }\DataTypeTok{color=}\NormalTok{ V1)}\OperatorTok{+}\KeywordTok{scale_color_gradient}\NormalTok{(}\DataTypeTok{low =} \StringTok{"grey"}\NormalTok{, }\DataTypeTok{high=} \StringTok{'red'}\NormalTok{)}\OperatorTok{+}\KeywordTok{ggtitle}\NormalTok{(}\StringTok{"Cluster Plot of Cases and First two Principal Components"}\NormalTok{)}\OperatorTok{+}\KeywordTok{labs}\NormalTok{(}\DataTypeTok{color =} \StringTok{"Cases per 100K Pop"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
+\begin{figure}
+\centering
 \includegraphics{covid_tree_analysis_files/figure-latex/unnamed-chunk-6-1.pdf}
+\caption{Scatter Plot of Cases along Principal Components}
+\end{figure}
 
 Plotting the scatter plot with first two components with color scaling
 the number of cases, we see that there is no specific clustering of high
@@ -348,121 +313,86 @@ We can clearly see that infection start date is positively correlated
 with the log count of cases. Along with it, stay at home orders are
 linked negatively to cases growth which is also theoretically correct.
 Another important variable is population density per square mile area
-which means that congested counties see higher number of cases. Counties
-with higher percentage of educated people and people with race as white
-also observe lower cases. Higher proportion of people employed in
-educational and health services and lower proportion of people in arts,
-recreational, accommodation and public administration industries are
-correlated with higher cases of virus. The signs for these co-efficient
-are consistent with our PCA analysis.\\
+which means that congested counties see higher number of cases.
+
+Counties with higher percentage of educated people and people with race
+as white also observe lower cases. Higher proportion of people employed
+in educational and health services and lower proportion of people in
+arts, recreational, accommodation and public administration industries
+are correlated with higher cases of virus. The signs for these
+co-efficient are consistent with our PCA analysis.
+
 We have a problem of small sample and it would have been better if the
 sample size could have been bigger. We have Hauck-Donner effect in two
 variables: \% of population age 18 to 64 and
 E\_Total\_Households\_TYPE\_Family. The co-efficient magnitude cannot be
 considered as casual effect. However, the signs of co-efficient points
 towards some plausible correlation between number of cases and different
-variables. To check the predictive power of our model, we do 300 test/
-train splits of our sample and run the model. We get a RMSE of around
-240 cases per hundred thousand people. Plotting the predicted values
-against the actual values, we see that the model on average
-underpredicts the number of cases for counties with high number of cases
-and overpredicts for counties with lower number of cases. Overall, we do
-not think this model does a good job at prediction.
+variables.
 
-\begin{verbatim}
-## [1] 242.3946
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{yhat1 =}\StringTok{ }\KeywordTok{predict}\NormalTok{(m12, }\DataTypeTok{type =} \StringTok{'response'}\NormalTok{)}
-\NormalTok{modelfit1=}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(}\KeywordTok{cbind}\NormalTok{(yhat1, covid}\OperatorTok{$}\NormalTok{cases1))}
-
-\NormalTok{b1=}\KeywordTok{ggplot}\NormalTok{(modelfit1, }\DataTypeTok{mapping =} \KeywordTok{aes}\NormalTok{(V2, V1))}\OperatorTok{+}\KeywordTok{geom_point}\NormalTok{()}\OperatorTok{+}\KeywordTok{geom_abline}\NormalTok{(}\DataTypeTok{slope =} \DecValTok{1}\NormalTok{,}\DataTypeTok{intercept =} \DecValTok{0}\NormalTok{)}\OperatorTok{+}\StringTok{ }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x=}\StringTok{"Actual"}\NormalTok{, }\DataTypeTok{y=} \StringTok{"Predicted"}\NormalTok{, }\DataTypeTok{title =} \StringTok{"Cases per 100K Pop"}\NormalTok{)}\OperatorTok{+}\KeywordTok{theme}\NormalTok{(}\DataTypeTok{plot.title =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{size =}\DecValTok{10}\NormalTok{))}
-
-\NormalTok{b2=}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(modelfit1, }\DataTypeTok{mapping =} \KeywordTok{aes}\NormalTok{(V2, V1))}\OperatorTok{+}\KeywordTok{geom_point}\NormalTok{()}\OperatorTok{+}\KeywordTok{geom_abline}\NormalTok{(}\DataTypeTok{slope =} \DecValTok{1}\NormalTok{,}\DataTypeTok{intercept =} \DecValTok{0}\NormalTok{)}\OperatorTok{+}\StringTok{ }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x=}\StringTok{"Actual"}\NormalTok{, }\DataTypeTok{y=} \StringTok{"Predicted"}\NormalTok{, }\DataTypeTok{title =} \StringTok{"Cases per 100K Pop - Low Values"}\NormalTok{)}\OperatorTok{+}\KeywordTok{coord_cartesian}\NormalTok{(}\DataTypeTok{xlim =} \KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{1000} \OperatorTok{+}\StringTok{ }\DecValTok{10}\NormalTok{))}\OperatorTok{+}\KeywordTok{theme}\NormalTok{(}\DataTypeTok{plot.title =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{size =}\DecValTok{10}\NormalTok{))}
-
-\KeywordTok{grid.arrange}\NormalTok{(b1,b2, }\DataTypeTok{widths=}\KeywordTok{c}\NormalTok{(}\FloatTok{0.5}\NormalTok{, }\FloatTok{0.5}\NormalTok{) , }\DataTypeTok{heights=}\KeywordTok{c}\NormalTok{(}\FloatTok{0.7}\NormalTok{, }\FloatTok{0.7}\NormalTok{),}\DataTypeTok{ncol =} \DecValTok{2}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
+To check the predictive power of our model, we do 300 test/ train splits
+of our sample and run the model. We get a RMSE of around \textbf{240}
+cases per hundred thousand people. Plotting the predicted values against
+the actual values, we see that the model on average underpredicts the
+number of cases for counties with high number of cases and overpredicts
+for counties with lower number of cases. Overall, we do not think this
+model does a good job at prediction.
 
 \includegraphics{covid_tree_analysis_files/figure-latex/unnamed-chunk-9-1.pdf}
 
 We try the same model with actual number of cases rather than number of
 cases per hundred thousand people and include log of population in the
 model to control for community size. The RMSE of 300 test and train
-split comes out to be around 1500 and the prediction graph is more
-balanced as compared to the model with cases per hundred thousand
+split comes out to be around \textbf{1500} and the prediction graph is
+more balanced as compared to the model with cases per hundred thousand
 population. Therefore, we prefer using total number of cases in the
 model for prediction purpose.
 
 \includegraphics{covid_tree_analysis_files/figure-latex/unnamed-chunk-11-1.pdf}
 
+\hypertarget{k-nearest-neighbors}{%
+\subsection{K-Nearest Neighbors}\label{k-nearest-neighbors}}
+
+We try k-nearest neighbors technique to predict the number of cases for
+counties.We use total number of cases instead of cases per 100K
+population. We first use PCA to scale the data and reduce the number of
+variables. Using 9 principle components, we select K = 3 from the K-RMSE
+plot. The knn model gave us an average RMSE of 1499. The RMSE for knn
+model is around the same level we obtained from negative binomial model.
+However, this model does not provide any insight into the importance of
+variables in determining the number of cases.
+
 \hypertarget{analysis-using-random-forest-and-boosting-trees}{%
 \subsection{Analysis using Random Forest and Boosting
 Trees}\label{analysis-using-random-forest-and-boosting-trees}}
 
-In this section we perform an anlysis over the county level data of
-Covid-19 reports. We know that the tree models are characterized to be
-flexible fitters that can capture non-linearity and interactions between
-the variables. Tree models also are useful when we have information in
-different magnitudes as this case, where we have variables that are
-values while others are proportions. Specifically, we will work with
-with a Random Forest model and a Boosting Tree mode. The first, model
-mainly fit many large trees to bootstrap-resampled versions of the
-training data by relevance, while the second fits several trees to
-reweighted versions of the training dataset and then classifies by
-weighted majority relevance.
+We fit random forest and boosting models on cases per 100k population.
+In addition, by the use of this models we can get information about
+variable relevance, that can shed light about what variables make more
+likely the presence of the disease in a community and to improve the
+understanding of this pandemic. After a train test split of our sample,
+we created 1000 trees by random forest including a minimum of 5 features
+per bucket.
 
-Our goal in this section will be fittin models on cases per 100k
-population. As in the previous section, our data set includes a set of
-socieconomic, demographic and geographical variables for many US states.
-The data set includes information about the Covid crisis such as tests
-per 100k population and policies issued to fight the pandemic. By the
-use of this sort of models we can get information about variable
-relevance, that can shed light about what variables make more likely the
-presence of the disease in a community and to improve the understanding
-of this pandemic. To run our models, we first splitted our sample in a
-training and test subsamples in order to confirm the model performance.
-After this, We created 1000 trees by random forest including a minimum
-of 5 features per bucket, and later we compute the out of sample RMSE.
-
-Table XX summarizes the variable importance information derived from the
-random forest model (RF). We can notice that as expected the population
-density per square mile plays an importante role as expected. It suggest
-that Counties more dense must expect a higher number of people infected,
-as happened in New York state. The RF model also suggets that the number
-of test performed in county matters, this goes in the direction of
-people that support the lower initial of reported cases in the US was
-due to the lack of testing. The RF model shows that the variable that
-measures the decrease in number of people at work places is relevant,
-which may suggest two things, one that places that started the lockdown
-earlier could have more cases or the lockdown did stop the virus
-expansion, since variable importance here does not gives us the impact
-sign. From the variable importance table we can also see covariates
-related with the population that have had more exposition the the virus,
-such as occupation. We can see that the proportion of people working at
-food services in a county explains the number of cases, which make sense
-since this sort of jobs are likely to have contact with many people,
-increasing the probability to get sick. As mentioned, we fit a Boosting
-Tree(BT) that allows us to validate the results of the RF model. The BT
-model generate a variable importance output as well, the result in this
-case are close with those released by the RF and are summarized in table
-XX.
-
-\begin{verbatim}
-## Warning in rug(quantile(xv, seq(0.1, 0.9, by = 0.1)), side = 1): some values
-## will be clipped
-
-## Warning in rug(quantile(xv, seq(0.1, 0.9, by = 0.1)), side = 1): some values
-## will be clipped
-
-## Warning in rug(quantile(xv, seq(0.1, 0.9, by = 0.1)), side = 1): some values
-## will be clipped
-
-## Warning in rug(quantile(xv, seq(0.1, 0.9, by = 0.1)), side = 1): some values
-## will be clipped
-\end{verbatim}
+Table XX (APP TABLE) summarizes the variable importance information
+derived from the random forest model (RF). We can notice that as
+expected the population density per square mile plays an importante role
+as expected. It suggest that Counties more dense must expect a higher
+number of people infected, as happened in New York state. The RF model
+also suggets that the number of test performed in county matters, this
+goes in the direction of people that support the lower initial of
+reported cases in the US was due to the lack of testing. The RF model
+shows that the variable that measures the decrease in number of people
+at work places is relevant. From the variable importance table we can
+also see covariates related with the population that have had more
+exposition the the virus, such as occupation. We can see that the
+proportion of people working at food services in a county explains the
+number of cases, which make sense since this sort of jobs are likely to
+have contact with many people, increasing the probability to get sick.
+As mentioned, we fit a Boosting Tree(BT) that allows us to validate the
+results of the RF model. The BT model generates a variable importance
+output as well, the result in this case are closed with those released
+by the RF and are summarized in table XX(APP TABLE).
 
 \begin{figure}
 \centering
@@ -475,8 +405,7 @@ generate partial dependence functions. This functions show the marginal
 effect of one feature on the predicted outcome of our model. A partial
 dependence function can be represented as:
 
-
-
+\[\hat{g}_{x_i}(x_i)=E_{X}\left[\hat{g}(x_i,X)\right]=\int\hat{g}(x_i,X)d\mathbb{P}(X)\]
 
 Where \(x_i\) are the variables for which we are computing the function
 and matrix X the other variables used in the model \(\hat{g}\). Then,
@@ -499,9 +428,134 @@ median age has a positive effect and more people driving alone to work
 has a negative one.
 
 Regarding to the predictive performance of the models, we got an out of
-sample RMSE of 203.1140734 for the RF model and 236.0619057 for the BT.
-This values sugget that these models are reasonable tools for prediction
-even tough they do not outperform the result of the Negative Binomial
-model on cases per 100k.
+sample RMSE of 203 for the RF model and 236 for the BT. This values
+sugget that these models are reasonable tools for prediction even tough
+they do not outperform the result of the Negative Binomial model on
+cases per 100k.
+
+\hypertarget{conclusion}{%
+\section{Conclusion}\label{conclusion}}
+
+By running different models on the available data, we were able to
+highlight some county level factors that are correlated with the spread
+of covid-19 virus. From our analysis, we have gathered that high
+population density, lower level of education, higher unemployment,
+higher median age, higher proportion of white race and male and more
+employment in educational and health sectors are correlated with higher
+number of cases of covid-19. These models show similar predictive power
+but we think it needs improvement by including more counties and
+including testing data for county level to make them more accurate. With
+the given data, we conclude that random forests technique gives us the
+best predictions.
+
+\newpage
+
+\hypertarget{appendix}{%
+\section{Appendix}\label{appendix}}
+
+\hypertarget{list-of-variables}{%
+\subsection{List of Variables}\label{list-of-variables}}
+
+\begin{table}[ht]
+\resizebox{\textwidth}{!}{%
+\centering
+\begin{tabular}{rll}
+  \hline
+ & Name & Description \\ 
+  \hline
+1 & fips & Unique County Code \\ 
+  2 & county & County Name \\ 
+  3 & State & State Name \\ 
+  4 & cases & Total No of Cases as on April 30, 2020 \\ 
+  5 & deaths & Total No of Deaths as on April 30, 2020 \\ 
+  6 & days\_first\_case & Total Days since reporting of 1st case \\ 
+  7 & Tests\_per\_100K & Total Tests conducted per 100K of Population at State Level \\ 
+  8 & Stay\_home\_order & Total Days since issuance of stay at home orders \\ 
+  9 & Adults\_Bachelor\_degree\_or\_higher & \% of Adults with bachelors or higher degree \\ 
+  10 & Unemployment\_rate\_2018 & Unemployment rate \\ 
+  11 & Population\_age\_18to64 & \% of Population between age 18 \& 64 \\ 
+  12 & Total\_Pop\_SEX\_Male & \% of Population male \\ 
+  13 & Total\_Pop\_RACE\_One\_Race & \% of Population belonging to one race only \\ 
+  14 & Total\_Pop\_RACE\_White & \% of Population belonging to white race \\ 
+  15 & Total\_Pop\_in\_Households\_Householder\_Spouse & \% of Population living in households with spouse \\ 
+  16 & Total\_Pop\_in\_Households\_Householder\_Parent & \% of Population living in households with parents \\ 
+  17 & Total\_Pop\_Over\_15\_Divorced & \% of Population over 15 divorced \\ 
+  18 & Occ\_Administrative\_Waste\_Management & \% of employment in administrative \& waste management \\ 
+  19 & Occ\_Educational & \% of employment in educational services \\ 
+  20 & Occ\_Healthcare & \% of employment in heath care sector \\ 
+  21 & Occ\_Arts\_Entertainment\_Recreation & \% of employment in arts and recreational sector \\ 
+  22 & Occ\_Accommodation\_Food\_Services & \% of employment in accomodation and food services \\ 
+  23 & Occ\_Other\_Services & \% of employment in other services \\ 
+  24 & Occ\_Public\_Administration & \% of employment in Public administration \\ 
+  25 & Total\_Workers\_Over\_16 & \% of Total Population above 16 and working \\ 
+  26 & Total\_Workers\_Over\_16\_Drove\_Alone & \% of Total Population above 16 and working that drove alone to work \\ 
+  27 & Total\_Households\_TYPE\_Family & \% of total households categorized as Family \\ 
+  28 & Households\_with\_incomes & \% of total households with incomes \\ 
+  29 & Total\_poverty & \% of Population in Poverty \\ 
+  30 & summer\_tmmx & 8 Year average maximum summer humidity \\ 
+  31 & summer\_rmax & 8 Year average maximum summer temperature \\ 
+  32 & Population\_density\_per\_sqrm & Population density per square mile of area \\ 
+  33 & Median\_Age & Median age (log) \\ 
+  34 & Median\_Household\_Income & Median household incone (log) \\ 
+  35 & Total\_Population & Total Population of County (log) \\ 
+  36 & workplaces\_percent\_change\_from\_baseline & Total \% decrease in movement to workplaces from the baseline. Based on daily average of 20-29 April  \\ 
+  37 & cases100k & Log count of total Cases \\ 
+   \hline
+\end{tabular}}
+\end{table}
+
+\newpage
+
+\hypertarget{summary-of-negative-binomial-model}{%
+\subsection{Summary of Negative Binomial
+Model}\label{summary-of-negative-binomial-model}}
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrrr}
+  \hline
+ & Estimate & Std. Error & z value & Pr($>$$|$z$|$) \\ 
+  \hline
+(Intercept) & -34.95 & 0.55 & -64.10 & 0.00 \\ 
+  days\_since\_first\_infection1 & 0.01 & 0.00 & 26.92 & 0.00 \\ 
+  Tests.per.100thousand & 0.00 & 0.00 & 148.86 & 0.00 \\ 
+  stayhome & -0.01 & 0.00 & -47.32 & 0.00 \\ 
+  Percent.of.adults.with.a.bachelor.s.degree.or.higher.2014.18 & -4.19 & 0.05 & -79.67 & 0.00 \\ 
+  Unemployment\_rate\_2018 & -2.80 & 0.25 & -11.00 & 0.00 \\ 
+  Total\_age18to64 & -4.56 & 0.13 & -35.58 & 0.00 \\ 
+  E\_Total\_Pop\_SEX\_Male & 12.08 & 0.21 & 58.44 & 0.00 \\ 
+  E\_Total\_Pop\_RACE\_One\_Race & 13.42 & 0.21 & 64.49 & 0.00 \\ 
+  E\_Total\_Pop\_RACE\_White & -1.94 & 0.02 & -102.95 & 0.00 \\ 
+  E\_Total\_Pop\_in\_Households\_Householder\_Spouse & -1.64 & 0.05 & -30.81 & 0.00 \\ 
+  E\_Total\_Pop\_in\_Households\_Householder\_Parent & 9.42 & 0.59 & 16.06 & 0.00 \\ 
+  E\_Total\_Pop\_Over\_15\_MARITAL\_STATUS\_Divorced & -7.38 & 0.21 & -35.98 & 0.00 \\ 
+  E\_INDUSTRY\_Administrative\_Waste\_Management & -10.70 & 0.59 & -18.13 & 0.00 \\ 
+  E\_INDUSTRY\_Educational & 2.21 & 0.22 & 9.87 & 0.00 \\ 
+  E\_INDUSTRY\_Healthcare\_Social\_Assistance & 7.48 & 0.18 & 40.92 & 0.00 \\ 
+  E\_INDUSTRY\_Arts\_Entertainment\_Recreation & -5.15 & 0.50 & -10.23 & 0.00 \\ 
+  E\_INDUSTRY\_Accommodation\_Food\_Services & -18.92 & 0.34 & -56.05 & 0.00 \\ 
+  E\_INDUSTRY\_Other\_Services & -25.74 & 0.68 & -37.89 & 0.00 \\ 
+  E\_INDUSTRY\_Public\_Administration & -2.61 & 0.20 & -12.86 & 0.00 \\ 
+  ET\_TRANSPORTATION\_Total\_Workers\_Over\_16 & -1.23 & 0.06 & -21.31 & 0.00 \\ 
+  E\_TRANSPORTATION\_Total\_Workers\_Over\_16\_Drove\_Alone & 1.97 & 0.06 & 31.39 & 0.00 \\ 
+  E\_Total\_Households\_TYPE\_Family & -3.07 & 0.07 & -41.66 & 0.00 \\ 
+  E\_Total\_Households\_WITH\_INCOME\_WITH\_EARNINGS & 7.01 & 0.09 & 79.18 & 0.00 \\ 
+  E\_Total\_Pop\_POVERTY\_STATUS\_Below\_100\_Percent & 6.39 & 0.10 & 63.86 & 0.00 \\ 
+  summer\_tmmx & -0.01 & 0.00 & -11.23 & 0.00 \\ 
+  summer\_rmax & -0.00 & 0.00 & -5.59 & 0.00 \\ 
+  Density.per.square.mile.of.land.area...Population & 0.21 & 0.00 & 76.21 & 0.00 \\ 
+  EM\_Total\_Pop\_Median\_Age & 2.73 & 0.05 & 55.78 & 0.00 \\ 
+  Median\_Household\_Income\_2018 & 1.35 & 0.03 & 51.87 & 0.00 \\ 
+  workplaces\_percent\_change\_from\_baseline & -5.41 & 0.05 & -118.65 & 0.00 \\ 
+   \hline
+\end{tabular}
+\end{table}
+
+\newpage
+
+\hypertarget{section}{%
+\subsection{}\label{section}}
+
+\newpage
 
 \end{document}
