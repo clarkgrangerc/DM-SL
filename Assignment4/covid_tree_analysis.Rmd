@@ -7,7 +7,7 @@ output:
   number_sections: true
 ---
 
-```{r include=FALSE, cache= TRUE}
+```{r include=FALSE}
 
 library(mosaic)
 library(tidyverse)
@@ -20,6 +20,10 @@ library(knitr)
 library(kableExtra)
 library(randomForest)
 library(gbm)
+library(ggplot2)
+library(ggrepel)
+library(plotmo)
+library(VGAM)
 
 
 data=read.csv("covid2zargham.csv")
@@ -36,12 +40,12 @@ Covid-19 or corona virus started its spread from China at the end of Year 2020. 
 
 Since the first case of covid-19 was discovered in the US in Snohomish county in the Washington State, the virus has now spread to other places and in some cities like New York and Chicago, the spread has been faster, making them new hotspots for the virus even though cities like Seattle & Los Angeles reported their first cases before these cities. A simple line graphs for some counties that saw their first case of infection around the same time shows the difference in the rate of virus spread. 
 
-```{r,echo=FALSE, warning=FALSE, fig.cap ="Trend Line Graph for Counties", fig.dim=c(5,7) }
+```{r,echo=FALSE, warning=FALSE, fig.cap ="Trend Line Graph for Counties", fig.dim=c(6,4) }
 library(ggplot2)
 library(ggrepel)
 time1= read.csv("casesperpop.csv")
-ggplot(time1, mapping = aes(x = Combined_Key, y = value))+geom_line(aes(color = variable), size = 0.8) +
-  theme(legend.position = "none")+xlim(0, 120)+geom_text_repel(data = subset(time1, Combined_Key == max(Combined_Key)),aes(label= variable),nudge_x = 30,segment.color = NA)+labs(
+ggplot(time1, mapping = aes(x = Combined_Key, y = value, color = variable))+geom_line() +
+  theme(legend.position = "none")+xlim(0, 110)+geom_text_repel(data = subset(time1, Combined_Key == max(Combined_Key)),aes(label= variable),nudge_x =2,segment.color = NA, size=3, direction= "y",hjust= 0)+labs(
        caption = "Counties with same infection dates",
         x="Days since first Infection",
         y = "No. of Cases per 100K Pop")+
@@ -54,7 +58,7 @@ This poses a question that; what are the different factors that are leading to d
 
 - **Cases & Deaths:** We collect the data of total number of covid-19 infection cases and deaths at county level as on April 30, 2010. The data has been obtained from NYTimes Github repository. We selected 1462 counties which had non-zero number of deaths reported. This was done because ACS data was only available for counties that have any death reported for covid-19.We divided the total number of cases by population to have cases per hundred thousand of population. This gives a good comparison of cases across counties with different population size. From now on we will refer to cases as cases per hundred thousand of population. The density graph shows that a lot of counties have lower number of cases and a very skewed distribution of cases. 
 
-```{r, echo=FALSE, warning=FALSE, fig.cap="Density Graph for Number of Cases"}
+```{r, echo=FALSE, warning=FALSE, fig.dim=c(5,3), fig.cap="Density Graph for Number of Cases"}
 covid = read.csv("covid2zargham.csv")
 ggplot(data = covid, mapping = aes(cases1))+geom_density()+labs(x="Cases per 100K Pop")
 ```
@@ -62,7 +66,7 @@ ggplot(data = covid, mapping = aes(cases1))+geom_density()+labs(x="Cases per 100
 
 -	**Days since first Case:** We calculated the total number of days since 1st infection for all counties as on April 30, 2020. This variable measures the time period for spread of virus. A scatter plot of days since first infection and number of cases per 100 thousand people shows that there is a general exponential trend but some counties have been able to keep their number of cases down even though the got the virus before other counties.  
 
-```{r}
+```{r, warning=FALSE, echo=FALSE, fig.dim=c(5,3)}
 ggplot(covid, mapping = aes(days_since_first_infection1,cases1))+geom_point()+labs(title= "Scatter Plot of Time and Cases",y="Cases per 100K Pop")
 ```
  
@@ -85,17 +89,17 @@ We use principal component analysis to see if we can look at the variations in t
 
 The biplot of main variables that contribute to variance is first two PCs shows that PC1 captures variation in population density, time since first case, proportion of population between 18 and 64 and change in the movement of people to their workplaces. 
 
-```{r}
+```{r, warning=FALSE, echo=FALSE, fig.dim=c(5,5)}
 library(factoextra)
 covid = read.csv("covid2zargham.csv")
 X= covid[,-c(1:5, 35,37)]
 PCA = prcomp(X, scale. = TRUE)
-fviz_pca_var(PCA, col.var="contrib",
+fviz_pca_var(PCA, col.var="contrib",labelsize = 3,
              gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),select.var = list(contrib=12),
              repel = TRUE, title = "Variables Contribution in first two PCAs " )
 
 ```
-```{r}
+```{r, warning=FALSE, echo=FALSE, fig.dim=c(7,4)}
 scores = PCA$x
 scores= cbind(covid$cases1, scores)
 scores = as.data.frame(scores)
@@ -120,7 +124,7 @@ Counties with higher percentage of educated people and people with race as white
 We have a problem of small sample and it would have been better if the sample size could have been bigger. We have Hauck-Donner effect in two variables: % of population age 18 to 64 and E_Total_Households_TYPE_Family. The co-efficient magnitude cannot be considered as casual effect. However, the signs of co-efficient points towards some plausible correlation between number of cases and different variables. 
 To check the predictive power of our model, we do 300 test/ train splits of our sample and run the model. We get a RMSE of around 240 cases per hundred thousand people. Plotting the predicted values against the actual values, we see that the model on average underpredicts the number of cases for counties with high number of cases and overpredicts for counties with lower number of cases. Overall, we do not think this model does a good job at prediction. 
 
-```{r, warning= FALSE, echo=FALSE, cache=TRUE}
+```{r, warning= FALSE, echo=FALSE, cache=TRUE, include=FALSE}
 n = nrow(covid1)
 n_train = round(0.8*n)  # round to nearest integer
 n_test = n - n_train
@@ -136,7 +140,7 @@ vglmerr = do(300)*{
   error_rate = rmse(glm_test$cases1, yhat)}
 mean(vglmerr$result, na.rm = FALSE)
 ```
-```{r}
+```{r, warning=FALSE, echo=FALSE}
 
 yhat1 = predict(m12, type = 'response')
 modelfit1= as.data.frame(cbind(yhat1, covid$cases1))
@@ -145,7 +149,8 @@ b1=ggplot(modelfit1, mapping = aes(V2, V1))+geom_point()+geom_abline(slope = 1,i
 
 b2= ggplot(modelfit1, mapping = aes(V2, V1))+geom_point()+geom_abline(slope = 1,intercept = 0)+ labs(x="Actual", y= "Predicted", title = "Cases per 100K Pop - Low Values")+coord_cartesian(xlim = c(0, 1000 + 10))+theme(plot.title = element_text(size =10))
 
-grid.arrange(b1,b2, widths=c(0.5, 0.5) , heights=c(0.7, 0.7),ncol = 2)
+grid.arrange(b1,b2, widths=c(0.7, 0.7) , heights=c(0.7, 0.7),ncol = 2)
+
 ```
 
 We try the same model with actual number of cases rather than number of cases per hundred thousand people and include log of population in the model to control for community size. The RMSE of 300 test and train split comes out to be around 1500 and the prediction graph is more balanced as compared to the model with cases per hundred thousand population. Therefore, we prefer using total number of cases in the model for prediction purpose. 
@@ -178,23 +183,10 @@ p2=ggplot(modelfit2, mapping = aes(V2, V1))+geom_point()+geom_abline(slope = 1,i
 grid.arrange(p1,p2, widths=c(0.5, 0.5) , heights=c(0.7, 0.7),ncol = 2)
 ```
 
-<<<<<<< HEAD
 ## Analysis using Random Forest and Boosting Trees
 ```{r include=FALSE, cache= TRUE}
-library(mosaic)
-library(tidyverse)
-library(Metrics)
-library(gamlr)
-library(margins)
-library(rpart)
-library(caret)
-library(randomForest)
-library(gbm)
-library(dummies)
-library(plotmo)
-=======
+
 ## Random Forest and Boosting Trees
->>>>>>> f4e92f808fe4dc5116ad347869dd677e8a41fe0f
 
 data=read.csv("covid2zargham.csv")
 names=read.table("names.txt")
@@ -203,7 +195,7 @@ colnames(data)=cnames
 
 
 #### Create the subsample for training an testing ####
-x<- data[-c(1:5,35)]c
+x<- data[-c(1:5,35)]
 n = nrow(x)
 n_train = round(0.8*n)  # round to nearest integer
 n_test = n - n_train
@@ -228,10 +220,7 @@ m2 = randomForest(cases100k ~ (.)^2,data= x_train, mtry = 5, ntree=1000,importan
 plot(m2)
 yhat_test2 = predict(m2, x_test)
 rrf=rmse(x_test$cases100k,yhat_test2)
-
-varimp(m2)
-
-varImpPlot(m2,type=2) 
+ 
 
 ####################################
 ##### Boosting Model ##############
@@ -241,8 +230,6 @@ m3 = gbm(cases100k ~ .,data = x_train,n.trees=5000, shrinkage=.05)
 yhat_test3= predict(m3, x_test, n.trees=5000)
 rb=rmse(x_test$cases100k,yhat_test3)
 
-windows()
-tab1=summary(m3)
 
 ```
 
@@ -253,7 +240,7 @@ Our goal in this section will be fittin models on cases per 100k population. As 
 Table XX summarizes the variable importance information derived from the random forest model (RF). We can notice that as expected the population density per square mile plays an importante role as expected. It suggest that Counties more dense must expect a higher number of people infected, as happened in New York state. The RF model also suggets that the number of test performed in county matters, this goes in the direction of people that support the lower initial of reported cases in the US was due to the lack of testing. The RF model shows that the variable that measures the decrease in number of people at work places is relevant, which may suggest two things, one that places that started the lockdown earlier could have more cases or the lockdown did stop the virus expansion, since variable importance here does not gives us the impact sign. From the variable importance table we can also see covariates related with the population that have had more exposition the the virus, such as occupation. We can see that the proportion of people working at food services in a county explains the number of cases, which make sense since this sort of jobs are likely to have contact with many people, increasing the probability to get sick. As mentioned, we fit a Boosting Tree(BT) that allows us to validate the results of the RF model. The BT model generate a variable importance output as well, the result in this case are close with those released by the RF and are summarized in table XX. 
 
 
-```{r fig1, echo=FALSE, fig.width=7, cache=TRUE,fig.height=6,fig.cap="Partial Dependence From Random Forest Model"}
+```{r fig1, echo=FALSE, fig.width=7, cache=TRUE ,fig.height=6,fig.cap="Partial Dependence From Random Forest Model"}
 par(mfrow = c(3,3))
 partialPlot(m2, x_train[,1:30],x.var =27, main="Population Density",xlab="",ylab="Cases per 100k")
 partialPlot(m2, x_train[,1:30],x.var =1, main="Days Since First Case",xlab="",xlim=c(20,60))
@@ -262,7 +249,7 @@ partialPlot(m2, x_train[,1:30],x.var =9, main="Population White Race",xlab="",yl
 partialPlot(m2, x_train[,1:30],x.var =26, main="Summer Max Temperature",xlab="",xlim=c(50,90))
 partialPlot(m2, x_train[,1:30],x.var =5, main="Unemployment Rate",xlab="",xlim=c(0.03,0.12))
 partialPlot(m2, x_train[,1:30],x.var =17, main="Occupation Food and Services",xlab="",xlim=c(0.04,0.11),ylim=c(175,195),ylab="Cases per 100k")
-partialPlot(m2, x_train[,1:30],x.var =7, main="Population Male Gender",xlab="",xlim=c(0.5,.60),ylim=c(180,220))
+partialPlot(m2, x_train[,1:30],x.var =7, main="Population Male Gender",xlab="",xlim=c(0.5,.60),ylim=c(180,230))
 partialPlot(m2, x_train[,1:30],x.var =28, main="Median Age",xlab="")
 ```
 
@@ -272,7 +259,7 @@ From Random Forest model and Boosting Trees we have the posibility to generate p
 
 Where $x_i$ are the variables for which we are computing the function and matrix X the other variables used in the model $\hat{g}$. Then, the partial function tell us for a given value of covariate $i$ what the average marginal effect on the prediction is. Then by the calculation of the partial depence functions we can look for the effect of the County level features over the number of Covid cases per 100k. Figure \ref{fig:fig1} shows the partial depence function derived of the RF for some features we found intuitive, for example we can observe the can confirm the positive relation of population density over number of cases. We also can evaluate the effect of a socioeconomic variable such as poverty level, specifically we can see that an increase of poverty level has a positive impact over number of cases. In the case of proportion of population being white has a negative effect on number of cases. This finding goes in line with the last reports of New York State that suggest that the most affected ethnicity or race are Hispanic and Black. It is also interesting to see how warmer summer temperatures have a negative effect over Covid cases. Finally, we can see how a higher median age has a positive effect and more people driving alone to work has a negative one. 
 
-Regarding to the predictive performance of the models, we got an out of sample RMSE of `r rrf` for the RF model and `r rf` for the BT. This values sugget that these models are reasonable tools for prediction even tough they do not outperform the result of the Negative Binomial model on cases per 100k. 
+Regarding to the predictive performance of the models, we got an out of sample RMSE of `r rrf` for the RF model and `r rb` for the BT. This values sugget that these models are reasonable tools for prediction even tough they do not outperform the result of the Negative Binomial model on cases per 100k. 
 
 
 
