@@ -380,7 +380,9 @@ errorrate = mean(glmcovid$result, na.rm = FALSE)
 #######################################################################################
 ######################## Zero Truncated Neg Binomial Model ############################
 
-m1 <- vglm(cases1 ~ ., family = pospoisson(), data = covid3)
+colnames(covid)=cnames
+
+m111 = vglm(cases100k ~ ., family = pospoisson(), data = covid3)
 yhat = predict(m1, type = 'response')
 modelfit= as.data.frame(cbind(yhat, covid3$cases1))
 
@@ -420,6 +422,18 @@ scores2= cbind(covid3$cases1, scores2)
 scores2 = as.data.frame(scores2)
 qplot(PC1,PC2, data=scores2, color= V1)+scale_color_gradient(low = "grey", high= 'red')+ggtitle("Scatterplot of Cases for Counties along first two PCs ")
 
+library(xtable)
+library(texreg)
+library(kableExtra)
+library(pander)
+summary(m111)
 
+d =summaryvglm(m111)
+pander(d@coef3)
+pander(d@pearson.resid)
 
+extract.vglm(m111, include.loglik = FALSE,include.df = TRUE, include.nobs = TRUE)
+
+xtable(d@coef3)
+xtable(d@pearson.resid)
 
