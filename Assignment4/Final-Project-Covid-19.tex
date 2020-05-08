@@ -37,7 +37,7 @@
 \IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
 \hypersetup{
   pdftitle={Covid-19 Spread - Cross sectional Analysis of US Counties},
-  pdfauthor={Muhammad Zargham, Clark Granger, Zachery Carlson},
+  pdfauthor={Muhammad Zargham, Clark Granger, Zachary Carlson},
   hidelinks,
   pdfcreator={LaTeX via pandoc}}
 \urlstyle{same} % disable monospaced font for URLs
@@ -100,7 +100,7 @@
 \usepackage{xcolor}
 
 \title{Covid-19 Spread - Cross sectional Analysis of US Counties}
-\author{Muhammad Zargham, Clark Granger, Zachery Carlson}
+\author{Muhammad Zargham, Clark Granger, Zachary Carlson}
 \date{}
 
 \begin{document}
@@ -252,8 +252,8 @@ is not perfect because we are assuming that the rate of testing is
 uniform across counties in each state but we think that public health
 and testing policy is same across the all counties in each state.
 
-\hypertarget{methods}{%
-\section{Methods}\label{methods}}
+\hypertarget{methods-and-results}{%
+\section{Methods and Results}\label{methods-and-results}}
 
 \hypertarget{principal-component-analysis}{%
 \subsection{Principal Component
@@ -341,7 +341,11 @@ number of cases for counties with high number of cases and overpredicts
 for counties with lower number of cases. Overall, we do not think this
 model does a good job at prediction.
 
+\begin{figure}
+\centering
 \includegraphics{Final-Project-Covid-19_files/figure-latex/unnamed-chunk-9-1.pdf}
+\caption{Fitted vs Actual Cases per 100K Pop}
+\end{figure}
 
 We try the same model with actual number of cases rather than number of
 cases per hundred thousand people and include log of population in the
@@ -351,7 +355,11 @@ more balanced as compared to the model with cases per hundred thousand
 population. Therefore, we would prefer using total number of cases in
 the model for prediction purposes.
 
+\begin{figure}
+\centering
 \includegraphics{Final-Project-Covid-19_files/figure-latex/unnamed-chunk-11-1.pdf}
+\caption{Fitted vs Actual Total Cases}
+\end{figure}
 
 \hypertarget{k-nearest-neighbors}{%
 \subsection{K-Nearest Neighbors}\label{k-nearest-neighbors}}
@@ -374,18 +382,17 @@ By using these models we can also get information about variable
 relevance .After a train test split of our sample, we created 1000 trees
 by random forest including a minimum of 5 features per bucket.
 
-Table XX (APP TABLE) summarizes the variable importance information
-derived from the random forest model (RF). We can notice that as
-expected the population density per square mile plays an importante role
-as expected. It suggests that Counties more dense must expect a higher
-number of people infected, as happened in New York state. From the
-variable importance table we can also see demograohic and economic
-covariates of population that are more likely to be exposed to the
-virus, such as occupation type. As mentioned, we fit a Boosting Tree(BT)
-that allows us to validate the results of the RF model. The BT model
-generates a variable importance output as well, the result in this case
-are closed with those released by the RF and are summarized in table
-XX(APP TABLE).
+Table A3 summarizes the variable importance information derived from the
+random forest model (RF). We can notice that as expected the population
+density per square mile plays an importante role as expected. It
+suggests that Counties more dense must expect a higher number of people
+infected, as happened in New York state. From the variable importance
+table we can also see demograohic and economic covariates of population
+that are more likely to be exposed to the virus, such as occupation
+type. As mentioned, we fit a Boosting Tree(BT) that allows us to
+validate the results of the RF model. The BT model generates a variable
+importance output as well, the result in this case are closed with those
+released by the RF and are summarized in table A3.
 
 \begin{figure}
 \centering
@@ -406,17 +413,17 @@ the partial function tell us for a given value of covariate \(i\) what
 the average marginal effect on the prediction is. Then by the
 calculation of the partial depence functions we can look for the effect
 of the County level features over the number of Covid cases per 100k.
-Figure \ref{fig:fig1} shows the partial depence function derived of the
-RF for some features we found intuitive, for example we can observe the
-can confirm the positive relation of population density over number of
-cases. We also can evaluate the effect of a socioeconomic variable such
-as poverty level, specifically we can see that an increase of poverty
-level has a positive impact over number of cases. In the case of
-proportion of population being white has a negative effect on number of
-cases. This finding goes in line with the last reports of New York State
-that suggest that the most affected ethnicity or race are Hispanic and
-Black. It is also interesting to see how warmer summer temperatures have
-a negative effect over Covid cases. Finally, we can see how a higher
+Figure 8 shows the partial depence function derived of the RF for some
+features we found intuitive, for example we can observe the can confirm
+the positive relation of population density over number of cases. We
+also can evaluate the effect of a socioeconomic variable such as poverty
+level, specifically we can see that an increase of poverty level has a
+positive impact over number of cases. In the case of proportion of
+population being white has a negative effect on number of cases. This
+finding goes in line with the last reports of New York State that
+suggest that the most affected ethnicity or race are Hispanic and Black.
+It is also interesting to see how warmer summer temperatures have a
+negative effect over Covid cases. Finally, we can see how a higher
 median age has a positive effect and more people driving alone to work
 has a negative one.
 
@@ -445,8 +452,8 @@ random forests technique gives us the best predictions.
 \hypertarget{appendix}{%
 \section{Appendix}\label{appendix}}
 
-\hypertarget{list-of-variables}{%
-\subsection{List of Variables}\label{list-of-variables}}
+\hypertarget{a1-list-of-variables}{%
+\subsection{A1 List of Variables}\label{a1-list-of-variables}}
 
 \begin{table}[ht]
 \resizebox{\textwidth}{!}{%
@@ -500,9 +507,9 @@ random forests technique gives us the best predictions.
 
 \newpage
 
-\hypertarget{summary-of-negative-binomial-model}{%
-\subsection{Summary of Negative Binomial
-Model}\label{summary-of-negative-binomial-model}}
+\hypertarget{a2-summary-of-negative-binomial-model}{%
+\subsection{A2 Summary of Negative Binomial
+Model}\label{a2-summary-of-negative-binomial-model}}
 
 \begin{table}[ht]
 \centering
@@ -555,8 +562,49 @@ Model}\label{summary-of-negative-binomial-model}}
 
 \newpage
 
-\hypertarget{section}{%
-\subsection{}\label{section}}
+\hypertarget{a3-variable-importance-random-forest-and-boosting-tree}{%
+\subsection{A3 Variable Importance Random Forest and Boosting
+Tree}\label{a3-variable-importance-random-forest-and-boosting-tree}}
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{lcc}
+  \hline
+Variable & Boosting Tree (Rel.inf) & Random Forest \\ 
+  \hline
+Population\_density\_per\_sqrm & 25.10 & 19.15 \\ 
+Total\_Pop\_SEX\_Male & 17.21 & 1.69 \\ 
+Occ\_Accommodation\_Food\_Services & 10.57 & 10.14 \\ 
+Total\_Pop\_Over\_15\_Divorced & 7.59 & 7.44 \\ 
+Tests\_per\_100K & 6.02 & 23.43 \\ 
+Occ\_Other\_Services & 5.74 & 5.26 \\ 
+Total\_Pop\_RACE\_White & 4.00 & 13.27 \\ 
+Median\_Household\_Income & 3.21 & 7.63 \\ 
+ workplaces\_percent\_change\_from\_baseline & 2.73 & 9.92 \\ 
+ Total\_Pop\_in\_Households\_Hh_Spouse & 2.56 & 9.80  \\ 
+ Total\_Pop\_in\_Households\_Hh\_Parent & 1.38 &  14.31 \\ 
+  Stay\_home\_order & 1.33 & 10.26  \\ 
+  Occ\_Educational & 1.27 & 8.26\\ 
+  summer\_tmmx & 1.26 & 11.57 \\ 
+  Total\_Households\_TYPE\_Family & 1.11 & 6.83\\ 
+  Adults\_Bachelor\_degree\_or\_higher & 1.10 & 8.61\\ 
+  Days\_first\_case & 0.91 & 9.11 \\ 
+  opulation\_age\_18to64 & 0.88 & 9.96 \\ 
+  Households\_with\_incomes & 0.80 & 9.42 \\ 
+  Occ\_Administrative\_Waste\_Management & 0.73 & 5.30 \\ 
+  Median\_Age & 0.60 & 8.20 \\ 
+  Total\_poverty & 0.59 & 6.29 \\ 
+  Occ\_Healthcare & 0.58 & 8.01 \\ 
+  Occ\_Public\_Administration & 0.47 & 1.52 \\ 
+  Total\_Workers\_Over\_16 & 0.43 & 8.11 \\ 
+  Total\_Pop\_RACE\_One\_Race & 0.42 & 7.37 \\ 
+  summer\_rmax & 0.37 & 6.51 \\ 
+  Occ\_Arts\_Entertainment\_Recreation & 0.37 & 4.99 \\ 
+  Total\_Workers\_Over\_16\_Drove\_Alone & 0.34 & 7.57 \\ 
+  Unemployment\_rate\_2018 & 0.34 & 6.80 \\ 
+   \hline
+\end{tabular}
+\end{table}
 
 \newpage
 

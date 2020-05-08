@@ -1,74 +1,89 @@
-library(tidyverse)
 library(mosaic)
-library(ggplot2)
-library(class)
-library(reshape2)
-library(pander)
-library(gamlr)
 library(tidyverse)
-library(foreach)
-library(doMC)  # for parallel computing
-library(FNN)
+library(Metrics)
+library(gamlr)
+library(margins)
+library(rpart)
+library(caret)
+library(knitr)
+library(kableExtra)
+library(randomForest)
+library(gbm)
+library(plotmo)
+library(xtable)
 
-covidzach2 = read.csv('/Users/kelly_carlson/Documents/GitHub/DM-SL/Assignment4/covidzach2.csv', header=TRUE)
-
-N = nrow(covidzach2)
-
-X_all = model.matrix(~. - cases - deaths - county - state.x - fips.x - Tests.per.100thousand -1,
-                     data=covidzach2)
-# standardize the columns of covid2
-feature_sd = apply(X_all, 2, sd)
-X_std = scale(X_all, scale=feature_sd)
-
-#Running PCA was necessary on this data set largely because of how many rows were strongly related or correlated. This colinearity is a problem when KNN is looking for close data points, because the identical columns make points seem "further away" than they really are. 
-PCAs = prcomp(X_std, scale=TRUE)
-
-## variance plot
-plot(PCAs)
-summary(PCAs)
-
-# first few pcs
-round(PCAs$rotation[,1:9],2) 
-
-
-PCAsforKNN = PCAs$x[,1:9] #choosing how many PCAs to use for KNN took a little tuning. I changed it around a lot to try to find a lower Out-of-sample RMSE, and found that 8 PCAs yielded the best performance.
-
-# now use LOOCV across a grid of values for K
-k_grid = seq(1, 15, by=1)
-
-registerDoMC(cores=4) 
-
-# loop over the individual data points for leave-one-out
-loop_rmse = foreach(i = 1:N, .combine='rbind') %dopar% {
-  X_train = PCAsforKNN[-i,]
-  X_test = PCAsforKNN[i,]
-  y_train = covidzach2$cases[-i]
-  y_test = covidzach2$cases[i]
-  
-  # fit the models: loop over k
-  knn_mse_out = foreach(k = k_grid, .combine='c') %do% {
-    knn_fit = knn.reg(X_train, X_test, y_train, k)
-    (y_test - knn_fit$pred)^2  # return prediction
-  }
-  
-  # return results from the loop over k
-  knn_mse_out
-}
-
-
-knn_rmse = sqrt(colMeans(loop_rmse))
-
-
-plot(k_grid, knn_rmse, xlab = K, ylab = RMSE) #k=4
-
-#The minimum RMSE is at k=3 with 9 PCAs, where our RMSE is 1499.
-
-#Other methods I tried for reducing RMSE further: I found that by excluding some random columns before running PCAs, I could get slighter better RMSE, so I tried using a lasso for selecting variables to use in my KNN. This proved unfruitful because when I included the variables from the lasso process, it yielded a higher RMSE. One thing I learned from the Lasso output was that population density was seemingly the most important variable for prediction, so I even tried multiplying the population density column by five before running KNN and this still did not yield a better RMSE.
+data=read.csv("covid2zargham.csv")
+names=read.table("names.txt")
+cnames=names[,1] 
+colnames(data)=cnames
+#### Create the subsample for training an testing ####
+x<- data[-c(1:5,35)]
 
 
 
+## Random Forest and Boosting Trees
+
+data=read.csv("covid2zargham.csv")
+names=read.table("names.txt")
+cnames=names[,1] 
+colnames(data)=cnames
+
+
+#### Create the subsample for training an testing ####
+x<- data[-c(1:5,35)]
+n = nrow(x)
+n_train = round(0.8*n)  # round to nearest integer
+n_test = n - n_train
+# re-split into train and test cases with the same sample sizes
+train_cases = sample.int(n, n_train, replace=FALSE)
+test_cases = setdiff(1:n, train_cases)
+x_train = x[train_cases,]
+x_test = x[test_cases,]
+
+######################################
+############ Random Forest ###########
+######################################
+n = nrow(x)
+n_train = round(0.8*n)  # round to nearest integer
+n_test = n - n_train
+train_cases = sample.int(n, n_train, replace=FALSE)
+test_cases = setdiff(1:n, train_cases)
+x_train = x[train_cases,]
+x_test = x[test_cases,]
+
+m2 = randomForest(cases100k ~ (.)^2,data= x_train, mtry = 5, ntree=1000,importance=T)
+plot(m2)
+yhat_test2 = predict(m2, x_test)
+
+rrf=round(rmse(x_test$cases100k,yhat_test2))
+
+b=varImp(m2,type=2)
+
+################## PArtial Dependence ###############3
+windows()
+par(mfrow = c(3,3))
+partialPlot(m2, x_train[,1:30],x.var =27, main="Population Density",xlab="",ylab="Cases per 100k")
+partialPlot(m2, x_train[,1:30],x.var =1, main="Days Since First Case",xlab="",xlim=c(20,60))
+partialPlot(m2, x_train[,1:30],x.var =21, main="Workers driving Alone",xlab="",xlim=c(.1,.4))
+partialPlot(m2, x_train[,1:30],x.var =9, main="Population White Race",xlab="",ylab="Cases per 100k")
+partialPlot(m2, x_train[,1:30],x.var =26, main="Summer Max Temperature",xlab="",xlim=c(50,90))
+partialPlot(m2, x_train[,1:30],x.var =5, main="Unemployment Rate",xlab="",xlim=c(0.03,0.12))
+partialPlot(m2, x_train[,1:30],x.var =17, main="Occupation Food and Services",xlab="",xlim=c(0.04,0.11),ylim=c(175,195),ylab="Cases per 100k")
+partialPlot(m2, x_train[,1:30],x.var =7, main="Population Male Gender",xlab="",xlim=c(0.5,.60))
+partialPlot(m2, x_train[,1:30],x.var =28, main="Median Age",xlab="")
 
 
 
+####################################
+##### Boosting Model ##############
+###################################
 
+m3 = gbm(cases100k ~ .,data = x_train,n.trees=5000, shrinkage=.05)
+yhat_test3= predict(m3, x_test, n.trees=5000)
+rb=round(rmse(x_test$cases100k,yhat_test3))
+
+names(m3)
+a=as.data.frame(summary(m3))
+b=as.data.frame(a[,2])
+xtable(a)
 
